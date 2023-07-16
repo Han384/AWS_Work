@@ -27,7 +27,7 @@ $ bundle install
 #インストール確認
 $ gem list | grep serverspec
 ```
-- テスト実行用のディレクトリ作成・移動 (※ディレクトリ名は任意)
+- テスト実行用のディレクトリ作成・移動　(※ディレクトリ名は任意)
 ```
 $ mkdir severspec
 $ cd severspec
@@ -36,7 +36,7 @@ $ cd severspec
 ```
 $ bundle exec serverspec-init
 ```
-- 【 1) UN*X 】 　【 2) Exec (local) 】　 を選択
+- 【 1) UN*X 】 【 2) Exec (local) 】 を選択
 ```
 Select OS type:
 
@@ -162,4 +162,4 @@ $ rake
 - [「Serverspec」を使ってサーバー環境を自動テストしよう](https://knowledge.sakura.ad.jp/2596)
 - [AWS備忘録７～serverspec~](https://note.com/kinako1525/n/n631440d86ac4)
 - [【Serverspec】 Serverspec の Rakefile を調べた](https://go-journey.club/archives/7695)
-- [Serverspec [ 書籍 - オライリー・ジャパン ] ](https://www.oreilly.co.jp/books/9784873117096/)(※今後勉強する際に参考としたい)
+- [Serverspec [ 書籍 - オライリー・ジャパン ] ](https://www.oreilly.co.jp/books/9784873117096/)　(※今後勉強する際に参考としたい)
