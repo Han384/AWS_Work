@@ -70,7 +70,6 @@ Rakefile  spec
 ```
 
 - 作成された `sample_spec.rb` を下記内容に編集<br>
-(※内容は課題として提供されたサンプル)
 ```
 $ vim spec/localhost/sample_spec.rb
 
