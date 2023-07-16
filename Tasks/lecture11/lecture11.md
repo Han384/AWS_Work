@@ -160,7 +160,7 @@ $ rake
 
 ## ■ 参考リンク
 - [SeverSpec公式 - 使い方・チュートリアル](https://serverspec.org/)
-- [「Serverspec」を使ってサーバー環境を自動テストしよう](https://knowledge.sakura.ad.jp/2596/#serverspec-init)
+- [「Serverspec」を使ってサーバー環境を自動テストしよう](https://knowledge.sakura.ad.jp/2596)
 - [AWS備忘録７～serverspec~](https://note.com/kinako1525/n/n631440d86ac4)
-- [【Serverspec】 Serverspec の Rakefile を調べた](https://go-journey.club/archives/7695#Serverspec%E3%81%AE%E6%9C%AC)
+- [【Serverspec】 Serverspec の Rakefile を調べた](https://go-journey.club/archives/7695)
 - [Serverspec [ 書籍 - オライリー・ジャパン ] ](https://www.oreilly.co.jp/books/9784873117096/)(※今後勉強する際に参考としたい)
