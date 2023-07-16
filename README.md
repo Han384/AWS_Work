@@ -2,14 +2,14 @@
 
 ## ■ 概要
 - インフラ構築・設定など、下記の実践内容を記載
-  - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイ)
+  - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイテスト)
   - [CloudFormation を使用したインフラリソースの構築](#-cloudformation-を使用したインフラリソースの構築)
   - [Webエンジニアリングスクールでのアウトプット一覧　( 実践/学習記録 )](#-webエンジニアリングスクールでのアウトプット一覧-実践学習記録-)
 
 <br>
 
 ---
-## ■ AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ<br>
+## ■ AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト<br>
 【 実践内容 】
 - EC2上にサンプルアプリケーションをデプロイ
   - 組み込みサーバ ( Puma ) でデプロイ
@@ -17,6 +17,7 @@
 - ELB (ALB) / S3  を追加・動作確認
 - Rails の Active Storage を連携、画像の保存先をS3に設定
 - AWS構成図作成 ( VPC / EC2 / RDS / ELB / S3 )
+- 自動テスト ( ServerSpec )
 
 | 動作環境 | バージョン |
 | -------- | ---------- |
@@ -30,6 +31,7 @@
 
 - デプロイ - [全手順](./Tasks/lecture05/lecture05.md)
 - デプロイ - [部分手順](./Tasks/lecture05//building_procedure) ( ※上記各手順別の構築・設定手順 )
+- テスト - [ServerSpec](./Tasks/lecture11/lecture11.md)
 - AWS構成図
 ![構成図1](./Tasks/lecture05/images/Diagram/diagram_lecture05.png)<br>
 - Webアプリケーション ( デプロイ・ブラウザ動作確認 )
