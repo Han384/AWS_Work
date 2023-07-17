@@ -6,7 +6,7 @@
 - 試行するも、初期設定フロー通りに設定できなかったため動作に必要な設定・挙動を確認して以降の対応を実施<br>
 ( ※遭遇した状況：下図の箇所でモーダル (ポップアップ画面) が出現せず )
 ![start_guide](./images/start_guide.png)
-- GitHubリモートリポジトリ上で下記内容の `.circle/config.yml` を作成<br>
+- GitHubリモートリポジトリ上で下記内容の [config.yml](../../.circleci/config.yml) を作成　(※格納先は  [/.circle ](../../.circleci))<br>
 (※記述内容：[cfn-lint](https://github.com/aws-cloudformation/cfn-lint) を使用し、 [lecture10](../lecture10/lecture10.md) で作成した [CloudFormatin テンプレート](../lecture10/CloudFormation_templates/) の構文をチェック )
   ```
   version: 2.1
