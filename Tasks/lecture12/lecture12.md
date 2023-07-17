@@ -40,8 +40,8 @@
 
 ## ■ 感想
 - 前回の [ServerSpec](../lecture12/lecture12.md) と同じく 0→1 を経験するため CircleCI の基本を学び、動作確認という形で CI/CD の実践を行いました。
-- 動作結果としては [Lecture10](../lecture10/lecture10.md) の実践時に BlackBelt の内容を反映させるよう工夫していたためか、エラーは起きず。<br>
-( CloudFormation の学習は時間はかかりましたが、AWSのベストプラクティスを反映させるためしっかり学んでいて良かったです )
+- CFn構文チェックの動作結果としてはエラーは起きず。<br>
+( [Lecture10 - CloudFormation](../lecture10/lecture10.md)  の実践時、 BlackBelt の内容を反映させるよう工夫。インプットには時間がかかりましたが、しっかり学んでいて良かったです。 )
 - 今回の CircleCI は簡易に実行しましたが、今後はより深く定義・設定できるよう継続して CI/CD についても学んでいきたいと思います。
 
 ## ■ 参考リンク
@@ -50,3 +50,5 @@
 - [cfn-lint を使った AWS CloudFormation テンプレートの Git pre-commit バリデーション](https://aws.amazon.com/jp/blogs/news/git-pre-commit-validation-of-aws-cloudformation-templates-with-cfn-lint/)
 -  [CircleCI - 【チュートリアル】01 CircleCIをはじめよう！](https://www.youtube.com/watch?v=cOHKRYgdzDY)
 -  [CircleCI - 【チュートリアル】02 CircleCIでビルドを成功させよう！](https://www.youtube.com/watch?v=hTM2nk8mSoQ)
+- [【AWS Black Belt Online Seminar】　AWS CloudFormation](https://www.youtube.com/watch?v=Viyqh9fNBjw)
+- [AWS CloudFormation のベストプラクティス](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/best-practices.html)
