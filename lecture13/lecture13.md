@@ -1,7 +1,7 @@
 # 【 lecture13：構成管理(プロビジョニング)ツール ( Ansible ) / CircleCIへの組込 】
 
-## ■ Ansibleの実行環境構築/設定
-- コントロールノード用のEC2を起動　( Amazon Linux 2 )
+## ■ Ansible の環境構築・設定・処理実行
+- コントロールノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - SessionManager を使用してログイン、Ansibleインストールのため下記を実行
   ```
   #bash切替
@@ -28,7 +28,7 @@
   #Pythonインストール確認 (※必要に応じてアップグレード実施)
   $ python -V
   ```
-- ターゲットノード用のEC2を起動　( Amazon Linux 2 )
+- ターゲットノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - ログイン後、下記を実行
   ```
   #yumアップデート
@@ -99,7 +99,7 @@
 ```
 - `cfn-lint` によるCFnテンプレートの構文をチェックする処理(下記記述)を `.circleci/config` に追加
 - 自動構築が実行される処理(下記記述)を `.circleci/config` に追加　( ※ `aws cli` の `ORBS` を使用 )
-### ■ Ansible によるプロビジョニング実行
+### ■ Ansible による構成管理(プロビジョニング)の実行
 - `ターゲットノードに Git をインストール する処理(下記記述)` を `.circleci/config` に追加<br>
 ( ※ `ansible` の `ORBS` を使用 )
     ```
@@ -116,12 +116,15 @@
     ```
 ### ■ ServerSpec によるテスト実行
 ## ■動作確認
-- CircleCI の実行結果
+- CircleCI 一連の実行結果
+- cfn-lint の実行結果
 - CloudFormation の実行結果
 - Ansible の実行結果
 - ServerSpec の実行結果
 
-## ■ 参考リンク (Ansible設定関連)
+## ■ 感想
+## ■ 今後の課題
+## ■ 参考リンク ( Ansible設定関連 )
 - [Ansible ドキュメント](https://docs.ansible.com/ansible/2.9_ja/index.html)
 - [Ansible のインストール](https://docs.ansible.com/ansible/2.9_ja/installation_guide/intro_installation.html)
 - [Ansible 構成設定](https://docs.ansible.com/ansible/2.9_ja/reference_appendices/config.html)
