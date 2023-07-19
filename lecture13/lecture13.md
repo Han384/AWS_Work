@@ -91,14 +91,35 @@
   ```
 ## ■ CircleCIへの組込　( CloudFormation / Ansible / ServerSpec )
 ### ■ CloudFormation によるインフラリソース構築
-- インフラリソース構成図　( 補足：IPアドレスは EIP により取得 )
-- 上記構成の CloudFormation テンプレート の構文をチェックする処理を `.circleci/config` に追加
-- 自動構築が実行されるよう `.circleci/config` に処理を追加　( ※ `aws cli` の `ORBS` を使用 )
-### ■ Ansible によるプロビジョニング実行
-- 上記 Ansibleの実行環境構築/設定 ( ターゲットノードに Git をインストール ) の処理を `.circleci/config` に追加<br>
-( ※ `ansible` の `ORBS` を使用 )
-### ■ ServerSpec によるテスト実行
+- [lecture10](../Tasks/lecture10/lecture10.md) の [CloudFormation テンプレート](../Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml) に下記を追記
 
+```
+#EC2 に EIP をアタッチ
+
+```
+- `cfn-lint` によるCFnテンプレートの構文をチェックする処理(下記記述)を `.circleci/config` に追加
+- 自動構築が実行される処理(下記記述)を `.circleci/config` に追加　( ※ `aws cli` の `ORBS` を使用 )
+### ■ Ansible によるプロビジョニング実行
+- `ターゲットノードに Git をインストール する処理(下記記述)` を `.circleci/config` に追加<br>
+( ※ `ansible` の `ORBS` を使用 )
+    ```
+    #【Gitインストール】：Ansible - playbook.yml の記述
+
+    - hosts: target_node
+      tasks:
+      - name: install git
+        become: yes
+        yum:
+          name: git
+          state: latest
+          lock_timeout: 180
+    ```
+### ■ ServerSpec によるテスト実行
+## ■動作確認
+- CircleCI の実行結果
+- CloudFormation の実行結果
+- Ansible の実行結果
+- ServerSpec の実行結果
 
 ## ■ 参考リンク (Ansible設定関連)
 - [Ansible ドキュメント](https://docs.ansible.com/ansible/2.9_ja/index.html)
