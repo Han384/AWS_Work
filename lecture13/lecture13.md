@@ -94,7 +94,7 @@
 - [lecture10](../Tasks/lecture10/lecture10.md) の [CloudFormation テンプレート](../Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml) に下記を追記
 
 ```
-#EC2 に EIP をアタッチ
+#EC2 に EIP をアタッチ (※CFnを実行・EC2を起動する度にIPアドレスが変わるため)
 
 ```
 - `cfn-lint` によるCFnテンプレートの構文をチェックする処理(下記記述)を `.circleci/config` に追加
