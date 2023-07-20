@@ -124,7 +124,7 @@
 
 ## ■ 感想
 ## ■ 今後の課題
-## ■ 参考リンク ( Ansible設定関連 )
+## ■ 参考リンク ( Ansible 環境構築・設定 関連 )
 - [Ansible ドキュメント](https://docs.ansible.com/ansible/2.9_ja/index.html)
 - [Ansible のインストール](https://docs.ansible.com/ansible/2.9_ja/installation_guide/intro_installation.html)
 - [Ansible 構成設定](https://docs.ansible.com/ansible/2.9_ja/reference_appendices/config.html)
@@ -137,3 +137,5 @@
 - [SSHコマンド実行時に生じたBad owner or permissions on /home/(user_name)/.ssh/config エラーの対処法](https://qiita.com/muramasa2/items/c58345b3ab6069d02849)
 - [【完全版】SSHコマンドの基本からその実践方法まで実例付きで解説](https://itc.tokyo/linux/ssh-command/)
 - [【SSH】公開鍵認証とEC2について](https://qiita.com/aiandrox/items/98ad9b7551481d890916)
+
+## ■ 参考リンク ( CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec ) 関連 )
