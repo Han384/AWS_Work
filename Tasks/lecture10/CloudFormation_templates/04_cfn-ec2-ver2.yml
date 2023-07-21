@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: template for EC2 / Application Layer
+
+Parameters:
+  VPCStack:
+    Type: String
+    Default: cfn-vpc
+  SGStack:
+    Type: String
+    Default: cfn-securitygroup
+  EC2AMI:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+Resources:
+  EC2WebServer01:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref EC2AMI
+      InstanceType: t2.micro
+      KeyName: '{{resolve:ssm:KeyName:1}}'
+      AvailabilityZone: !Select [0, !GetAZs ]
+      SubnetId:
+        Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1a
+      SecurityGroupIds:
+        - Fn::ImportValue: !Sub ${SGStack}-EC2-WebServer
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-EC2WebServer01
+
+  NewMyEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref EC2WebServer01
+      Tags:
+          - Key: Name
+            Value: !Sub ${AWS::StackName}-NewMyEIP
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub ${AWS::StackName}-EC2InstanceProfile
+      Path: /
+      Roles:
+        - Ref: EC2IAMRole
+
+  EC2IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: SSM-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+Outputs:
+  EC2WebServer01:
+    Description: EC2WebServer01
+    Value: !Ref EC2WebServer01
+    Export:
+      Name: !Sub ${AWS::StackName}-EC2WebServer01
