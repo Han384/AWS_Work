@@ -1,19 +1,37 @@
-version: 2.1
-orbs:
-  python: circleci/python@2.0.3
-jobs:
-  cfn-lint:
-    executor: python/default
-    steps:
-      - checkout
-      - run: pip install cfn-lint
-      - run:
-          name: run cfn-lint
-          command: |
-            cfn-lint -i W3002 -t Tasks/lecture10/CloudFormation_templates/*.yml
+  version: 2.1
+  orbs:
+    python: circleci/python@2.0.3
+    aws-cli: circleci/aws-cli@4.0.0
 
-workflows:
-  raisetech:
-    jobs:
-      - cfn-lint
-      
+  jobs:
+    cfn-lint:
+      executor: python/default
+      steps:
+        - checkout
+        - run: pip install cfn-lint
+        - run:
+            name: run cfn-lint
+            command: |
+              cfn-lint -i W3002 -t Tasks/lecture10/CloudFormation_templates/*.yml
+
+    execute-cloudformation:
+      executor: aws-cli/default
+      steps:
+        - checkout
+        - aws-cli/setup:
+            aws_access_key_id: AWS_ACCESS_KEY_ID
+            aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+            region: ${AWS_DEFAULT_REGION}
+        - run:
+            name: deploy Cloudformation
+            command: | #パイプは改行させてコマンドを実行させてたい場合に必要
+              set -x # シェルが実行コマンドとその引数を出力
+              aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
+              aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml
+              aws cloudformation deploy --stack-name cfn-ec2-ver2 --template-file  Tasks/lecture10/CloudFormation_templates/04_cfn-ec2-ver2.yml --capabilities CAPABILITY_NAMED_IAM
+
+  workflows:
+    AWS_Work_CircleCI:
+      jobs:
+        - cfn-lint
+        - execute-cloudformation
