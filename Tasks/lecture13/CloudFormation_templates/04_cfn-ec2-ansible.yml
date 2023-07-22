@@ -29,13 +29,11 @@ Resources:
         - Key: Name
           Value: !Sub ${AWS::StackName}-EC2WebServer01
 
-  NewMyEIP:
-    Type: AWS::EC2::EIP
+  EIPAssociation:
+    Type: AWS::EC2::EIPAssociation
     Properties:
       InstanceId: !Ref EC2WebServer01
-      Tags:
-          - Key: Name
-            Value: !Sub ${AWS::StackName}-NewMyEIP
+      EIP: 54.150.101.186
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile

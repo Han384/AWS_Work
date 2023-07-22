@@ -91,23 +91,30 @@
   ```
 ## ■ CircleCIへの組込　( CloudFormation / Ansible / ServerSpec )
 ### ■ CloudFormation によるインフラリソース構築
-- [lecture10](../../Tasks/lecture10/lecture10.md) の [CloudFormation_templates - 04_cfn-ec2.yml](../../Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml) に下記を追記
+- AnsibleでのSSH接続対応のため、 [lecture10](../../Tasks/lecture10/lecture10.md) の [CloudFormation_templates - 04_cfn-ec2.yml](../../Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml) に下記を追記<br>
+( ※併せて [02_cfn-securitygroup.yml](../../Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml) のSSH接続設定も変更 )
+  ```
+  #EC2 に 既存の EIP をアタッチ
+    EIPAssociation:
+      Type: AWS::EC2::EIPAssociation
+      Properties:
+        InstanceId: !Ref EC2WebServer01
+        EIP: 54.150.101.186
+  ```
+  <details><summary>【 補足：EC2 に 新規取得したEIP をアタッチする記述 】</summary>
 
-```
-#EC2 に 新規取得したEIP をアタッチ
+  ```
+    NewMyEIP:
+      Type: AWS::EC2::EIP
+      Properties:
+        InstanceId: !Ref EC2WebServer01
+  ```
 
-  NewMyEIP:
-    Type: AWS::EC2::EIP
-    Properties:
-      InstanceId: !Ref EC2WebServer01
-      Tags:
-          - Key: Name
-            Value: !Sub ${AWS::StackName}-NewMyEIP
-```
-- `aws cli` の使い方の復習を兼ね、自動実行のために手動にて挙動等を確認<br>
-(※ 今回、CFn実行には `aws cloudformation deploy` コマンドを使用)
-- 上記更新したテンプレートを `04_cfn-ec2-ver2.yml` として新規作成
-- `.circleci/config` に `cfn-lint` によるCloudformationテンプレートの構文をチェックする処理(下記記述)を追加　(※ [lecture12](../../Tasks/lecture12/lecture12.md) と同様の内容 )
+  </details>
+
+- 上記更新したテンプレートを [Tasks/lecture13/CloudFormation_templates/](./CloudFormation_templates/) 配下に [04_cfn-ec2-ansible.yml](./CloudFormation_templates/04_cfn-ec2-ansible.yml) ・ [02_cfn-securitygroup-ansible.yml](./CloudFormation_templates/02_cfn-securitygroup-ansible.yml) として新規作成
+-  `aws cli` を使用し、手動にて挙動等を確認　( ※CFn実行には `aws cloudformation deploy` コマンドを使用 )
+- `.circleci/config` に `cfn-lint` による Cloudformationテンプレート の構文をチェックする処理を追記　( 参照： [lecture12](../../Tasks/lecture12/lecture12.md)  )
   ```
   version: 2.1
   orbs:
@@ -123,53 +130,56 @@
             name: run cfn-lint
             command: |
               cfn-lint -i W3002 -t Tasks/lecture10/CloudFormation_templates/*.yml
+              cfn-lint -i W3002 -t Tasks/lecture13/CloudFormation_templates/*.yml
 
   workflows:
     AWS_Work_CircleCI:
       jobs:
         - cfn-lint
-    ```
-- `aws cli` を使用するため、CircleCI の環境変数 (Environment Variables) を設定
+  ```
+- `aws cli` を使用するため、CircleCI上より 下記の環境変数 ( `Environment Variables` ) を設定
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY
   - AWS_DEFAULT_REGION
-- `.circleci/config` に `aws cli` によるCloudformationを実行する処理(下記記述)を追加　( ※ `aws cli` の `ORBS` を使用 )
+- `.circleci/config` に `aws cli` による Cloudformation を実行する処理を追記　( ※ `aws cli` の `ORBS` を使用 )
   ```
-    version: 2.1
-    orbs:
-      aws-cli: circleci/aws-cli@4.0.0
+  version: 2.1
+  orbs:
+    aws-cli: circleci/aws-cli@4.0.0
 
-    jobs:
-      execute-cloudformation:
-        executor: aws-cli/default
-        steps:
-          - checkout
-          - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-              region: ${AWS_DEFAULT_REGION}
-          - run:
-              name: deploy Cloudformation
-              command: |          #パイプは改行させてコマンドを実行させてたい場合に必要
-                set -x            # シェルが実行コマンドとその引数を出力
-                aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
-                aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml
-                aws cloudformation deploy --stack-name cfn-ec2-ver2 --template-file  Tasks/lecture10/CloudFormation_templates/04_cfn-ec2-ver2.yml --capabilities CAPABILITY_NAMED_IAM
+  jobs:
+    execute-cloudformation:
+      executor: aws-cli/default
+      steps:
+        - checkout
+        - aws-cli/setup:
+            aws_access_key_id: AWS_ACCESS_KEY_ID
+            aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+            region: ${AWS_DEFAULT_REGION}
+        - run:
+            name: deploy Cloudformation
+            command: |   #パイプは改行させてコマンドを実行させてたい場合に必要
+              set -x     #シェルが実行コマンドとその引数を出力
+              aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
+              aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture13/CloudFormation_templates/02_cfn-securitygroup-ansible.yml
+              aws cloudformation deploy --stack-name cfn-rds --template-file  Tasks/lecture10/CloudFormation_templates/03_cfn-rds.yml
+              aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture13/CloudFormation_templates/04_cfn-ec2-ansible.yml --capabilities CAPABILITY_NAMED_IAM
+              aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
+              #aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
 
-    workflows:
-      AWS_Work_CircleCI:
-        jobs:
-          - execute-cloudformation
-
+  workflows:
+    AWS_Work_CircleCI:
+      jobs:
+        - execute-cloudformation
   ```
-- CircleCI・AWSマネジメントコンソールで、自動構築の実行結果を確認
+- CircleCI・AWSマネジメントコンソール上で、CloudFormationの実行結果を確認
 
 
 ### ■ Ansible による構成管理(プロビジョニング)の実行
-- `ターゲットノードに Git をインストール する処理(下記記述)` を `.circleci/config` に追加<br>
-( ※ `ansible` の `ORBS` を使用 )
+- ルートディレクトリに `ansibleディレクトリ` を作成、その配下に `playbook.yml` ・ `inventory` を作成
+- `playbook.yml` に、 ` ターゲットノードへ Git をインストール` する処理(下記)を記述　
     ```
-    #【Gitインストール】：Ansible - playbook.yml の記述
+    #【Gitインストール】：ansible - playbook.yml の記述
 
     - hosts: target_node
       tasks:
@@ -180,6 +190,45 @@
           state: latest
           lock_timeout: 180
     ```
+- `inventory` に下記を記述
+  ```
+  [target_node]
+  54.150.101.186  #既存のEIP ( ※ターゲットノードのipアドレス )
+  ```
+- ルートディレクトリに `ansible.cfg` を作成、SSH接続に必要な下記を記述
+  ```
+  [ssh_connection]
+  ssh_args =  -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no
+  ```
+- CircleCI上の `SSH Keys` - `Additional SSH Keys` より `Hostname (EIP)` ・ `Private Key` を登録
+- `Fingerprint` の値を後述の `.circleci/config` に記述
+- `.circleci/config` に `Ansible` による構成管理(プロビジョニング)の実行を追記　( ※ `ansible` の `ORBS` を使用 )
+  ```
+  version: 2.1
+  orbs:
+    ansible-playbook: orbss/ansible-playbook@0.0.5
+
+  jobs:
+    execute-ansible:
+      executor: ansible-playbook/default
+      steps:
+        - checkout
+        - add_ssh_keys:
+            fingerprints:
+              - "28:be:a7:0c:50:3a:17:2f:e8:8f:5c:ab:a9:1d:ac:f9"
+        - ansible-playbook/install:
+            version: 2.10.7
+        - ansible-playbook/playbook:
+            playbook: ansible/playbook.yml
+            playbook-options: "-u ec2-user -i ansible/inventory --private-key ~/.ssh/id_rsa"
+
+  workflows:
+    AWS_Work_CircleCI:
+      jobs:
+        - execute-ansible
+  ```
+- CircleCI上で、Ansibleの実行結果を確認
+
 ### ■ ServerSpec によるテスト実行
 ## ■動作確認
 - CircleCI 一連の実行結果
