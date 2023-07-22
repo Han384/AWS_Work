@@ -201,7 +201,7 @@
   ssh_args =  -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no
   ```
 - CircleCI上の `SSH Keys` - `Additional SSH Keys` より `Hostname (EIP)` ・ `Private Key` を登録
-- `Fingerprint` の値を後述の `.circleci/config` に記述
+- `Fingerprint` の値を下記の `.circleci/config` に記述
 - `.circleci/config` に `Ansible` による構成管理(プロビジョニング)の実行を追記　( ※ `ansible` の `ORBS` を使用 )
   ```
   version: 2.1
@@ -230,6 +230,61 @@
 - CircleCI上で、Ansibleの実行結果を確認
 
 ### ■ ServerSpec によるテスト実行
+- 自動テスト構築の確認のため、[lecture11](../lecture11/lecture11.md) では実施していなかった SeverSpec を動かすための環境構築 (最小限の構成) を手動で実施。
+  - EC2 に `rbenv / ruby / bundler` をインストール　(  [EC2_eivironment_deploy.md](../lecture05/building_procedure/EC2_eivironment_deploy.md) を参考に実施)
+  - `severspec`ディレクトリを作成　( ※ディレクトリ名は任意 )
+  - `severspec`ディレクトリに移動し、 `Gemfile` を作成
+  - `Gemfile` に `serverspec` `rake` を記載し、`bundle install` を実行
+  - インストール実行後、 `Gemfile.lock` が作成されることを確認
+  - インストール確認　`gem list | grep serverspec && gem list | grep rake`
+  - SeverSpecの環境設定・サンプルコード作成　`bundle exec serverspec-init`
+  - 【 1) UN*X 】 【 2) Exec (local) 】 を選択
+  - `Rakefile` ・ `specディレクトリ` ・ `.rspec` など、新規ファイル・ディレクトリが作成されていることを確認　`ls`
+  - 作成された sample_spec.rb を下記内容に編集
+    ```
+    $ vim spec/localhost/sample_spec.rb
+
+    -------------------------------------
+    require 'spec_helper'
+
+    #Gitがインストールされているか
+    describe package('git') do
+      it { should be_installed }
+    end
+
+    #Rubyが指定のバージョンか
+    describe command('ruby -v') do
+      its(:stdout) { should match /ruby 3\.1\.2/ }
+    end
+
+    #Bundlerが指定のバージョンか
+    describe command('bundle -v') do
+      its(:stdout) { should match /Bundler version 2\.3\.14/ }
+    end
+    -------------------------------------
+    ```
+  - テスト実行　`rake`　( `bundle exec rake` でも実行可能 )
+  - テスト成功を確認
+  - 【補足】 上記実行後のディレクトリ・ファイル構成
+    ```
+    [ec2-user@ip-10-0-7-80 ~]$ pwd
+    /home/ec2-user
+    [ec2-user@ip-10-0-7-80 ~]$ tree
+    .
+    └── severspec
+        ├── Gemfile
+        ├── Gemfile.lock
+        ├── Rakefile
+        └── spec
+            ├── localhost
+            │   └── sample_spec.rb
+            └── spec_helper.rb
+
+    3 directories, 5 files
+    ```
+- 上記を踏まえて CircleCI での自動テストの構築を実施
+  - 上記作成した `serverspec` ファイル・ディレクトリ群をルートディレクトリに
+
 ## ■動作確認
 - CircleCI 一連の実行結果
 - cfn-lint の実行結果
@@ -238,6 +293,8 @@
 - ServerSpec の実行結果
 
 ## ■ 感想
+- SeverSpec の手動による環境構築時には、いろいろ調べる中で Gemfile について ChatGPT に聞いてみところ、すごく分かりやすく、使い方まで提示してくれたのでちょっと調べるならGoogleで検索しなくてもいいなと思いました。今後も活用していきたいと思います。
+
 ## ■ 今後の課題
 ## ■ 参考リンク ( Ansible 環境構築・設定 関連 )
 - [Ansible ドキュメント](https://docs.ansible.com/ansible/2.9_ja/index.html)
@@ -252,10 +309,14 @@
 - [SSHコマンド実行時に生じたBad owner or permissions on /home/(user_name)/.ssh/config エラーの対処法](https://qiita.com/muramasa2/items/c58345b3ab6069d02849)
 - [【完全版】SSHコマンドの基本からその実践方法まで実例付きで解説](https://itc.tokyo/linux/ssh-command/)
 - [【SSH】公開鍵認証とEC2について](https://qiita.com/aiandrox/items/98ad9b7551481d890916)
+- [Ansible - ディレクトリ構成について](https://qiita.com/makaaso-tech/items/0375081c1600b312e8b0)
+- [【Ansible公式】ベストプラクティス](https://docs.ansible.com/ansible/2.9_ja/user_guide/playbooks_best_practices.html)
+- [公式ベストプラクティスを参考に、Ansibleを1から学んでつくってみました](https://blog.engineer.adways.net/entry/2019/04/12/170000)
+- [【Ansible - GALAXY】](https://galaxy.ansible.com/)
 
 ## ■ 参考リンク ( CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec ) 関連 )
 
-## ■ 参考リンク ( CircleCIへの組込 ( CloudFormation 関連 )
+## ■ 参考リンク ( CircleCIへの組込 ( CloudFormation 関連 )  )
 - [AWS公式ドキュメント - CloudFormation ( AWS::EC2::EIP )](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-eip.html)
 - [AWS公式ドキュメント - CloudFormation ( AWS::EC2::EIPAssociation )](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-eip-association.html)
 - [CloudFormationで既存EIPをEC2に割り当てる](https://blog.denet.co.jp/cloudformation-eip-ec2/)
@@ -263,3 +324,20 @@
 - [CloudFormationの全てを味わいつくせ！「AWSの全てをコードで管理する方法〜その理想と現実〜」](https://dev.classmethod.jp/articles/aws-all-iac/)
 - [AWS CLIのエラー「Could not connect to the endpoint URL」](https://blog.serverworks.co.jp/tech/2019/02/27/post-69261/)
 - [AWS CLI のエラー「Connect timeout on/Could not connect to the endpoint URL: ～」を回避するには](https://dev.classmethod.jp/articles/tsnote-awscli-couldnotconnect-001/)
+- [【CircleCI公式】Orb の概要](https://circleci.com/docs/ja/orb-intro/)
+- [【CircleCI公式】circleci/aws-cli@4.0.0](https://circleci.com/developer/ja/orbs/orb/circleci/aws-cli)
+- [【 set 】コマンド――シェルの設定を確認、変更する](https://atmarkit.itmedia.co.jp/ait/articles/1805/10/news023.html)
+## ■ 参考リンク ( CircleCIへの組込 ( Ansible 関連 )
+- [【CircleCI公式】orbss/ansible-playbook@0.0.5](https://circleci.com/developer/ja/orbs/orb/orbss/ansible-playbook)
+- [【CircleCI公式】CircleCI に SSH キーを登録する](https://circleci.com/docs/ja/add-ssh-key/)
+- [CircleCIのJob実行環境にSSH接続する](https://dev.classmethod.jp/articles/circleci-job-contener-ssh-connect/)
+- [AnsibleのSSH接続エラーの回避設定](https://qiita.com/taka379sy/items/331a294d67e02e18d68d)
+- [【8つの方法】「Authenticity of Host Can’t Be Established」エラーを解決するには](https://kinsta.com/jp/knowledgebase/the-authenticity-of-host-cant-be-established/)
+- [【 ssh 】コマンド――リモートマシンにログインしてコマンドを実行する](https://atmarkit.itmedia.co.jp/ait/articles/1701/26/news015.html)
+
+## ■ 参考リンク ( CircleCIへの組込 ( ServerSpec 関連 )
+- [Serverspec環境構築手順](https://qiita.com/Esfahan/items/2c80f84a7ea3f71f5037)
+- [Lecture05 - 【 環境構築：EC2_eivironment_deploy.md 】](../lecture05/building_procedure/EC2_eivironment_deploy.md)
+- [EC2にrubyをインストールする手順 ~rbenvからbundlerの解説~](https://hitolog.blog/2021/10/13/how-to-ruby-install/)
+- [Lecture11 - 【 インフラの自動テスト / ServerSpec 】](../lecture11/lecture11.md)　( ※参考リンクも参照 )
+- [【Rubyエラー】Could not locate Gemfile or .bundle/ directoryと出たときの対処法](https://qiita.com/Kenchiki/items/1f997f57a83a368bb538)
