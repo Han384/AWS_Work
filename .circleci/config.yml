@@ -25,10 +25,13 @@
         - run:
             name: deploy Cloudformation
             command: | #パイプは改行させてコマンドを実行させてたい場合に必要
-              set -x # シェルが実行コマンドとその引数を出力
+              set -x #シェルが実行コマンドとその引数を出力
               aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
               aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml
-              aws cloudformation deploy --stack-name cfn-ec2-ver2 --template-file  Tasks/lecture10/CloudFormation_templates/04_cfn-ec2-ver2.yml --capabilities CAPABILITY_NAMED_IAM
+              aws cloudformation deploy --stack-name cfn-rds --template-file  Tasks/lecture10/CloudFormation_templates/03_cfn-rds.yml
+              aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture10/CloudFormation_templates/04_cfn-ec2-ver2.yml --capabilities CAPABILITY_NAMED_IAM
+              aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
+              aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
 
   workflows:
     AWS_Work_CircleCI:
