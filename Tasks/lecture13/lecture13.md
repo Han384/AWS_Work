@@ -165,7 +165,7 @@
               aws cloudformation deploy --stack-name cfn-rds --template-file  Tasks/lecture10/CloudFormation_templates/03_cfn-rds.yml
               aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture13/CloudFormation_templates/04_cfn-ec2-ansible.yml --capabilities CAPABILITY_NAMED_IAM
               aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
-              #aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
+              aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
 
   workflows:
     AWS_Work_CircleCI:
@@ -311,7 +311,7 @@
           - execute-serverspec
     ```
 - CircleCI上で、ServerSpecの実行結果を確認
-## ■動作確認
+## ■ 実行結果/動作確認
 - CircleCI 一連の実行 ( パイプライン ) 結果
 ![CircleCI_00_Pipeline](./images//CircleCI_00_Pipeline.png)
 - cfn-lint の実行結果
@@ -364,4 +364,4 @@
 -  Lecture11 以降については、『 0-1 をまずはやってみる 』 『とりあえず実践して試してみる』 の精神・考えで取組を行いました。
 - そのため、取組内容としては簡単なパーツを組み合わせて動かしてみるというイメージで実践・実施。
 - 実際にこれまで手動で行ってきた作業の自動化を実施してみて、改めて各種の挙動確認や動作の理解、トライ＆エラーがいかに重要かを実感することができました。
-- 今後はこれまでの過程で得たことを活かしつつ、これまで実践した各内容の深掘りをやっていきたいと思います。
+- 今後はこれまでの過程で得たことを活かしつつ、実践した各内容の深掘りをやっていきたいと思います。
