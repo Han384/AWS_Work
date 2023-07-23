@@ -330,6 +330,7 @@
 ![CircleCI_03_execute-ansible](./images//CircleCI_03_execute-ansible.png)
 - ServerSpec の実行結果
 ![CircleCI_04_execute-serverspec](./images//CircleCI_04_execute-serverspec.png)
+![CircleCI_05_execute-serverspec](./images//CircleCI_05_execute-serverspec.png)
 
 ## ■ CircleCI - .circleci/config.yml の関連ファイル構成
 ```
@@ -361,6 +362,6 @@
 ## ■ 感想
 - 今回の取組方針としては、インフラ構築・構成管理(プロビジョニング)・テストの自動化を最小構成で実施。
 -  Lecture11 以降については、『 0-1 をまずはやってみる 』 『とりあえず実践して試してみる』 の精神・考えで取組を行いました。
-- そのため、取組内容としては簡単なパーツを組み合わせて動かしてみるというイメージで実践/実施。
+- そのため、取組内容としては簡単なパーツを組み合わせて動かしてみるというイメージで実践・実施。
 - 実際にこれまで手動で行ってきた作業の自動化を実施してみて、改めて各種の挙動確認や動作の理解、トライ＆エラーがいかに重要かを実感することができました。
 - 今後はこれまでの過程で得たことを活かしつつ、これまで実践した各内容の深掘りをやっていきたいと思います。
