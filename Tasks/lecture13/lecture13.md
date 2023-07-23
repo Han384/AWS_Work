@@ -265,7 +265,7 @@
     ```
   - テスト実行　 `bundle exec rake`
   - テスト成功を確認
-  ![SeverSpec_test](images/images/SeverSpec_test.png)
+  ![SeverSpec_test](images/SeverSpec_test.png)
   - 【補足】 上記実行後のディレクトリ・ファイル構成
     ```
     [ec2-user@ip-10-0-7-80 ~]$ pwd
