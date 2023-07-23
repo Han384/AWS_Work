@@ -265,6 +265,7 @@
     ```
   - テスト実行　 `bundle exec rake`
   - テスト成功を確認
+  ![SeverSpec_test](images/images/SeverSpec_test.png)
   - 【補足】 上記実行後のディレクトリ・ファイル構成
     ```
     [ec2-user@ip-10-0-7-80 ~]$ pwd
@@ -311,15 +312,55 @@
     ```
 - CircleCI上で、ServerSpecの実行結果を確認
 ## ■動作確認
-- CircleCI 一連の実行結果
+- CircleCI 一連の実行 ( パイプライン ) 結果
+![CircleCI_00_Pipeline](./images/images/CircleCI_00_Pipeline.png)
 - cfn-lint の実行結果
+![CircleCI_01_cfn-lint](./images/images/CircleCI_01_cfn-lint.png)
 - CloudFormation の実行結果
+![CircleCI_02_execute-cloudformation](./images/images/CircleCI_02_execute-cloudformation.png)<br>
+( CloudFormation - スタック / リソース )<br>
+![CircleCI_CloudFormation01](./images/images/CircleCI_CloudFormation01.png)
+![CircleCI_CloudFormation02](./images/images/CircleCI_CloudFormation02.png)
+![CircleCI_CloudFormation03](./images/images/CircleCI_CloudFormation03.png)
+![CircleCI_CloudFormation04](./images/images/CircleCI_CloudFormation04.png)
+![CircleCI_CloudFormation05](./images/images/CircleCI_CloudFormation05.png)
+![CircleCI_CloudFormation06](./images/images/CircleCI_CloudFormation06.png)
+![CircleCI_CloudFormation07](./images/images/CircleCI_CloudFormation07.png)
 - Ansible の実行結果
+![CircleCI_03_execute-ansible](./images/images/CircleCI_03_execute-ansible.png)
 - ServerSpec の実行結果
+![CircleCI_04_execute-serverspec](./images/images/CircleCI_04_execute-serverspec.png)
 
+## ■ CircleCI - .circleci/config.yml で使用する関連ファイル構成
+```
+.
+|-- Tasks
+|   |-- lecture10
+|   |   |-- CloudFormation_templates
+|   |      |-- 01_cfn-vpc.yml
+|   |      |-- 03_cfn-rds.yml
+|   |      |-- 05_cfn-elb.yml
+|   |      `-- 06_cfn-s3.yml
+|   `-- lecture13
+|       |-- CloudFormation_templates
+|          |-- 02_cfn-securitygroup-ansible.yml
+|          `-- 04_cfn-ec2-ansible.yml
+|-- ansible
+|   |-- inventory
+|   `-- playbook.yml
+|-- ansible.cfg
+`-- serverspec
+    |-- Gemfile
+    |-- Gemfile.lock
+    |-- Rakefile
+    `-- spec
+        |-- localhost
+        |   `-- sample_spec.rb
+        `-- spec_helper.rb
+```
 ## ■ 感想
 - 今回の取組方針としては、インフラ構築・構成管理(プロビジョニング)・テストの自動化を最小構成で実施。
 -  Lecture11 以降については、『 0-1 をまずはやってみる 』 『とりあえず実践して試してみる』 の精神・考えで取組を行いました。
 - そのため、取組内容としては簡単なパーツを組み合わせて動かしてみるというイメージで実践/実施。
-- 実際にこれまで手動で行ってきた作業の自動化を実施しみて、改めて各種の挙動確認や動作の理解、トライ＆エラーがいかに重要か実感することができました。
+- 実際にこれまで手動で行ってきた作業の自動化を実施してみて、改めて各種の挙動確認や動作の理解、トライ＆エラーがいかに重要かを実感することができました。
 - 今後はこれまでの過程で得たことを活かしつつ、これまで実践した各内容の深掘りをやっていきたいと思います。
