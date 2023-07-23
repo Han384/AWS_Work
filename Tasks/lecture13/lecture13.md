@@ -313,25 +313,25 @@
 - CircleCI上で、ServerSpecの実行結果を確認
 ## ■動作確認
 - CircleCI 一連の実行 ( パイプライン ) 結果
-![CircleCI_00_Pipeline](./images/images/CircleCI_00_Pipeline.png)
+![CircleCI_00_Pipeline](./images//CircleCI_00_Pipeline.png)
 - cfn-lint の実行結果
-![CircleCI_01_cfn-lint](./images/images/CircleCI_01_cfn-lint.png)
+![CircleCI_01_cfn-lint](./images//CircleCI_01_cfn-lint.png)
 - CloudFormation の実行結果
-![CircleCI_02_execute-cloudformation](./images/images/CircleCI_02_execute-cloudformation.png)<br>
+![CircleCI_02_execute-cloudformation](./images//CircleCI_02_execute-cloudformation.png)<br>
 ( CloudFormation - スタック / リソース )<br>
-![CircleCI_CloudFormation01](./images/images/CircleCI_CloudFormation01.png)
-![CircleCI_CloudFormation02](./images/images/CircleCI_CloudFormation02.png)
-![CircleCI_CloudFormation03](./images/images/CircleCI_CloudFormation03.png)
-![CircleCI_CloudFormation04](./images/images/CircleCI_CloudFormation04.png)
-![CircleCI_CloudFormation05](./images/images/CircleCI_CloudFormation05.png)
-![CircleCI_CloudFormation06](./images/images/CircleCI_CloudFormation06.png)
-![CircleCI_CloudFormation07](./images/images/CircleCI_CloudFormation07.png)
+![CircleCI_CloudFormation01](./images//CircleCI_CloudFormation01.png)
+![CircleCI_CloudFormation02](./images//CircleCI_CloudFormation02.png)
+![CircleCI_CloudFormation03](./images//CircleCI_CloudFormation03.png)
+![CircleCI_CloudFormation04](./images//CircleCI_CloudFormation04.png)
+![CircleCI_CloudFormation05](./images//CircleCI_CloudFormation05.png)
+![CircleCI_CloudFormation06](./images//CircleCI_CloudFormation06.png)
+![CircleCI_CloudFormation07](./images//CircleCI_CloudFormation07.png)
 - Ansible の実行結果
-![CircleCI_03_execute-ansible](./images/images/CircleCI_03_execute-ansible.png)
+![CircleCI_03_execute-ansible](./images//CircleCI_03_execute-ansible.png)
 - ServerSpec の実行結果
-![CircleCI_04_execute-serverspec](./images/images/CircleCI_04_execute-serverspec.png)
+![CircleCI_04_execute-serverspec](./images//CircleCI_04_execute-serverspec.png)
 
-## ■ CircleCI - .circleci/config.yml で使用する関連ファイル構成
+## ■ CircleCI - .circleci/config.yml の関連ファイル構成
 ```
 .
 |-- Tasks
