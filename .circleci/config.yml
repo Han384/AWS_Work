@@ -1,6 +1,10 @@
 version: 2.1
 orbs:
   python: circleci/python@2.0.3
+  aws-cli: circleci/aws-cli@4.0.0
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+  ruby: circleci/ruby@2.0.1
+
 jobs:
   cfn-lint:
     executor: python/default
@@ -11,9 +15,63 @@ jobs:
           name: run cfn-lint
           command: |
             cfn-lint -i W3002 -t Tasks/lecture10/CloudFormation_templates/*.yml
+            cfn-lint -i W3002 -t Tasks/lecture13/CloudFormation_templates/*.yml
+
+  execute-cloudformation:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: ${AWS_DEFAULT_REGION}
+      - run:
+          name: deploy Cloudformation
+          command: | #パイプは改行させてコマンドを実行させてたい場合に必要
+            set -x #シェルが実行コマンドとその引数を出力
+            aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
+            aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture13/CloudFormation_templates/02_cfn-securitygroup-ansible.yml
+            aws cloudformation deploy --stack-name cfn-rds --template-file  Tasks/lecture10/CloudFormation_templates/03_cfn-rds.yml
+            aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture13/CloudFormation_templates/04_cfn-ec2-ansible.yml --capabilities CAPABILITY_NAMED_IAM
+            aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
+            aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
+
+  execute-ansible:
+    executor: ansible-playbook/default
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "28:be:a7:0c:50:3a:17:2f:e8:8f:5c:ab:a9:1d:ac:f9"
+      - ansible-playbook/install:
+          version: 2.10.7
+      - ansible-playbook/playbook:
+          playbook: ansible/playbook.yml
+          playbook-options: "-u ec2-user -i ansible/inventory --private-key ~/.ssh/id_rsa"
+
+  execute-serverspec:
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install:  #Ruby をバージョン指定してインストール
+          version: 3.1.2
+      - ruby/install-deps:  #Bundler を使用して gem をインストール
+          bundler-version: 2.3.14  #Bundler をバージョン指定してインストール
+          app-dir: serverspec  #Gemfile を含むディレクトリへのパス (Gemfile がルートに存在する場合は不要)
+      - run: |
+          cd serverspec
+          bundle exec rake
 
 workflows:
-  raisetech:
+  AWS_Work_CircleCI:
     jobs:
       - cfn-lint
-      
+      - execute-cloudformation:
+          requires:
+            - cfn-lint
+      - execute-ansible:
+          requires:
+            - execute-cloudformation
+      - execute-serverspec:
+          requires:
+            - execute-ansible
