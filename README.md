@@ -15,7 +15,10 @@
 | [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理(プロビジョニング)ツール ( Ansible ) / CircleCIへの組込                                                   |
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 全自動化処理フロー・AWS構成図 の作成など                                                   |<br>
 
+<br>
+
 - 最終課題(インフラ自動化)の構成図
-![diagram](Tasks/lecture14-15/diagram.png)
+![diagram](Tasks/lecture14-15/images/diagram.png)<br>
+
 - CircleCI - Pipeline 実行結果
-![]()
+![CircleCI_00_Pipelin](./Tasks/lecture14-15/images/CircleCI_00_Pipeline.png)
