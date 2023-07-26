@@ -1,3 +1,4 @@
+#※別途、CircleCIの環境変数(Environment Variables)・SSH Keys を必要に応じて適宜設定する必要あり
 version: 2.1
 orbs:
   python: circleci/python@2.0.3
@@ -24,7 +25,7 @@ jobs:
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: ${AWS_DEFAULT_REGION}
+          region: AWS_DEFAULT_REGION
       - run:
           name: deploy Cloudformation
           command: | #パイプは改行させてコマンドを実行させてたい場合に必要
@@ -42,7 +43,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "28:be:a7:0c:50:3a:17:2f:e8:8f:5c:ab:a9:1d:ac:f9"
+            - FINGERPRINT
       - ansible-playbook/install:
           version: 2.10.7
       - ansible-playbook/playbook:
@@ -53,14 +54,19 @@ jobs:
     executor: ruby/default
     steps:
       - checkout
-      - ruby/install:  #Ruby をバージョン指定してインストール
+      - ruby/install: #(参考) Ruby をバージョン指定してインストール
           version: 3.1.2
-      - ruby/install-deps:  #Bundler を使用して gem をインストール
-          bundler-version: 2.3.14  #Bundler をバージョン指定してインストール
-          app-dir: serverspec  #Gemfile を含むディレクトリへのパス (Gemfile がルートに存在する場合は不要)
+      - ruby/install-deps: # Bundler を使用して gem をインストール
+          bundler-version: 2.3.14 #(参考) Bundler をバージョン指定してインストール
+          app-dir: serverspec #Gemfile を含むディレクトリへのパス (Gemfile がルートに存在する場合は不要)
       - run: |
           cd serverspec
           bundle exec rake
+      #諸々の確認用
+      - run: |
+          set -x
+          uname -a && id && pwd && ls -la && git --version
+          ssh -i ~/.ssh/id_rsa ${USER_NAME}@${Hostname} -o StrictHostKeyChecking=no "ec2-metadata | grep ipv4 && uname -a && id && pwd && ls -la && git --version && ec2-metadata"
 
 workflows:
   AWS_Work_CircleCI:

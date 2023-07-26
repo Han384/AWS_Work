@@ -1,5 +1,6 @@
 # 【 lecture13：構成管理(プロビジョニング)ツール ( Ansible ) / CircleCIへの組込 】
 
+
 ## ■ Ansible の環境構築・設定・処理実行
 - コントロールノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - SessionManager を使用してログイン、Ansibleインストールのため下記を実行
@@ -155,7 +156,7 @@
         - aws-cli/setup:
             aws_access_key_id: AWS_ACCESS_KEY_ID
             aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-            region: ${AWS_DEFAULT_REGION}
+            region: AWS_DEFAULT_REGION
         - run:
             name: deploy Cloudformation
             command: |   #パイプは改行させてコマンドを実行させてたい場合に必要
@@ -215,7 +216,7 @@
         - checkout
         - add_ssh_keys:
             fingerprints:
-              - "28:be:a7:0c:50:3a:17:2f:e8:8f:5c:ab:a9:1d:ac:f9"
+              - FINGERPRINT
         - ansible-playbook/install:
             version: 2.10.7
         - ansible-playbook/playbook:
@@ -230,61 +231,87 @@
 - CircleCI上で、Ansibleの実行結果を確認
 
 ### ■ ServerSpec によるテスト実行
-- 自動テスト構築の確認のため、[lecture11](../lecture11/lecture11.md) では実施していなかった SeverSpec を動かすための環境構築 (最小限の構成) を手動で実施。
-  - EC2 に `rbenv / ruby / bundler` をインストール　(  [EC2_eivironment_deploy.md](../lecture05/building_procedure/EC2_eivironment_deploy.md) を参考に実施)
-  - `serverspec`ディレクトリを作成　( ※ディレクトリ名は任意 )
-  - `serverspec`ディレクトリに移動し、 `Gemfile` を作成
-  - `Gemfile` に `serverspec` `rake` を記載し、`bundle install` を実行
-  - インストール実行後、 `Gemfile.lock` が作成されることを確認
-  - インストール確認　`gem list | grep serverspec && gem list | grep rake`
-  - SeverSpecの環境設定・サンプルコード作成　`bundle exec serverspec-init`
-  - 【 1) UN*X 】 【 2) Exec (local) 】 を選択
-  - `Rakefile` ・ `specディレクトリ` ・ `.rspec` など、新規ファイル・ディレクトリが作成されていることを確認　`ls`
-  - 作成された sample_spec.rb を下記内容に編集
-    ```
-    $ vim spec/localhost/sample_spec.rb
+- 自動テスト構築の確認のため、[lecture11](../lecture11/lecture11.md) では実施していなかった部分を含めた SeverSpec を動かすための環境構築 (最小限の構成) を手動で実施。
 
-    -------------------------------------
-    require 'spec_helper'
+#### 【 ① ServerSpec によるテストを Local環境/実行ホスト でのみ行う際の環境構築 】
+- EC2 に `rbenv / ruby / bundler` をインストール　(  [EC2_eivironment_deploy.md](../lecture05/building_procedure/EC2_eivironment_deploy.md) を参考に実施)
+- `serverspec`ディレクトリを作成　( ※ディレクトリ名は任意 )
+- `serverspec`ディレクトリに移動し、 `Gemfile` を作成
+- `Gemfile` に `serverspec` `rake` `ed25519` `bcrypt_pbkdf` を記載し、`bundle install` を実行
+- インストール実行後、 `Gemfile.lock` が作成されることを確認
+- インストール確認　`gem list | grep -e serverspec -e rake -e ed25519 -e bcrypt_pbkd`
+- SeverSpecの環境設定・サンプルコード作成　`bundle exec serverspec-init`
+- 【 1) UN*X 】 【 2) Exec (local) 】 を選択
+- `Rakefile` ・ `specディレクトリ` ・ `.rspec` など、新規ファイル・ディレクトリが作成されていることを確認　`ls`
+- 作成された sample_spec.rb を下記内容に編集
+  ```
+  $ vim spec/localhost/sample_spec.rb
 
-    #Gitがインストールされているか
-    describe package('git') do
-      it { should be_installed }
-    end
+  -------------------------------------
+  require 'spec_helper'
 
-    #Rubyが指定のバージョンか
-    describe command('ruby -v') do
-      its(:stdout) { should match /ruby 3\.1\.2/ }
-    end
+  #Gitがインストールされているか
+  describe package('git') do
+    it { should be_installed }
+  end
+  -------------------------------------
+  ```
+- テスト実行　 `bundle exec rake`
+- テスト成功を確認
+![SeverSpec_test](images/SeverSpec_test.png)
+- 【補足】 上記実行後のディレクトリ・ファイル構成
+  ```
+  [ec2-user@ip-10-0-7-80 ~]$ pwd
+  /home/ec2-user
+  [ec2-user@ip-10-0-7-80 ~]$ tree
+  .
+  └── serverspec
+      ├── Gemfile
+      ├── Gemfile.lock
+      ├── Rakefile
+      └── spec
+          ├── localhost
+          │   └── sample_spec.rb
+          └── spec_helper.rb
 
-    #Bundlerが指定のバージョンか
-    describe command('bundle -v') do
-      its(:stdout) { should match /Bundler version 2\.3\.14/ }
-    end
-    -------------------------------------
-    ```
-  - テスト実行　 `bundle exec rake`
-  - テスト成功を確認
-  ![SeverSpec_test](images/SeverSpec_test.png)
-  - 【補足】 上記実行後のディレクトリ・ファイル構成
-    ```
-    [ec2-user@ip-10-0-7-80 ~]$ pwd
-    /home/ec2-user
-    [ec2-user@ip-10-0-7-80 ~]$ tree
-    .
-    └── severspec
-        ├── Gemfile
-        ├── Gemfile.lock
-        ├── Rakefile
-        └── spec
-            ├── localhost
-            │   └── sample_spec.rb
-            └── spec_helper.rb
+  3 directories, 5 files
+  ```
 
-    3 directories, 5 files
-    ```
-- 上記を踏まえて CircleCI での自動テストの構築を実施
-  - 上記作成した `serverspec` ディレクトリ配下のファイル群を、 `AWS_Work` のルートディレクトリに移動
+#### 【 ② ServerSpec によるテストを 実行ホストからターゲットノード(ホスト)へ行う際の環境構築 】
+- EC2 に `rbenv / ruby / bundler` をインストール　(  [EC2_eivironment_deploy.md](../lecture05/building_procedure/EC2_eivironment_deploy.md) を参考に実施)
+- `serverspec`ディレクトリを作成　( ※ディレクトリ名は任意 )
+- `serverspec`ディレクトリに移動し、 `Gemfile` を作成
+- `Gemfile` に `serverspec` `rake` `ed25519` `bcrypt_pbkdf` を記載し、`bundle install` を実行
+- インストール実行後、 `Gemfile.lock` が作成されることを確認
+- インストール確認　`gem list | grep -e serverspec -e rake -e ed25519 -e bcrypt_pbkd`
+- SeverSpecの環境設定・サンプルコード作成　`bundle exec serverspec-init`
+- 【 1) UN*X 】 【 1) SSH 】 【 Vagrant instance y/n: n 】 【 Input target host name: "ターゲットホスト名/IPアドレス" 】 を選択
+- `Rakefile` ・ `specディレクトリ` ・ `.rspec` など、新規ファイル・ディレクトリが作成されていることを確認　`ls`
+- 作成された sample_spec.rb を編集　( 内容は同上 )
+- 作成された spec_helper.rb を編集　( 下記箇所を変更 )
+  ```
+  #options[:user] ||= Etc.getlogin
+  options[:user] ||= 'ec2-user'
+  ```
+- 【補足】 上記実行後のディレクトリ・ファイル構成
+  ```
+  [ec2-user@ip-10-0-7-80 ~]$ pwd
+  /home/ec2-user
+  [ec2-user@ip-10-0-7-80 ~]$ tree
+  .
+  └── serverspec
+      ├── Gemfile
+      ├── Gemfile.lock
+      ├── Rakefile
+      └── spec
+          ├── 54.150.101.186
+          │   └── sample_spec.rb
+          └── spec_helper.rb
+
+  3 directories, 5 files
+  ```
+#### 【 上記②を踏まえて CircleCI での自動テストの構築を実施 】
+  - 上記②で作成した `serverspec` ディレクトリ配下のファイル群を、 `AWS_Work` のルートディレクトリに移動
   - `.circleci/config` に `SeverSpec` によるテストを実行する処理を追記　( ※ `Ruby` の `ORBS` を使用 )
     ```
     version: 2.1
@@ -296,11 +323,11 @@
         executor: ruby/default
         steps:
           - checkout
-          - ruby/install:  #Ruby をバージョン指定してインストール
+          - ruby/install:  #(参考) Ruby をバージョン指定してインストール
               version: 3.1.2
-          - ruby/install-deps:  #Bundler を使用して gem をインストール
-              bundler-version: 2.3.14  #Bundler をバージョン指定してインストール
-              app-dir: serverspec  #Gemfile を含むディレクトリへのパス ( ※Gemfile がルートに存在する場合は不要 )
+          - ruby/install-deps: # Bundler を使用して gem をインストール
+              bundler-version: 2.3.14  #(参考) Bundler をバージョン指定してインストール
+              app-dir: serverspec #Gemfile を含むディレクトリへのパス (Gemfile がルートに存在する場合は不要)
           - run: |
               cd serverspec
               bundle exec rake

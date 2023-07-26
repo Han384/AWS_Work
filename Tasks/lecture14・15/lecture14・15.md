@@ -1,5 +1,0 @@
-# 【 lecture14・15： AWS 構成図・自動化処理フロー図の作成 】
-
-## ■ AWS構成図・自動化処理フロー図の作成
-![diagram](diagram.png)
-- 既存の README.md に 上図 及び lecture11 以降の内容を追記
