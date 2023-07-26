@@ -1,4 +1,4 @@
-# 【 lecture14・15： 自動化処理フロー・AWS構成図 の作成など 】
+# 【 lecture14 - 15： 自動化処理フロー・AWS構成図 の作成など 】
 
 ## ■ 自動化処理フロー・AWS構成図 の作成
 ![diagram](./images/diagram.png)
