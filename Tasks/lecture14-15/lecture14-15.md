@@ -1,7 +1,7 @@
 # 【 lecture14・15： 自動化処理フロー・AWS構成図 の作成など 】
 
 ## ■ 自動化処理フロー・AWS構成図 の作成
-![diagram](diagram.png)
+![diagram](./images/diagram.png)
 
 ## ■ 前回分の修正 - ServerSpec・`.circleci/config.yml` ( 環境変数の参照 追記 ) など
 - 構成図を書き起こすためフローを見返した際、テスト実行時に違和感があり SeverSpec の動作確認を実施。

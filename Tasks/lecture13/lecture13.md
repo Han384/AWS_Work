@@ -1,6 +1,16 @@
 # 【 lecture13：構成管理(プロビジョニング)ツール ( Ansible ) / CircleCIへの組込 】
 
-
+- [Ansible の環境構築・設定・処理実行](#-ansible-の環境構築設定処理実行)
+- [CircleCI への組込　( CloudFormation / Ansible / ServerSpec )](#-circleci-への組込-cloudformation--ansible--serverspec-)
+  - [CloudFormation によるインフラリソース構築](#-cloudformation-によるインフラリソース構築)
+  - [Ansible による構成管理(プロビジョニング)の実行](#-ansible-による構成管理プロビジョニングの実行)
+  - [ServerSpec によるテスト実行](#-serverspec-によるテスト実行)
+    - [【 ① ServerSpec によるテストを Local環境/実行ホスト でのみ行う際の環境構築 】](#--serverspec-によるテストを-local環境実行ホスト-でのみ行う際の環境構築-)
+    - [【 ② ServerSpec によるテストを 実行ホストからターゲットノード(ホスト)へ行う際の環境構築 】](#--serverspec-によるテストを-実行ホストからターゲットノードホストへ行う際の環境構築-)
+    - [【 上記②を踏まえて CircleCI での自動テストの構築を実施 】](#-上記を踏まえて-circleci-での自動テストの構築を実施-)
+- [CircleCI - 実行結果/動作確認](#-circleci---実行結果動作確認)
+- [CircleCI - .circleci/config.yml の関連ファイル構成](#-circleci---circleciconfigyml-の関連ファイル構成)
+- [感想](#-感想)
 ## ■ Ansible の環境構築・設定・処理実行
 - コントロールノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - SessionManager を使用してログイン、Ansibleインストールのため下記を実行
@@ -90,7 +100,7 @@
   ```
   $ git --version
   ```
-## ■ CircleCIへの組込　( CloudFormation / Ansible / ServerSpec )
+## ■ CircleCI への組込　( CloudFormation / Ansible / ServerSpec )
 ### ■ CloudFormation によるインフラリソース構築
 - AnsibleでのSSH接続対応のため、 [lecture10](../../Tasks/lecture10/lecture10.md) の [CloudFormation_templates - 04_cfn-ec2.yml](../../Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml) に下記を追記<br>
 ( ※併せて [02_cfn-securitygroup.yml](../../Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml) のSSH接続設定も変更 )
@@ -338,7 +348,7 @@
           - execute-serverspec
     ```
 - CircleCI上で、ServerSpecの実行結果を確認
-## ■ 実行結果/動作確認
+## ■ CircleCI - 実行結果/動作確認
 - CircleCI 一連の実行 ( パイプライン ) 結果
 ![CircleCI_00_Pipeline](./images/CircleCI_00_Pipeline.png)
 - cfn-lint の実行結果
