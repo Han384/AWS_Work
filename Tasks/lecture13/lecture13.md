@@ -1,4 +1,4 @@
-# 【 lecture13：構成管理(プロビジョニング)ツール ( Ansible ) / CircleCIへの組込 】
+# 【 lecture13：構成管理(プロビジョニング)ツール　( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec ) 】
 
   - [Ansible の環境構築・設定・処理実行](#-ansible-の環境構築設定処理実行)
   - [CircleCI への組込　( CloudFormation / Ansible / ServerSpec )](#-circleci-への組込-cloudformation--ansible--serverspec-)

@@ -1,6 +1,6 @@
 # 【 lecture14 - 15： 自動化処理フロー・AWS構成図 の作成など 】
 
-## ■ 自動化処理フロー・AWS構成図 の作成
+## ■ 自動化処理フロー ＆ AWS構成図 の作成
 ![diagram](./images/diagram.png)
 
 ## ■ 前回分の修正 - ServerSpec・`.circleci/config.yml` ( 環境変数の参照 追記 ) など

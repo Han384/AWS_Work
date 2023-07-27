@@ -48,11 +48,11 @@
 - [CircleCI - スタートガイド](https://circleci.com/docs/ja/getting-started/)
 - [AWS CloudFormation Linter](https://github.com/aws-cloudformation/cfn-lint)
 - [cfn-lint を使った AWS CloudFormation テンプレートの Git pre-commit バリデーション](https://aws.amazon.com/jp/blogs/news/git-pre-commit-validation-of-aws-cloudformation-templates-with-cfn-lint/)
+- [Linterを使ってCloudFormationの間違いに爆速で気づく](https://dev.classmethod.jp/articles/use-linter-to-notice-mistakes-of-cloudformation/)
 -  [CircleCI - 【チュートリアル】01 CircleCIをはじめよう！](https://www.youtube.com/watch?v=cOHKRYgdzDY)
 -  [CircleCI - 【チュートリアル】02 CircleCIでビルドを成功させよう！](https://www.youtube.com/watch?v=hTM2nk8mSoQ)
 - [【AWS Black Belt Online Seminar】　AWS CloudFormation](https://www.youtube.com/watch?v=Viyqh9fNBjw)
 - [AWS CloudFormation のベストプラクティス](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/best-practices.html)<br>
-
 
  ## ■ 参考リンク ( CircleCI CLI 関連 )
 - [CircleCI のローカル CLI のインストール](https://circleci.com/docs/ja/local-cli/)
