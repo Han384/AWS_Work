@@ -154,7 +154,7 @@
 | [lecture06.md](./Tasks/lecture06/lecture06.md) | 証跡・ロギング / 監視・通知 / コスト管理                                               |
 | [lecture07.md](./Tasks/lecture07/lecture07.md) | セキュリティ対策                                                                       |
 | [lecture10.md](./Tasks/lecture10/lecture10.md) | インフラ自動化 / IaC / CloudFormation                                                  |
-| [lecture11.md](./Tasks/lecture11/lecture11.md) | インフラの自動テスト / ServerSpec                                                  |
+| [lecture11.md](./Tasks/lecture11/lecture11.md) | 自動テスト / ServerSpec                                                  |
 | [lecture12.md](./Tasks/lecture12/lecture12.md) | CI/CDツール ( CircleCI )                                                   |
 | [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>

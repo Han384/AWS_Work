@@ -1,4 +1,4 @@
-# 【 lecture11：インフラの自動テスト / ServerSpec 】
+# 【 lecture11：自動テスト / ServerSpec 】
 
 ## ■ ServerSpecを使用して自動テストを実行
 - 事前作業 - EC2・RDS を起動

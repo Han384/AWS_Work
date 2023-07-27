@@ -1,6 +1,6 @@
 # 【 lecture12：CI/CDツール ( CircleCI ) 】
 
-## ■ CircleCIの動作確認　( GitHubリポジトリへの組込：CFnの構文チェック )
+## ■ CircleCIの動作確認　( GitHubリポジトリへの組込：cfn-lint - CFnの構文チェック )
 【 手順 】
 - [公式ドキュメント](https://circleci.com/docs/ja/getting-started/)を参照して初期設定を試行
 - 試行するも、初期設定フロー通りに設定できなかったため動作に必要な設定・挙動を確認して以降の対応を実施<br>
