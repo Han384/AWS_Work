@@ -1,16 +1,18 @@
 # 【 lecture13：構成管理(プロビジョニング)ツール ( Ansible ) / CircleCIへの組込 】
 
-- [Ansible の環境構築・設定・処理実行](#-ansible-の環境構築設定処理実行)
-- [CircleCI への組込　( CloudFormation / Ansible / ServerSpec )](#-circleci-への組込-cloudformation--ansible--serverspec-)
-  - [CloudFormation によるインフラリソース構築](#-cloudformation-によるインフラリソース構築)
-  - [Ansible による構成管理(プロビジョニング)の実行](#-ansible-による構成管理プロビジョニングの実行)
-  - [ServerSpec によるテスト実行](#-serverspec-によるテスト実行)
-    - [【 ① ServerSpec によるテストを Local環境/実行ホスト でのみ行う際の環境構築 】](#--serverspec-によるテストを-local環境実行ホスト-でのみ行う際の環境構築-)
-    - [【 ② ServerSpec によるテストを 実行ホストからターゲットノード(ホスト)へ行う際の環境構築 】](#--serverspec-によるテストを-実行ホストからターゲットノードホストへ行う際の環境構築-)
-    - [【 上記②を踏まえて CircleCI での自動テストの構築を実施 】](#-上記を踏まえて-circleci-での自動テストの構築を実施-)
-- [CircleCI - 実行結果/動作確認](#-circleci---実行結果動作確認)
-- [CircleCI - .circleci/config.yml の関連ファイル構成](#-circleci---circleciconfigyml-の関連ファイル構成)
-- [感想](#-感想)
+  - [Ansible の環境構築・設定・処理実行](#-ansible-の環境構築設定処理実行)
+  - [CircleCI への組込　( CloudFormation / Ansible / ServerSpec )](#-circleci-への組込-cloudformation--ansible--serverspec-)
+    - [CloudFormation によるインフラリソース構築](#-cloudformation-によるインフラリソース構築)
+    - [Ansible による構成管理(プロビジョニング)の実行](#-ansible-による構成管理プロビジョニングの実行)
+    - [ServerSpec によるテスト実行](#-serverspec-によるテスト実行)
+      - [【 ① ServerSpec によるテストを Local環境/実行ホスト でのみ行う際の環境構築 】](#--serverspec-によるテストを-local環境実行ホスト-でのみ行う際の環境構築-)
+      - [【 ② ServerSpec によるテストを 実行ホストからターゲットノード(ホスト)へ行う際の環境構築 】](#--serverspec-によるテストを-実行ホストからターゲットノードホストへ行う際の環境構築-)
+      - [【 上記②を踏まえて CircleCI での自動テストの構築を実施 】](#-上記を踏まえて-circleci-での自動テストの構築を実施-)
+  - [CircleCI - 実行結果/動作確認](#-circleci---実行結果動作確認)
+  - [CircleCI - .circleci/config.yml の関連ファイル構成](#-circleci---circleciconfigyml-の関連ファイル構成)
+  - [感想](#-感想)
+  - [参考リンク](#-参考リンク)
+
 ## ■ Ansible の環境構築・設定・処理実行
 - コントロールノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - SessionManager を使用してログイン、Ansibleインストールのため下記を実行
@@ -402,3 +404,70 @@
 - そのため、取組内容としては簡単なパーツを組み合わせて動かしてみるというイメージで実践・実施。
 - 実際にこれまで手動で行ってきた作業の自動化を実施してみて、改めて各種の挙動確認や動作の理解、トライ＆エラーがいかに重要かを実感することができました。
 - 今後はこれまでの過程で得たことを活かしつつ、実践した各内容の深掘りをやっていきたいと思います。
+
+## ■ 参考リンク
+<details><summary>【 Ansible 環境構築・設定 関連 】</summary>
+
+- [Ansible ドキュメント](https://docs.ansible.com/ansible/2.9_ja/index.html)
+- [Ansible のインストール](https://docs.ansible.com/ansible/2.9_ja/installation_guide/intro_installation.html)
+- [Ansible 構成設定](https://docs.ansible.com/ansible/2.9_ja/reference_appendices/config.html)
+- [Ansible の動作の制御: 優先順位のルール](https://docs.ansible.com/ansible/2.9_ja/reference_appendices/general_precedence.html)
+- [Amazon Linux2にAnisbleをインストールする方法](https://qiita.com/tireidev/items/92dcfa6fa2a33cb11442)
+- [Amazon Linux 2のExtras Library(amazon-linux-extras)を使ってみた](https://dev.classmethod.jp/articles/how-to-work-with-amazon-linux2-amazon-linux-extras/)
+- [Ansible をインストールする](https://sid-fm.com/support/vm/guide/install-ansible.html)
+- [Ansibleを使用したコマンドのインストール](https://engineer-blog.ajike.co.jp/ansible-1/)
+- [ansible.cnfでssh_configを設定する](https://dev.classmethod.jp/articles/enable_ssh_conf_using_via_ansible-cnf/)
+- [SSHコマンド実行時に生じたBad owner or permissions on /home/(user_name)/.ssh/config エラーの対処法](https://qiita.com/muramasa2/items/c58345b3ab6069d02849)
+- [【完全版】SSHコマンドの基本からその実践方法まで実例付きで解説](https://itc.tokyo/linux/ssh-command/)
+- [【SSH】公開鍵認証とEC2について](https://qiita.com/aiandrox/items/98ad9b7551481d890916)
+- [Ansible - ディレクトリ構成について](https://qiita.com/makaaso-tech/items/0375081c1600b312e8b0)
+- [【Ansible公式】ベストプラクティス](https://docs.ansible.com/ansible/2.9_ja/user_guide/playbooks_best_practices.html)
+- [公式ベストプラクティスを参考に、Ansibleを1から学んでつくってみました](https://blog.engineer.adways.net/entry/2019/04/12/170000)
+- [【Ansible - GALAXY】](https://galaxy.ansible.com/)
+
+</details>
+
+<details><summary>【 CircleCIへの組込 ( CloudFormation 関連 )  】</summary>
+
+- [AWS公式ドキュメント - CloudFormation ( AWS::EC2::EIP )](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-eip.html)
+- [AWS公式ドキュメント - CloudFormation ( AWS::EC2::EIPAssociation )](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-eip-association.html)
+- [CloudFormationで既存EIPをEC2に割り当てる](https://blog.denet.co.jp/cloudformation-eip-ec2/)
+- [【AWS】CloudFormationの作成ノウハウをまとめた社内向け資料を公開してみる](https://dev.classmethod.jp/articles/cloudformation-knowhow/)
+- [CloudFormationの全てを味わいつくせ！「AWSの全てをコードで管理する方法〜その理想と現実〜」](https://dev.classmethod.jp/articles/aws-all-iac/)
+- [AWS CLIのエラー「Could not connect to the endpoint URL」](https://blog.serverworks.co.jp/tech/2019/02/27/post-69261/)
+- [AWS CLI のエラー「Connect timeout on/Could not connect to the endpoint URL: ～」を回避するには](https://dev.classmethod.jp/articles/tsnote-awscli-couldnotconnect-001/)
+- [【CircleCI公式】Orb の概要](https://circleci.com/docs/ja/orb-intro/)
+- [【CircleCI公式】circleci/aws-cli@4.0.0](https://circleci.com/developer/ja/orbs/orb/circleci/aws-cli)
+- [【 set 】コマンド――シェルの設定を確認、変更する](https://atmarkit.itmedia.co.jp/ait/articles/1805/10/news023.html)
+
+</details>
+
+<details><summary>【 CircleCIへの組込 ( Ansible 関連 ) 】</summary>
+
+- [【CircleCI公式】orbss/ansible-playbook@0.0.5](https://circleci.com/developer/ja/orbs/orb/orbss/ansible-playbook)
+- [【CircleCI公式】CircleCI に SSH キーを登録する](https://circleci.com/docs/ja/add-ssh-key/)
+- [CircleCIのJob実行環境にSSH接続する](https://dev.classmethod.jp/articles/circleci-job-contener-ssh-connect/)
+- [AnsibleのSSH接続エラーの回避設定](https://qiita.com/taka379sy/items/331a294d67e02e18d68d)
+- [【8つの方法】「Authenticity of Host Can’t Be Established」エラーを解決するには](https://kinsta.com/jp/knowledgebase/the-authenticity-of-host-cant-be-established/)
+- [【 ssh 】コマンド――リモートマシンにログインしてコマンドを実行する](https://atmarkit.itmedia.co.jp/ait/articles/1701/26/news015.html)
+
+</details>
+
+
+<details><summary>【 CircleCIへの組込 ( ServerSpec 関連 ) 】</summary>
+
+- [Serverspec環境構築手順](https://qiita.com/Esfahan/items/2c80f84a7ea3f71f5037)
+- [Lecture05 - 【 環境構築：EC2_eivironment_deploy.md 】](../lecture05/building_procedure/EC2_eivironment_deploy.md)
+- [EC2にrubyをインストールする手順 ~rbenvからbundlerの解説~](https://hitolog.blog/2021/10/13/how-to-ruby-install/)
+- [Lecture11 - 【 インフラの自動テスト / ServerSpec 】](../lecture11/lecture11.md)　( ※参考リンクも参照 )
+- [【Rubyエラー】Could not locate Gemfile or .bundle/ directoryと出たときの対処法](https://qiita.com/Kenchiki/items/1f997f57a83a368bb538)
+- [CircleCIのorbsを使って設定ファイルを整理するMEMO](https://madogiwa0124.hatenablog.com/entry/2020/09/27/233519)
+- [[備忘録] CircleCI / Ruby(公式doc.の最小構成)について各設定項目の概要と参照先リンク](https://qiita.com/RiSE_blackbird/items/c0f23ca2c78499fad1b5)
+- [Serverspec 最初の一歩 @ AWS EC2](https://qiita.com/hitomatagi/items/12f9f10ff8e95dbe0999)
+- [Serverspec で リモート サーバをテスト @ AWS EC2](https://qiita.com/hitomatagi/items/c76fcf088daff31069ff)
+- [Serverspec で複数のサーバをテスト @ AWS EC2](https://qiita.com/hitomatagi/items/956a8893aea6cb18a93f)
+- [Serverspecでよく使うテストの書き方まとめ](https://qiita.com/minamijoyo/items/467ddd13c0cab15330bf)
+- [【小ネタ】パブリックIPアドレスをEC2内部から確認する方法](https://blog.serverworks.co.jp/ec2/ipaddress)
+- [circleci経由でEC2にSSHするとそれ以降のコマンドが実行されない](https://teratail.com/questions/213693)
+
+</details>
