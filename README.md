@@ -3,7 +3,8 @@
 ## ■ 概要
 - インフラ構築・設定など、下記の実践内容を記載
   - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイテスト)
-  - [IaC - CloudFormation を使用したインフラリソースの構築](#-IaC--cloudformation-を使用したインフラリソースの構築)
+  - [CloudFormation を使用したインフラリソースの構築](#-cloudformation-を使用したインフラリソースの構築)
+  - [CircleCI による 自動化・パイプライン構築](#-circleci-による-自動化・パイプライン構築)
   - [Webエンジニアリングスクールでのアウトプット一覧　( 実践/学習記録 )](#-webエンジニアリングスクールでのアウトプット一覧-実践学習記録-)
 
 <br>
@@ -39,7 +40,7 @@
 
 <br>
 
-## ■ IaC - CloudFormation を使用したインフラリソースの構築<br>
+## ■ CloudFormation を使用したインフラリソースの構築<br>
 【 実践内容 】
 - [構築実践の取組](./Tasks/lecture10/lecture10.md)　( ※下記 AWS構成図のリソース構築を実施 )
 - 各リソース/スタックのテンプレートファイル ( [CloudFormation_templates](./Tasks/lecture10/CloudFormation_templates) ) を作成
@@ -49,7 +50,7 @@
   - ハードコーディングを避けるための動的参照 - SSMパラメータストア を活用
   - RDS - SecretsManager での認証情報 (シークレット) 管理を反映
   - EC2 - SessionManager を活用　( ※SSH接続に関する設定は、後学のために削除せず記述を残置 )<br>
-- [CI/CDツール ( CircleCI )](./Tasks/lecture12/lecture12.md) による CloudFormation テンプレート の構文チェック
+- [CI/CDツール ( CircleCI：cfn-lint )](./Tasks/lecture12/lecture12.md) による CloudFormation テンプレート の構文チェック
 - AWS構成図
 ![構成図2](./Tasks/lecture10/images//resource_diagram.png)
 - テンプレートファイル構成
@@ -68,20 +69,25 @@
 
 <br>
 
-## ■ CI/CD - CircleCI による自動化・パイプライン構築<br>　 ( CloudFormation / Ansible / ServerSpec )
+## ■ CircleCI による 自動化・パイプライン構築
+【 使用ツール 】
+- CircleCI - パイプライン構築
+- cfn-lint - CloudFormation テンプレート の構文チェック
 - CloudFormation - インフラリソース構築
 - Ansible - 構成管理 / プロビジョニング
 - ServerSpec - テスト
 
 <br>
 
+【 実践内容 】
 - [自動化・パイプライン構築の取組](./Tasks/lecture13/lecture13.md)　
-( ※下記 自動化処理フロー ＆ AWS構成図 のリソース構築を実施 )
+( ※下記 自動化処理フロー ＆ AWS構成図 の構築を実施 )
 - 自動化処理・パイプラインを実行する CircleCI の設定ファイル [.circleci/config.yml](./.circleci/config.yml) を作成
+- cfn-lint・CloudFormation については [上記取組]() のものを一部修正して活用
 - Ansible・ServereSpec については簡易的な実行処理を記述<br>
-( ※CloudFormation で構築した EC2 に Git をインストール＆テスト )
-- 『 0→1 の実践 』 の考えで 簡易パーツを組み合わせて動かしてみるイメージで取組を実施<br>
-( ※各ツールの深堀りは継続学習中 )
+( ※ CloudFormation で構築した EC2 に Git をインストール＆テスト )
+- 『 0→1 の実践 』 の考え、簡易パーツを組み合わせて動かすイメージで自動化の取組を実施<br>
+( ※各ツールの深堀りについては継続学習中 )
 - 自動化処理フロー ＆ AWS構成図
 ![diagram](./Tasks/lecture14-15/images/diagram.png)
 - [.circleci/config.yml](./.circleci/config.yml) の関連ファイル構成
@@ -111,18 +117,20 @@
           |   `-- sample_spec.rb
           `-- spec_helper.rb
   ```
-- CircleCI の実行結果 ( パイプライン )
+- CircleCI -  パイプライン構築　の実行結果
 ![CircleCI_00_Pipeline](./Tasks/lecture13/images/CircleCI_00_Pipeline.png)
-- cfn-lint ( CloudFormation テンプレート の構文チェック ) の実行結果
+- cfn-lint -  CloudFormation テンプレート の構文チェック　の実行結果
 ![CircleCI_01_cfn-lint](./Tasks/lecture13/images/CircleCI_01_cfn-lint.png)
-- CloudFormation ( インフラリソース構築 ) の実行結果
+- CloudFormation - インフラリソース構築　の実行結果
 ![CircleCI_02_execute-cloudformation](./Tasks/lecture13/images/CircleCI_02_execute-cloudformation.png)<br>
 ( CloudFormation - 作成スタック )
 ![CircleCI_CloudFormation01](./Tasks/lecture13/images/CircleCI_CloudFormation01.png)
-- Ansible ( 構成管理/プロビジョニング ) の実行結果
+- Ansible - 構成管理 / プロビジョニング　の実行結果
 ![CircleCI_03_execute-ansible](./Tasks/lecture13/images/CircleCI_03_execute-ansible.png)
-- ServerSpec ( テスト ) の実行結果
+- ServerSpec - テスト　の実行結果
 ![CircleCI_01_execute-serverspec.png](./Tasks/lecture14-15/images/CircleCI_01_execute-serverspec.png)
+
+<br>
 
 ## ■ Webエンジニアリングスクールでのアウトプット一覧　( 実践/学習記録 )<br>
 - スクール ( RaiseTech ) での実践/学習記録を各ファイルに記載
@@ -148,5 +156,5 @@
 | [lecture10.md](./Tasks/lecture10/lecture10.md) | インフラ自動化 / IaC / CloudFormation                                                  |
 | [lecture11.md](./Tasks/lecture11/lecture11.md) | インフラの自動テスト / ServerSpec                                                  |
 | [lecture12.md](./Tasks/lecture12/lecture12.md) | CI/CDツール ( CircleCI )                                                   |
-| [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール　( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
+| [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>
