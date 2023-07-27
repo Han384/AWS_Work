@@ -458,7 +458,7 @@
 
 - [Serverspec環境構築手順](https://qiita.com/Esfahan/items/2c80f84a7ea3f71f5037)
 - [Lecture05 - 【 環境構築：EC2_eivironment_deploy.md 】](../lecture05/building_procedure/EC2_eivironment_deploy.md)
-- [EC2にrubyをインストールする手順 ~rbenvからbundlerの解説~](https://hitolog.blog/2021/10/13/how-to-ruby-install/)
+- [EC2にrubyをインストールする手順 -rbenvからbundlerの解説-](https://hitolog.blog/2021/10/13/how-to-ruby-install/)
 - [Lecture11 - 【 インフラの自動テスト / ServerSpec 】](../lecture11/lecture11.md)　( ※参考リンクも参照 )
 - [【Rubyエラー】Could not locate Gemfile or .bundle/ directoryと出たときの対処法](https://qiita.com/Kenchiki/items/1f997f57a83a368bb538)
 - [CircleCIのorbsを使って設定ファイルを整理するMEMO](https://madogiwa0124.hatenablog.com/entry/2020/09/27/233519)
