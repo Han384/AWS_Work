@@ -1,10 +1,10 @@
-# 【 インフラ構築 実践 】<br>
+# 【 インフラ構築・自動化/パイプライン構築の実践 】<br>
 
 ## ■ 概要
-- インフラ構築・設定など、下記の実践内容を記載
+- インフラ構築・自動化/パイプライン構築など、下記の実践内容を記載
   - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイテスト)
-  - [CloudFormation を使用したインフラリソースの構築](#-cloudformation-を使用したインフラリソースの構築)
-  - [CircleCI による 自動化・パイプライン構築](#-circleci-による-自動化・パイプライン構築)
+  - [【 IaC 】 CloudFormation を使用したインフラリソースの構築](#--iac--cloudformation-を使用したインフラリソースの構築)
+  - [【 CI/CD 】 CircleCI による 自動化・パイプライン構築](#--iac--cloudformation-を使用したインフラリソースの構築)
   - [Webエンジニアリングスクールでのアウトプット一覧　( 実践/学習記録 )](#-webエンジニアリングスクールでのアウトプット一覧-実践学習記録-)
 
 <br>
@@ -40,7 +40,7 @@
 
 <br>
 
-## ■ CloudFormation を使用したインフラリソースの構築<br>
+## ■ 【 IaC 】 CloudFormation を使用したインフラリソースの構築<br>
 【 実践内容 】
 - [構築実践の取組](./Tasks/lecture10/lecture10.md)　( ※下記 AWS構成図のリソース構築を実施 )
 - 各リソース/スタックのテンプレートファイル ( [CloudFormation_templates](./Tasks/lecture10/CloudFormation_templates) ) を作成
@@ -69,7 +69,7 @@
 
 <br>
 
-## ■ CircleCI による 自動化・パイプライン構築
+## ■ 【 CI/CD】 CircleCI による 自動化・パイプライン構築
 【 使用ツール 】
 - CircleCI - パイプライン構築
 - cfn-lint - CloudFormation テンプレート の構文チェック
@@ -80,10 +80,10 @@
 <br>
 
 【 実践内容 】
-- [自動化・パイプライン構築の取組](./Tasks/lecture13/lecture13.md)　
-( ※下記 自動化処理フロー ＆ AWS構成図 の構築を実施 )
+- [自動化・パイプライン構築の取組](./Tasks/lecture13/lecture13.md)<br>
+( ※下記 自動化処理フロー ＆ AWS構成図 の自動実行設定を実施 )
 - 自動化処理・パイプラインを実行する CircleCI の設定ファイル [.circleci/config.yml](./.circleci/config.yml) を作成
-- cfn-lint・CloudFormation については [上記取組]() のものを一部修正して活用
+- cfn-lint・CloudFormation については [上記取組](#-cloudformation-を使用したインフラリソースの構築) のものを一部修正して活用
 - Ansible・ServereSpec については簡易的な実行処理を記述<br>
 ( ※ CloudFormation で構築した EC2 に Git をインストール＆テスト )
 - 『 0→1 の実践 』 の考え、簡易パーツを組み合わせて動かすイメージで自動化の取組を実施<br>
