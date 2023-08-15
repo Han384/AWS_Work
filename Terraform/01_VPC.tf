@@ -117,3 +117,22 @@ resource "aws_route_table_association" "PrivateSubnet1cRouteTableAssociation" {
   route_table_id = aws_route_table.PrivateRouteTable.id
   subnet_id      = aws_subnet.PrivateSubnet1c.id
 }
+
+# ---------------------------------------------
+# Internet Gateway
+# ---------------------------------------------
+resource "aws_internet_gateway" "TerraformInternetGateway" {
+  vpc_id = aws_vpc.TerraformVPC.id
+
+  tags = {
+    Name    = "${var.project}-${var.environment}-igw"
+    Project = var.project
+    Env     = var.environment
+  }
+}
+
+resource "aws_route" "PublicRoute" {
+  route_table_id         = aws_route_table.PublicRouteTable.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.TerraformInternetGateway.id
+}
