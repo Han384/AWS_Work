@@ -72,3 +72,48 @@ resource "aws_subnet" "PrivateSubnet1c" {
     Type    = "private"
   }
 }
+
+# ---------------------------------------------
+# Route Table
+# ---------------------------------------------
+resource "aws_route_table" "PublicRouteTable" {
+  vpc_id = aws_vpc.TerraformVPC.id
+
+  tags = {
+    Name    = "${var.project}-${var.environment}-public-rtb"
+    Project = var.project
+    Env     = var.environment
+    Type    = "public"
+  }
+}
+
+resource "aws_route_table_association" "PublicSubnet1aRouteTableAssociation" {
+  route_table_id = aws_route_table.PublicRouteTable.id
+  subnet_id      = aws_subnet.PublicSubnet1a.id
+}
+
+resource "aws_route_table_association" "PublicSubnet1cRouteTableAssociation" {
+  route_table_id = aws_route_table.PublicRouteTable.id
+  subnet_id      = aws_subnet.PublicSubnet1c.id
+}
+
+resource "aws_route_table" "PrivateRouteTable" {
+  vpc_id = aws_vpc.TerraformVPC.id
+
+  tags = {
+    Name    = "${var.project}-${var.environment}-private-rtb"
+    Project = var.project
+    Env     = var.environment
+    Type    = "private"
+  }
+}
+
+resource "aws_route_table_association" "PrivateSubnet1aRouteTableAssociation" {
+  route_table_id = aws_route_table.PrivateRouteTable.id
+  subnet_id      = aws_subnet.PrivateSubnet1a.id
+}
+
+resource "aws_route_table_association" "PrivateSubnet1cRouteTableAssociation" {
+  route_table_id = aws_route_table.PrivateRouteTable.id
+  subnet_id      = aws_subnet.PrivateSubnet1c.id
+}
