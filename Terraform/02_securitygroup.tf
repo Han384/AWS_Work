@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "ec2_web_in_ssh" {
   protocol          = "tcp"
   from_port         = 22
   to_port           = 22
-  cidr_blocks       = [data.aws_ssm_parameter.myIP-terraform.value] # パラメータストアの値を使用
+  cidr_blocks       = [data.aws_ssm_parameter.myIP-terraform.value] # パラメータストアの暗号化した値を取得
 }
 
 resource "aws_security_group_rule" "ec2_web_in_tcp3000" {

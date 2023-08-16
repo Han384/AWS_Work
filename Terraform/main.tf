@@ -5,8 +5,10 @@ terraform {
   required_version = ">=1.5.0"
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0"
+      source = "hashicorp/aws"
+      #version = "~> 3.0"
+      #version = "~> 4.0"
+      version = "~> 5.0"
     }
   }
 }
@@ -15,15 +17,15 @@ terraform {
 # Provider
 # ---------------------------------------------
 provider "aws" {
-  profile = var.profile
-  region  = "ap-northeast-1"
+  #profile = var.profile
+  region = "ap-northeast-1"
 }
 
 # ---------------------------------------------
 # Backend：S3
 # ---------------------------------------------
 # ※バックエンド設定(記述)では variable が使用できないため、
-# 　ハードコーディングを避ける方法としては init コマンド実行時に引数を渡す方法がある
+# 　ハードコーディングを避ける方法としては terraform init コマンド実行時に引数を渡す方法がある
 # ---------------------------------------------
 terraform {
   backend "s3" {
@@ -52,6 +54,6 @@ variable "environment" {
   type = string
 }
 
-variable "profile" {
-  type = string
-}
+# variable "profile" {
+#   type = string
+# }
