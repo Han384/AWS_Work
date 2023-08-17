@@ -1,5 +1,5 @@
 # ---------------------------------------------
-# IAM Role
+# IAM Role：セッションマネージャー用
 # ---------------------------------------------
 resource "aws_iam_instance_profile" "EC2InstanceProfile" {
   name = aws_iam_role.EC2IAMRole.name

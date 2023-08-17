@@ -57,3 +57,8 @@ variable "environment" {
 # variable "profile" {
 #   type = string
 # }
+
+# 第5回サンプルアプリのAMIを使用しての動作確認用
+# variable "ami" {
+#   type = string
+# }
