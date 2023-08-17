@@ -25,7 +25,7 @@ data "aws_ami" "EC2WebServer01" {
   owners      = ["self", "amazon"]
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["amzn2-ami-hvm-2.0.*-x86_64-gp2"]
     #values = ["amzn2-ami-kernel-5.10-hvm-2.0.*-x86_64-gp2"]
   }
