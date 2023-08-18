@@ -26,7 +26,7 @@ resource "aws_db_instance" "RDSDBInstance" {
   engine_version              = "8.0.32"
   identifier                  = "${var.project}-${var.environment}-rds-mysql"
   username                    = data.aws_ssm_parameter.MasterUsername-terraform.value # パラメータストアの暗号化した値を取得
-  manage_master_user_password = true  # Secrets Manager でのマスター パスワードの管理を有効化
+  manage_master_user_password = true                                                  # Secrets Manager でのマスター パスワードの管理を有効化
   instance_class              = "db.t3.micro"
   allocated_storage           = 20
   storage_type                = "gp2"

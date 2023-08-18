@@ -1,3 +1,4 @@
+# S3 bucket 名にランダム文字列を使用するための記述
 resource "random_string" "s3_unique_key" {
   length  = 6
   upper   = false

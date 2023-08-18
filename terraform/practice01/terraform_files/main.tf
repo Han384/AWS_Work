@@ -6,8 +6,8 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      #version = "~> 3.0"
-      #version = "~> 4.0"
+      #version = "~> 3.0" # 確認用
+      #version = "~> 4.0" # 確認用
       version = "~> 5.0"
     }
   }
@@ -17,27 +17,26 @@ terraform {
 # Provider
 # ---------------------------------------------
 provider "aws" {
-  #profile = var.profile
+  #profile = var.profile #確認用
   region = "ap-northeast-1"
 }
 
 # ---------------------------------------------
 # Backend：S3
 # ---------------------------------------------
-# ※バックエンド設定(記述)では variable が使用できないため、
+# ※【補足】 初期化実行時、バックエンド設定(記述)では variables が使用できないため、
 # 　ハードコーディングを避ける方法としては terraform init コマンド実行時に引数を渡す方法がある
 # ---------------------------------------------
 terraform {
   backend "s3" {
-    #profile = var.profile
-    # 初期化にはprofile指定が必要だが、terraform init 実行するとエラーとなるため引数として値を渡して初期化コマンドを実行
-    bucket = "aws-work-terraform"
+    #profile = var.profile # 確認用
+    bucket = "aws-work-terraform-practice01"
     key    = "dev/terraform.tfstate"
     region = "ap-northeast-1"
   }
 }
 
-# 動作検証用 (※initコマンドに引数を渡して初期化を実行)
+# 確認用 (※上記記述をコメントアウト、terrafrom init コマンドに引数を渡して初期化を実行)
 #   terraform {
 #     backend "s3" {
 #     }
@@ -54,6 +53,7 @@ variable "environment" {
   type = string
 }
 
+# 確認用
 # variable "profile" {
 #   type = string
 # }
