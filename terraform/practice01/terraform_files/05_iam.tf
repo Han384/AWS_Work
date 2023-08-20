@@ -1,5 +1,5 @@
 # ---------------------------------------------
-# IAM Role：セッションマネージャー用
+# IAM Role：EC2 - SessionManager 適用のため記述
 # ---------------------------------------------
 resource "aws_iam_instance_profile" "EC2InstanceProfile" {
   name = aws_iam_role.EC2IAMRole.name

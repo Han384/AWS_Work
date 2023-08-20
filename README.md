@@ -4,6 +4,7 @@
 - インフラ構築・自動化/パイプライン構築など、下記の実践内容を記載
   - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイテスト)
   - [【 IaC 】 CloudFormation を使用したインフラリソースの構築](#--iac--cloudformation-を使用したインフラリソースの構築)
+  - [【 IaC 】 Terraform を使用したインフラリソースの構築](#--iac--terraform-を使用したインフラリソースの構築)
   - [【 CI/CD 】 CircleCI による 自動化・パイプライン構築](#--cicd-circleci-による-自動化パイプライン構築)
   - [Webエンジニアリングスクールでのアウトプット一覧　( 実践/学習記録 )](#-webエンジニアリングスクールでのアウトプット一覧-実践学習記録-)
 
@@ -56,16 +57,87 @@
 - テンプレートファイル構成
   ```
   |-- CloudFormation_templates
-  |   |-- 01_cfn-vpc.yml
-  |   |-- 02_cfn-securitygroup.yml
-  |   |-- 03_cfn-rds.yml
-  |   |-- 04_cfn-ec2.yml
-  |   |-- 05_cfn-elb.yml
-  |   `-- 06_cfn-s3.yml
+      |-- 01_cfn-vpc.yml
+      |-- 02_cfn-securitygroup.yml
+      |-- 03_cfn-rds.yml
+      |-- 04_cfn-ec2.yml
+      |-- 05_cfn-elb.yml
+      `-- 06_cfn-s3.yml
   ```
 - 各リソースのスタック<br>
 ( ※各リソースのスタック名は テンプレートファイル名から引用/命名し、構築を実施 )<br>
 ![00_cfn-stacks.png](./Tasks/lecture10/images/00_cfn-stacks.png)<br>
+
+<br>
+
+## ■ 【 IaC 】 Terraform を使用したインフラリソースの構築
+【 実践内容 】
+- [構築実践の取組](./terraform/practice01/tf_practice01.md)　( ※ [上記 CloudFormtain 構成](#--iac--cloudformation-を使用したインフラリソースの構築) のリソース構築を Terraform にて実施 )
+- 各リソースの tfファイル ( [terraform_files](./terraform/practice01/terraform_files) ) を作成
+- その他、Terraform によるインフラリソース構築にあたっては下記取組を反映
+  - ハードコーディングを避けるための動的参照 - SSMパラメータストア を活用
+  - RDS - SecretsManager での認証情報 (シークレット) 管理を反映
+  - EC2 - SessionManager を活用　( ※SSH接続に関する設定は、後学のために削除せず記述を残置 )<br>
+- tfファイル構成
+```
+|-- terraform_files
+    |-- 01_VPC.tf
+    |-- 02_securitygroup.tf
+    |-- 03_rds.tf
+    |-- 04_ec2.tf
+    |-- 05_iam.tf
+    |-- 06_elb.tf
+    |-- 07_s3.tf
+    |-- data.tf
+    |-- main.tf
+```
+- 作成リソース一覧　( ※リソース構築後、下記コマンドを実行して作成されたリソース一覧を表示 )
+```
+$ terraform state list
+
+data.aws_ami.EC2WebServer01
+data.aws_iam_policy_document.ec2_assume_role
+data.aws_ssm_parameter.KeyName-terraform
+data.aws_ssm_parameter.MasterUsername-terraform
+data.aws_ssm_parameter.myIP-terraform
+aws_db_instance.RDSDBInstance
+aws_db_subnet_group.RDSDBSubnetGroup
+aws_iam_instance_profile.EC2InstanceProfile
+aws_iam_role.EC2IAMRole
+aws_iam_role_policy_attachment.EC2IAMRole_ssm_managed
+aws_instance.EC2WebServer01
+aws_internet_gateway.TerraformInternetGateway
+aws_lb.ALB
+aws_lb_listener.ALBListener_http
+aws_lb_target_group.ALBTargetGroup
+aws_lb_target_group_attachment.instance
+aws_route.PublicRoute
+aws_route_table.PrivateRouteTable
+aws_route_table.PublicRouteTable
+aws_route_table_association.PrivateSubnet1aRouteTableAssociation
+aws_route_table_association.PrivateSubnet1cRouteTableAssociation
+aws_route_table_association.PublicSubnet1aRouteTableAssociation
+aws_route_table_association.PublicSubnet1cRouteTableAssociation
+aws_s3_bucket.S3Bucket
+aws_s3_bucket_server_side_encryption_configuration.S3Bucket
+aws_security_group.ALBSecurityGroup
+aws_security_group.EC2SecurityGroup
+aws_security_group.RDSSecurityGroup
+aws_security_group_rule.alb_egress
+aws_security_group_rule.alb_in_http
+aws_security_group_rule.ec2_web_in_http_from_ALB
+aws_security_group_rule.ec2_web_in_ssh
+aws_security_group_rule.ec2_web_in_tcp3000
+aws_security_group_rule.rds_egress
+aws_security_group_rule.rds_in_tcp3306_from_ec2
+aws_security_group_rule.web_egress
+aws_subnet.PrivateSubnet1a
+aws_subnet.PrivateSubnet1c
+aws_subnet.PublicSubnet1a
+aws_subnet.PublicSubnet1c
+aws_vpc.TerraformVPC
+random_string.s3_unique_key
+```
 
 <br>
 
@@ -158,3 +230,7 @@
 | [lecture12.md](./Tasks/lecture12/lecture12.md) | CI/CDツール ( CircleCI )                                                   |
 | [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>
+
+| Others                                                  | Contents                                                                                |
+| :---------------------------------------------------: | :------------------------------------------------------------------------------------: |
+| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC / Terraform                                                  | <br>

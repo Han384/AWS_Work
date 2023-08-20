@@ -112,14 +112,14 @@ $ tree
 .
 |-- 01_VPC.tf
 |-- 02_securitygroup.tf
-|-- 03_rds.tf
+|-- 03_rds.tf   # RDS に SecretsManager による認証情報 (シークレット) 管理を適用するための記述を実施
 |-- 04_ec2.tf
-|-- 05_iam.tf   # EC2にセッションマネージャーを適用するための記述を実施
+|-- 05_iam.tf   # EC2 に SessionManager を適用するための記述を実施
 |-- 06_elb.tf
 |-- 07_s3.tf
-|-- data.tf     # SSM・AMIに関する記述を実施
-|-- main.tf     # 全体的な設定関連を記述
-`-- terraform.tfvars   # 変数定義を記述
+|-- data.tf     # SSMパラメータストア・AMIに関する記述を実施
+|-- main.tf     # 全体的な設定関連の記述を実施
+`-- terraform.tfvars   # 変数定義を記述 (※.gitigonore にリモートリポジトリへアップロードされないよう記述を実施)
 ```
 
 ## ■ 作成リソース一覧
