@@ -233,4 +233,4 @@ random_string.s3_unique_key
 
 | Others                                                  | Contents                                                                                |
 | :---------------------------------------------------: | :------------------------------------------------------------------------------------: |
-| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC / Terraform                                                  | <br>
+| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC / Terraform ( [terraform_files](./terraform/practice01/terraform_files) )                                                 | <br>

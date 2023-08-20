@@ -106,7 +106,7 @@
 </details>
 
 ## ■ ディレクトリ・ファイル構成
-- /AWS_Work/terraform/practice01/terraform_files 配下の各種ファイル群
+- [/AWS_Work/terraform/practice01/terraform_files](../practice01/terraform_files/) 配下の各種ファイル群
 ```
 $ tree
 .
