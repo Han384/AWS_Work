@@ -110,7 +110,7 @@
 ```
 $ tree
 .
-|-- 01_VPC.tf
+|-- 01_vpc.tf
 |-- 02_securitygroup.tf
 |-- 03_rds.tf   # RDS に SecretsManager による認証情報 (シークレット) 管理を適用するための記述を実施
 |-- 04_ec2.tf

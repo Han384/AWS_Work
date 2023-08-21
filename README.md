@@ -81,7 +81,7 @@
 - tfファイル構成
 ```
 |-- terraform_files
-    |-- 01_VPC.tf
+    |-- 01_vpc.tf
     |-- 02_securitygroup.tf
     |-- 03_rds.tf
     |-- 04_ec2.tf
