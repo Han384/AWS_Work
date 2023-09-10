@@ -19,8 +19,7 @@ Resources:
       DBInstanceClass: db.t3.micro
       MasterUsername: "{{resolve:ssm:MasterUsername:1}}"
       ManageMasterUserPassword: true
-      AvailabilityZone: !Select [0, !GetAZs ]
-      MultiAZ: false
+      MultiAZ: true
       PubliclyAccessible: false
       Engine: mysql
       EngineVersion: 8.0.32
@@ -48,4 +47,3 @@ Outputs:
     Value: !GetAtt RDSDBInstance.Endpoint.Address
     Export:
       Name: !Sub ${AWS::StackName}-RDSDBEndpoint
-
