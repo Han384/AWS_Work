@@ -19,7 +19,7 @@ Resources:
       DBInstanceClass: db.t3.micro
       MasterUsername: "{{resolve:ssm:MasterUsername:1}}"
       ManageMasterUserPassword: true
-      MultiAZ: false
+      MultiAZ: true
       PubliclyAccessible: false
       Engine: mysql
       EngineVersion: 8.0.32

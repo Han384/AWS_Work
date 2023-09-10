@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: template for EC2 / Application Layer
+
+Parameters:
+  VPCStack:
+    Type: String
+    Default: cfn-vpc
+  SGStack:
+    Type: String
+    Default: cfn-securitygroup
+  ELBStack:
+    Type: String
+    Default: cfn-elb
+  EC2AMI:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+Resources:
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub ${AWS::StackName}-EC2InstanceProfile
+      Path: /
+      Roles:
+        - Ref: EC2IAMRole
+
+  EC2IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: SSM-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  EC2LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub ${AWS::StackName}-LaunchTemplate
+      LaunchTemplateData:
+        ImageId: !Ref EC2AMI
+        InstanceType: t2.micro
+        KeyName: "{{resolve:ssm:KeyName:1}}"
+        NetworkInterfaces:
+          - AssociatePublicIpAddress: true
+            DeleteOnTermination: true
+            DeviceIndex: 0
+            Groups:
+              - Fn::ImportValue: !Sub ${SGStack}-EC2-WebServer
+        IamInstanceProfile:
+          Arn: !GetAtt EC2InstanceProfile.Arn
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: !Sub ${AWS::StackName}-EC2WebServer
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub ${AWS::StackName}-AutoScalingGroup
+      LaunchTemplate:
+        LaunchTemplateId: !Ref EC2LaunchTemplate
+        Version: !GetAtt EC2LaunchTemplate.LatestVersionNumber
+      MinSize: 2
+      MaxSize: 4
+      DesiredCapacity: 2
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1a
+        - Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1c
+      TargetGroupARNs:
+        - Fn::ImportValue: !Sub ${ELBStack}-TargetGroupArn
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      NewInstancesProtectedFromScaleIn: false

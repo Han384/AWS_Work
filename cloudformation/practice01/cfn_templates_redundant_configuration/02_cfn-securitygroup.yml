@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: template for SecurityGroup / Security Layer
+
+Parameters:
+  VPCStack:
+    Type: String
+    Default: cfn-vpc
+
+Resources:
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: sg for EC2-WebServer
+      GroupName: !Sub ${AWS::StackName}-EC2-WebServer
+      VpcId:
+        Fn::ImportValue: !Sub ${VPCStack}-VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref ALBSecurityGroup
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: '{{resolve:ssm:myIP:1}}'
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-EC2-WebServer
+
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: sg for RDS-MySQL
+      GroupName: !Sub ${AWS::StackName}-RDS-MySQL
+      VpcId:
+        Fn::ImportValue: !Sub ${VPCStack}-VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !Ref EC2SecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-RDS-MySQL
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: sg for ALB
+      GroupName: !Sub ${AWS::StackName}-ALB
+      VpcId:
+        Fn::ImportValue: !Sub ${VPCStack}-VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-ALB
+
+Outputs:
+  EC2SecurityGroup:
+    Description: EC2 SecurityGroup
+    Value: !Ref EC2SecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-EC2-WebServer
+
+  RDSSecurityGroup:
+    Description: RDS SecurityGroup
+    Value: !Ref RDSSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-RDS-MySQL
+
+  ALBSecurityGroup:
+    Description: ALB SecurityGroup
+    Value: !Ref ALBSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-ALB
+
