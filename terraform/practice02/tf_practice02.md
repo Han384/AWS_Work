@@ -36,8 +36,8 @@ terraform_files_redundant_configuration
 |-- 01_vpc.tf
 |-- 02_securitygroup.tf
 |-- 03_rds_multiaz.tf      # MautiAZを有効化
-|-- 04_ec2_autoscaling.tf  # 起動テンプレート・AutoScaling
-|-- 04_ec2_userdata.sh  　 # Autoscaling (ALBヘルスチェック対応)・RDS接続等確認用
+|-- 04_ec2_autoscaling.tf  # 起動テンプレート作成・AutoScaling設定
+|-- 04_ec2_userdata.sh  　 # Autoscaling(ALBヘルスチェック対応)・RDS接続等確認用
 |-- 05_iam.tf
 |-- 06_elb_autoscaling.tf  # 起動テンプレート・AutoscalingによるEC2起動に伴う記述修正
 |-- 07_s3.tf
@@ -45,7 +45,7 @@ terraform_files_redundant_configuration
 |-- main.tf
 `-- terraform.tfvars
 ```
-- 構築リソース
+- 構築リソース　( 下記コマンドを実行して作成されたリソース一覧を表示 )
 ```
 $ terraform state list
 
@@ -112,6 +112,5 @@ random_string.s3_unique_key
   - [Resource: aws_lb_target_group_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group_attachment)
   - [Resource: aws_autoscaling_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group#mixed_instances_policy)
 - AWS公式ドキュメント関連
-  - [AWS::RDS::DBInstance](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html)
   - [AWS::RDS::DBInstance](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html)
   - [Use instance scale-in protection](https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-instance-protection.html)
