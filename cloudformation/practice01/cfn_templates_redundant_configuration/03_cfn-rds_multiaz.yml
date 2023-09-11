@@ -47,3 +47,4 @@ Outputs:
     Value: !GetAtt RDSDBInstance.Endpoint.Address
     Export:
       Name: !Sub ${AWS::StackName}-RDSDBEndpoint
+

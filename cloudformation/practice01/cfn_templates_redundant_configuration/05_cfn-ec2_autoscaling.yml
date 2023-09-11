@@ -97,3 +97,4 @@ Resources:
       HealthCheckType: ELB
       HealthCheckGracePeriod: 300
       NewInstancesProtectedFromScaleIn: false
+
