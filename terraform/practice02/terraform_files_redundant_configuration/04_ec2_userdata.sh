@@ -16,3 +16,4 @@ sudo yum install -y mysql-community-server mysql-community-devel
 
 sudo systemctl enable mysqld
 sudo systemctl start mysqld
+  
