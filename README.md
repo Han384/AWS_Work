@@ -42,7 +42,26 @@
 <br>
 
 ## ■ 【 IaC 】 CloudFormation を使用したインフラリソースの構築<br>
-【 実践内容 】
+【 実践内容②：マルチAZ構成・冗長化構成 】
+- [構築実践の取組](./cloudformation/practice01/cfn_practice01.md)　( ※下記 AWS構成図のリソース構築を実施 )
+- 各リソース/スタックのテンプレートファイル ( [cfn_templates_redundant_configuration](./cloudformation/practice01/cfn_templates_redundant_configuration) ) を作成
+- 実践内容① ( シングルAZ構成 ) の内容に下記を追加・設定変更
+  - EC2 - シングルAZ から マルチAZ配置　( ※起動テンプレートを作成、AutoScalingに適用してEC2を起動 )
+  - RDS - シングルAZ から マルチAZ配置　( ※MautiAZの有効化 )
+- AWS構成図
+  ![cfn-practice01.png](./cloudformation/practice01/images/cfn-practice01.png)
+- テンプレートファイル構成
+  ```
+  cfn_templates_redundant_configuration
+  |-- 01_cfn-vpc.yml
+  |-- 02_cfn-securitygroup.yml
+  |-- 03_cfn-rds_multiaz.yml
+  |-- 04_cfn-elb_autoscaling.yml
+  |-- 05_cfn-ec2_autoscaling.yml
+  `-- 06_cfn-s3.yml
+  ```
+
+【 実践内容①：シングルAZ構成 】
 - [構築実践の取組](./Tasks/lecture10/lecture10.md)　( ※下記 AWS構成図のリソース構築を実施 )
 - 各リソース/スタックのテンプレートファイル ( [CloudFormation_templates](./Tasks/lecture10/CloudFormation_templates) ) を作成
 - その他、ベストプラクティス・セキュリティ対策を考慮して下記取組を実施
@@ -72,7 +91,7 @@
 
 ## ■ 【 IaC 】 Terraform を使用したインフラリソースの構築
 【 実践内容 】
-- [構築実践の取組](./terraform/practice01/tf_practice01.md)　( ※ [上記 CloudFormtain 構成](#--iac--cloudformation-を使用したインフラリソースの構築) のリソース構築を Terraform にて実施 )
+- [構築実践の取組](./terraform/practice01/tf_practice01.md)　( ※ [上記 CloudFormtain (シングルAZ構成)](#--iac--cloudformation-を使用したインフラリソースの構築) のリソース構築を Terraform にて実施 )
 - 各リソースの tfファイル ( [terraform_files](./terraform/practice01/terraform_files) ) を作成
 - その他、Terraform によるインフラリソース構築にあたっては下記取組を反映
   - ハードコーディングを避けるための動的参照 - SSMパラメータストア を活用
@@ -145,7 +164,7 @@ random_string.s3_unique_key
 【 使用ツール 】
 - CircleCI - パイプライン構築
 - cfn-lint - CloudFormation テンプレート の構文チェック
-- CloudFormation - インフラリソース構築
+- CloudFormation - インフラリソース構築 (シングルAZ構成)
 - Ansible - 構成管理 / プロビジョニング
 - ServerSpec - テスト
 
@@ -234,6 +253,6 @@ random_string.s3_unique_key
 
 | Others                                                      | Contents                                                                      | Note                                                                                                 |
 | :---------------------------------------------------------: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
-| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC - Terraform ( [terraform_files](./terraform/practice01/terraform_files) ) | [lecture10.md](./Tasks/lecture10/lecture10.md) のインフラリソースを Terraform で構築 |
-| [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)                                                            | IaC - CloudFormation ( 冗長化構成 )                                                                              | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を マルチAZ・冗長化構成 に変更      |
+| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC - Terraform<br> ( [terraform_files](./terraform/practice01/terraform_files) ) | [lecture10.md](./Tasks/lecture10/lecture10.md) のインフラリソース<br>( シングルAZ構成 ) を Terraform で構築 |
+| [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)                                                            | IaC - CloudFormation<br> ( 冗長化構成 )                                                                              | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更      |
 |                                                             |                                                                               |                                                                                                      |
