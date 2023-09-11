@@ -42,7 +42,7 @@
 <br>
 
 ## ■ 【 IaC 】 CloudFormation を使用したインフラリソースの構築<br>
-【 実践内容②：マルチAZ構成・冗長化構成 】
+【 実践内容②：マルチAZ・冗長化構成 】
 - [構築実践の取組](./cloudformation/practice01/cfn_practice01.md)　( ※下記 AWS構成図のリソース構築を実施 )
 - 各リソース/スタックのテンプレートファイル ( [cfn_templates_redundant_configuration](./cloudformation/practice01/cfn_templates_redundant_configuration) ) を作成
 - 実践内容① ( シングルAZ構成 ) の内容に下記を追加・設定変更
