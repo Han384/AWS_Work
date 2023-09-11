@@ -1,8 +1,8 @@
-# CloudFormation：冗長化構成 ( redundant configuration ) に変更
+# 【 CloudFormation：冗長化構成 ( redundant configuration ) に変更 】
 
 ## ■ 構成図
  - 変更前　( シングルAZ構成 )
- ![](../../Tasks/lecture10/images/resource_diagram.png)
+ ![resource_diagram.png](../../Tasks/lecture10/images/resource_diagram.png)
 
 - 変更後　( マルチAZ構成 )
   ![cfn-practice01.png](./images/cfn-practice01.png)
@@ -60,7 +60,7 @@ $ aws cloudformation deploy --stack-name cfn-s3 --template-file  cloudformation/
   - S3 - Application Layer　( 使用テンプレート：[06_cfn-s3.yml](./cfn_templates_redundant_configuration/06_cfn-s3.yml) )
   ![06_cfn-s3.png](./images/06_cfn-s3.png)
 
-## ■ 検証・気づき・工夫点・備忘録
+## ■ 検証・動作確認・工夫点・備忘録
 【 スタック構築順序に関して 】
 -  AWS CLI でのスタック構築順を [lecture10.md](../../Tasks/lecture10/lecture10.md) より変更　( ※EC2より先にALBを構築するように変更 )
 - これは、`05_cfn-ec2_autoscaling.yml` 内に記載している `AutoScalingGroup - TargetGroupARNs` で、`04_cfn-elb_autoscaling.yml` で記載しているターゲットグループのARNの情報が必要であるため　( ※クロススタック参照にて情報を参照するようにしている )
