@@ -231,6 +231,9 @@ random_string.s3_unique_key
 | [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>
 
-| Others                                                  | Contents                                                                                |
-| :---------------------------------------------------: | :------------------------------------------------------------------------------------: |
-| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC / Terraform ( [terraform_files](./terraform/practice01/terraform_files) )                                                 | <br>
+
+| Others                                                      | Contents                                                                      | Note                                                                                                 |
+| :---------------------------------------------------------: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
+| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC - Terraform ( [terraform_files](./terraform/practice01/terraform_files) ) | [lecture10.md](./Tasks/lecture10/lecture10.md) のインフラリソースを Terraform で構築 |
+| [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)                                                            | IaC - CloudFormation ( 冗長化構成 )                                                                              | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を マルチAZ・冗長化構成 に変更      |
+|                                                             |                                                                               |                                                                                                      |
