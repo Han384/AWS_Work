@@ -63,9 +63,7 @@ $ aws cloudformation deploy --stack-name cfn-s3 --template-file  cloudformation/
 ## ■ 検証・気づき・工夫点・備忘録
 【 スタック構築順序に関して 】
 -  AWS CLI でのスタック構築順を [lecture10.md](../../Tasks/lecture10/lecture10.md) より変更　( ※EC2より先にALBを構築するように変更 )
-- これは、`05_cfn-ec2_autoscaling.yml` 内に記載している `AutoScalingGroup - TargetGroupARNs` で、 <br>
-`04_cfn-elb_autoscaling.yml` で記載しているターゲットグループのARNの情報が必要であるため<br>
-( ※クロススタック参照にて情報を参照するようにしている )
+- これは、`05_cfn-ec2_autoscaling.yml` 内に記載している `AutoScalingGroup - TargetGroupARNs` で、`04_cfn-elb_autoscaling.yml` で記載しているターゲットグループのARNの情報が必要であるため　( ※クロススタック参照にて情報を参照するようにしている )
 - 上記は、一枚の CFnテンプレートに記述する方式では `DependsOn属性` を使用して依存関係を考慮したリソース構築順序の指定をすることができる<br>
 
 【 AutoScaling を使用した EC2 の起動に関して 】

@@ -66,3 +66,4 @@ Outputs:
     Value: !GetAtt ALB.DNSName
     Export:
       Name: !Sub ${AWS::StackName}-ALBEndpoint
+      

@@ -60,3 +60,4 @@ Outputs:
     Value: !Ref EC2WebServer01
     Export:
       Name: !Sub ${AWS::StackName}-EC2WebServer01
+      
