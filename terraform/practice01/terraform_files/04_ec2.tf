@@ -20,3 +20,4 @@ resource "aws_instance" "EC2WebServer01" {
     Type    = "web/app"
   }
 }
+  

@@ -38,3 +38,4 @@ data "aws_ami" "EC2WebServer01" {
     values = ["hvm"]
   }
 }
+  

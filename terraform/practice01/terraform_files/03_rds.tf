@@ -51,3 +51,4 @@ resource "aws_db_instance" "RDSDBInstance" {
     Env     = var.environment
   }
 }
+  

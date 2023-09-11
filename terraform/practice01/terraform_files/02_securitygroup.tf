@@ -110,3 +110,4 @@ resource "aws_security_group_rule" "alb_egress" {
   to_port           = 0
   cidr_blocks       = ["0.0.0.0/0"]
 }
+  

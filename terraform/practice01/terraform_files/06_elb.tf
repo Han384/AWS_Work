@@ -61,3 +61,4 @@ resource "aws_lb_target_group_attachment" "instance" {
   target_group_arn = aws_lb_target_group.ALBTargetGroup.arn
   target_id        = aws_instance.EC2WebServer01.id
 }
+  
