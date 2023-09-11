@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: template for S3 / Application Layer
+
+Parameters:
+  S3PrefixName:
+    Type: String
+    Default: raisetech
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${S3PrefixName}-${AWS::StackName}
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+            ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+Outputs:
+  S3Bucket:
+    Description: S3Bucket
+    Value: !Ref S3Bucket
+    Export:
+      Name: !Sub ${S3PrefixName}-${AWS::StackName}
+

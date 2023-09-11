@@ -1,0 +1,156 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: template for VPC / Network Layer
+
+Resources:
+  CFnVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: CFnVPC
+
+  PublicSubnet1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/20
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: !Select [0, !GetAZs ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub PublicSubnet-${AWS::Region}a-cfn
+
+  PublicSubnet1c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.16.0/20
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: !Select [1, !GetAZs ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub PublicSubnet-${AWS::Region}c-cfn
+
+  PrivateSubnet1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.128.0/20
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: !Select [0, !GetAZs ]
+      Tags:
+        - Key: Name
+          Value: !Sub PrivateSubnet-${AWS::Region}a-cfn
+
+  PrivateSubnet1c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.144.0/20
+      VpcId: !Ref CFnVPC
+      AvailabilityZone: !Select [1, !GetAZs ]
+      Tags:
+        - Key: Name
+          Value: !Sub PrivateSubnet-${AWS::Region}c-cfn
+
+  CFnInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: CFnInternetGateway-cfn
+
+  CFnVPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref CFnInternetGateway
+      VpcId: !Ref CFnVPC
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref CFnVPC
+      Tags:
+        - Key: Name
+          Value: !Sub PublicRouteTable-${AWS::Region}ac-cfn
+
+  PrivateRouteTable1a:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref CFnVPC
+      Tags:
+        - Key: Name
+          Value: !Sub PrivateRouteTable-${AWS::Region}a-cfn
+
+  PrivateRouteTable1c:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref CFnVPC
+      Tags:
+        - Key: Name
+          Value: !Sub PrivateRouteTable-${AWS::Region}c-cfn
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref CFnInternetGateway
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnet1aRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1a
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnet1cRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1c
+      RouteTableId: !Ref PublicRouteTable
+
+  PrivateSubnet1aRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1a
+      RouteTableId: !Ref PrivateRouteTable1a
+
+  PrivateSubnet1cRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1c
+      RouteTableId: !Ref PrivateRouteTable1c
+
+Outputs:
+  VPCID:
+    Description: VPC ID
+    Value: !Ref CFnVPC
+    Export:
+      Name: !Sub ${AWS::StackName}-VPCID
+
+  PublicSubnet1a:
+    Description: PublicSubnet1a
+    Value: !Ref PublicSubnet1a
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnet1a
+
+  PublicSubnet1c:
+    Description: PublicSubnet1c
+    Value: !Ref PublicSubnet1c
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnet1c
+
+  PrivateSubnet1a:
+    Description: PrivateSubnet1a
+    Value: !Ref PrivateSubnet1a
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnet1a
+
+  PrivateSubnet1c:
+    Description: PrivateSubnet1c
+    Value: !Ref PrivateSubnet1c
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnet1c
+

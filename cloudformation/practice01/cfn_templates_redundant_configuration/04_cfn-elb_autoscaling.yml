@@ -8,9 +8,6 @@ Parameters:
   SGStack:
     Type: String
     Default: cfn-securitygroup
-  EC2Stack:
-    Type: String
-    Default: cfn-ec2
 
 Resources:
   ALB:
@@ -48,9 +45,6 @@ Resources:
       Port: 80
       Protocol: HTTP
       TargetType: instance
-      Targets:
-        - Id:
-            Fn::ImportValue: !Sub ${EC2Stack}-EC2WebServer01
       HealthCheckEnabled: true
       HealthCheckPath: /
       HealthCheckIntervalSeconds: 10
@@ -66,3 +60,7 @@ Outputs:
     Value: !GetAtt ALB.DNSName
     Export:
       Name: !Sub ${AWS::StackName}-ALBEndpoint
+  TargetGroupArn:
+    Value: !GetAtt ALBTargetGroup.TargetGroupArn
+    Export:
+      Name: !Sub ${AWS::StackName}-TargetGroupArn
