@@ -254,7 +254,9 @@
 | [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>
 
+<br>
 
+【 継続実践/学習記録 】
 | Files                                                      | Practices                                                                      | Note                                                                                                 |
 | :---------------------------------------------------------: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
 | [tf_practice01.md](./terraform/practice01/tf_practice01.md) | Terraform<br> ( シングルAZ構成 ) | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> Terraform で構築 |
