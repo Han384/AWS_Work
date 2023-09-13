@@ -43,7 +43,7 @@ terraform_files_redundant_configuration
 |-- 07_s3.tf
 |-- data.tf
 |-- main.tf
-`-- terraform.tfvars
+`-- terraform.tfvars   # 変数定義を記述 (※.gitigonore にリモートリポジトリへアップロードされないよう記述を実施)
 ```
 - 構築リソース　( 下記コマンドを実行して作成されたリソース一覧を表示 )
 ```

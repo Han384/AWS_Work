@@ -3,8 +3,8 @@
 ## ■ 概要
 - インフラ構築・自動化/パイプライン構築など、下記の実践内容を記載
   - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイテスト)
-  - [【 IaC 】 CloudFormation を使用したインフラリソースの構築](#--iac--cloudformation-を使用したインフラリソースの構築)
-  - [【 IaC 】 Terraform を使用したインフラリソースの構築](#--iac--terraform-を使用したインフラリソースの構築)
+  - [【 IaC 】 CloudFormation を使用したインフラリソースの構築　( 冗長化構成・シングルAZ構成 )](#--iac--cloudformation-を使用したインフラリソースの構築)
+  - [【 IaC 】 Terraform を使用したインフラリソースの構築　( 冗長化構成 )](#--iac--terraform-を使用したインフラリソースの構築)
   - [【 CI/CD 】 CircleCI による 自動化・パイプライン構築](#--cicd-circleci-による-自動化パイプライン構築)
   - [Webエンジニアリングスクールでのアウトプット一覧　( 実践/学習記録 )](#-webエンジニアリングスクールでのアウトプット一覧-実践学習記録-)
 
@@ -90,73 +90,77 @@
 <br>
 
 ## ■ 【 IaC 】 Terraform を使用したインフラリソースの構築
-【 実践内容 】
-- [構築実践の取組](./terraform/practice01/tf_practice01.md)　( ※ [上記 CloudFormtain (シングルAZ構成)](#--iac--cloudformation-を使用したインフラリソースの構築) のリソース構築を Terraform にて実施 )
-- 各リソースの tfファイル ( [terraform_files](./terraform/practice01/terraform_files) ) を作成
-- その他、Terraform によるインフラリソース構築にあたっては下記取組を反映
+【 実践内容：マルチAZ・冗長化構成 】
+- [構築実践の取組](./terraform/practice02/tf_practice02.md)　( ※下記 AWS構成図のリソース構築を実施 )<br>
+( ※上記[ CloudFormtain (マルチAZ・冗長化構成)](#--iac--cloudformation-を使用したインフラリソースの構築) と同様の内容の構築を Terraform にて実施 )
+- 各リソースの tfファイル ( [terraform_files_redundant_configuration](./terraform/practice02/terraform_files_redundant_configuration/) ) を作成
+- その他、Terraform によるインフラリソース構築にあたっては下記内容を反映
   - ハードコーディングを避けるための動的参照 - SSMパラメータストア を活用
   - RDS - SecretsManager での認証情報 (シークレット) 管理を反映
-  - EC2 - SessionManager を活用　( ※SSH接続に関する設定は、後学のために削除せず記述を残置 )<br>
+  - EC2 - SessionManager を活用　( ※SSH接続に関する設定は、後学のために削除せず記述を残置 )
+- AWS構成図
+  ![cfn-practice01.png](./cloudformation/practice01/images/cfn-practice01.png)
 - tfファイル構成
-```
-|-- terraform_files
-    |-- 01_vpc.tf
-    |-- 02_securitygroup.tf
-    |-- 03_rds.tf
-    |-- 04_ec2.tf
-    |-- 05_iam.tf
-    |-- 06_elb.tf
-    |-- 07_s3.tf
-    |-- data.tf
-    |-- main.tf
-```
+  ```
+  terraform_files_redundant_configuration
+  |-- 01_vpc.tf
+  |-- 02_securitygroup.tf
+  |-- 03_rds_multiaz.tf
+  |-- 04_ec2_autoscaling.tf
+  |-- 04_ec2_userdata.sh 　
+  |-- 05_iam.tf
+  |-- 06_elb_autoscaling.tf
+  |-- 07_s3.tf
+  |-- data.tf
+  |-- main.tf
+  ```
 - 作成リソース一覧　( ※リソース構築後、下記コマンドを実行して作成されたリソース一覧を表示 )
-```
-$ terraform state list
+  ```
+  $ terraform state list
 
-data.aws_ami.EC2WebServer01
-data.aws_iam_policy_document.ec2_assume_role
-data.aws_ssm_parameter.KeyName-terraform
-data.aws_ssm_parameter.MasterUsername-terraform
-data.aws_ssm_parameter.myIP-terraform
-aws_db_instance.RDSDBInstance
-aws_db_subnet_group.RDSDBSubnetGroup
-aws_iam_instance_profile.EC2InstanceProfile
-aws_iam_role.EC2IAMRole
-aws_iam_role_policy_attachment.EC2IAMRole_ssm_managed
-aws_instance.EC2WebServer01
-aws_internet_gateway.TerraformInternetGateway
-aws_lb.ALB
-aws_lb_listener.ALBListener_http
-aws_lb_target_group.ALBTargetGroup
-aws_lb_target_group_attachment.instance
-aws_route.PublicRoute
-aws_route_table.PrivateRouteTable
-aws_route_table.PublicRouteTable
-aws_route_table_association.PrivateSubnet1aRouteTableAssociation
-aws_route_table_association.PrivateSubnet1cRouteTableAssociation
-aws_route_table_association.PublicSubnet1aRouteTableAssociation
-aws_route_table_association.PublicSubnet1cRouteTableAssociation
-aws_s3_bucket.S3Bucket
-aws_s3_bucket_server_side_encryption_configuration.S3Bucket
-aws_security_group.ALBSecurityGroup
-aws_security_group.EC2SecurityGroup
-aws_security_group.RDSSecurityGroup
-aws_security_group_rule.alb_egress
-aws_security_group_rule.alb_in_http
-aws_security_group_rule.ec2_web_in_http_from_ALB
-aws_security_group_rule.ec2_web_in_ssh
-aws_security_group_rule.ec2_web_in_tcp3000
-aws_security_group_rule.rds_egress
-aws_security_group_rule.rds_in_tcp3306_from_ec2
-aws_security_group_rule.web_egress
-aws_subnet.PrivateSubnet1a
-aws_subnet.PrivateSubnet1c
-aws_subnet.PublicSubnet1a
-aws_subnet.PublicSubnet1c
-aws_vpc.TerraformVPC
-random_string.s3_unique_key
-```
+  data.aws_ami.EC2WebServer01
+  data.aws_iam_policy_document.ec2_assume_role
+  data.aws_ssm_parameter.KeyName-terraform
+  data.aws_ssm_parameter.MasterUsername-terraform
+  data.aws_ssm_parameter.myIP-terraform
+  aws_autoscaling_group.AutoScalingGroup
+  aws_db_instance.RDSDBInstance
+  aws_db_subnet_group.RDSDBSubnetGroup
+  aws_iam_instance_profile.EC2InstanceProfile
+  aws_iam_role.EC2IAMRole
+  aws_iam_role_policy_attachment.EC2IAMRole_ssm_managed
+  aws_internet_gateway.TerraformInternetGateway
+  aws_launch_template.EC2LaunchTemplate
+  aws_lb.ALB
+  aws_lb_listener.ALBListener_http
+  aws_lb_target_group.ALBTargetGroup
+  aws_route.PublicRoute
+  aws_route_table.PrivateRouteTable
+  aws_route_table.PublicRouteTable
+  aws_route_table_association.PrivateSubnet1aRouteTableAssociation
+  aws_route_table_association.PrivateSubnet1cRouteTableAssociation
+  aws_route_table_association.PublicSubnet1aRouteTableAssociation
+  aws_route_table_association.PublicSubnet1cRouteTableAssociation
+  aws_s3_bucket.S3Bucket
+  aws_s3_bucket_server_side_encryption_configuration.S3Bucket
+  aws_security_group.ALBSecurityGroup
+  aws_security_group.EC2SecurityGroup
+  aws_security_group.RDSSecurityGroup
+  aws_security_group_rule.alb_egress
+  aws_security_group_rule.alb_in_http
+  aws_security_group_rule.ec2_web_in_http_from_ALB
+  aws_security_group_rule.ec2_web_in_ssh
+  aws_security_group_rule.ec2_web_in_tcp3000
+  aws_security_group_rule.rds_egress
+  aws_security_group_rule.rds_in_tcp3306_from_ec2
+  aws_security_group_rule.web_egress
+  aws_subnet.PrivateSubnet1a
+  aws_subnet.PrivateSubnet1c
+  aws_subnet.PublicSubnet1a
+  aws_subnet.PublicSubnet1c
+  aws_vpc.TerraformVPC
+  random_string.s3_unique_key
+  ```
 
 <br>
 
@@ -236,7 +240,7 @@ random_string.s3_unique_key
 - 講義で「答え」が示されることははなく、課題設定があるものについては自主学習により取組む
 - 指示のない部分については自分で考え、不明点がある場合は質問して解決していく
 
-| Files                                                  | Contents                                                                                |
+| Files                                                  | Tasks                                                                                |
 | :---------------------------------------------------: | :------------------------------------------------------------------------------------: |
 | [lecture02.md](./Tasks/lecture02.md)           | Git/GitHubを用いたチーム開発におけるバージョン管理                                     |
 | [lecture03.md](./Tasks/lecture03.md)           | Ruby on RailsによるWebアプリケーションのデプロイ                                       |
@@ -251,7 +255,8 @@ random_string.s3_unique_key
 | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>
 
 
-| Others                                                      | Contents                                                                      | Note                                                                                                 |
+| Files                                                      | Practices                                                                      | Note                                                                                                 |
 | :---------------------------------------------------------: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
-| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | IaC - Terraform<br> ( [terraform_files](./terraform/practice01/terraform_files) ) | [lecture10.md](./Tasks/lecture10/lecture10.md) のインフラリソース<br>( シングルAZ構成 ) を Terraform で構築 |
-| [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)                                                            | IaC - CloudFormation<br> ( 冗長化構成 )                                                                              | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更      |<br>
+| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | Terraform<br> ( シングルAZ構成 ) | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> Terraform で構築 |
+| [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)                                                            | CloudFormation<br> ( 冗長化構成 )                                                                              | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更      |
+| [tf_practice02.md](./terraform/practice02/tf_practice02.md)                                                            | Terraform<br> ( 冗長化構成 )                                                                              | [tf_practice01.md](./terraform/practice01/tf_practice01.md) の構成を<br> マルチAZ・冗長化構成 に変更      |<br>
