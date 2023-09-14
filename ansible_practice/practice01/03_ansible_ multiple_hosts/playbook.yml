@@ -1,0 +1,13 @@
+# install Nginx using Ansible
+# Start and Enable Nginx
+# Check the status of Nginx
+
+- name: Setup nginx server on myserver list (host group)
+  hosts: # ターゲットノードを指定
+    #- all #全てのホストを指定
+    - dev_servers # グループ内のホスト群を指定
+    - test_servers #　　　　　〃
+  become: True # 特権モードで下記 roles 記述内容を実行
+
+  roles:
+    - web_server_role
