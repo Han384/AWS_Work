@@ -233,4 +233,4 @@
 - [Ansibleのinventory入門](https://dev.classmethod.jp/articles/inventory/)
 - [Ansible:インベントリ変数について](https://noknowing.hatenablog.com/entry/2021/01/30/165136)
 - [Ansible初心者の学習まとめ～Playbookの書き方解説付き～](https://www.users-digital.com/2023/09/11/4941/)
-- [【Ansible】メンテナンスしやすいPlaybookの書き方](https://densan-hoshigumi.com/server/playbook-maintainability#IP)
+- [【Ansible】メンテナンスしやすいPlaybookの書き方](https://densan-hoshigumi.com/server/playbook-maintainability)
