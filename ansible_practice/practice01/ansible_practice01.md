@@ -41,7 +41,7 @@
   (※この時にログインできない場合、SecurityGroupでコントロールノードからのSSH接続が許可されているか確認する)
   - 【補足】 ※別途 `~/.ssh/config` ファイルを使用する方法もある
 
-## ■ 各種設定ファイル作成・処理実行
+## ■ 各種設定ファイルの作成・処理実行
 - 今回のファイル構成　( 参照：[01_ansible](../practice01/01_ansible/) )
   ```
   01_ansible
@@ -189,7 +189,7 @@
   ansible_ssh_private_key_file=~/.ssh/ansible.key.pem
   ```
 - `ansibleコマンド` を使用して接続(疎通) 確認　( pingモジュールを使用 )<br>
-( コントロールノード → ターゲットノード　(※03_ansible_ multiple_hostsディレクトリ内でコマンドを実行) )
+( コントロールノード → ターゲットノード　( ※03_ansible_ multiple_hostsディレクトリ内でコマンドを実行 ) )
   ```
   #inventory記載の全てのホストを指定
   $ ansible -i inventory all -m ping

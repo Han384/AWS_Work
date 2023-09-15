@@ -17,9 +17,6 @@
 - コントロールノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - SessionManager を使用してログイン、Ansibleインストールのため下記を実行
   ```
-  #bash切替
-  $ bash　
-
   #ユーザ切替
   $ sudo su - ec2-user　
 
@@ -37,9 +34,6 @@
 
   #インストール確認
   $ ansible --version
-
-  #Pythonインストール確認 (※必要に応じてアップグレード実施)
-  $ python -V
   ```
 - ターゲットノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - ログイン後、下記を実行
