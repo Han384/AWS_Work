@@ -1,0 +1,53 @@
+# roles/web_server_role/tasks/main.yaml
+- name: Install the latest version of nginx
+  command: amazon-linux-extras install nginx1 -y
+  register: nginx_install # 下記debugモジュールの出力に使用
+
+- name: Print nginx install
+  debug:
+    msg: "Nginxのインストールに成功しました。"
+  when: nginx_install.changed # 条件式(=nginxのインストールが成功したら上記msgを出力)
+
+- name: Start nginx service
+  service:
+    name: nginx
+    state: started
+
+- name: Enable nginx service
+  service:
+    name: nginx
+    enabled: yes
+
+- name: Get nginx Installed version
+  command: nginx -v
+  register: nginx_version # 下記debugモジュールの出力に使用
+
+- name: Print nginx version
+  debug:
+    var: nginx_version
+
+- name: Get status of nginx service
+  command: systemctl status nginx
+  register: nginx_status # 下記debugモジュールの出力に使用
+
+- name: Print nginx status
+  debug:
+    var: nginx_status
+
+- name: Read external variable file
+  include_vars: vars.yml # 外部の変数定義ファイルを読込 (下記copyモジュールで使用)
+
+# 下記はコントロールノードにあるファイルをそのままターゲットノード内指定のパスへコピーする方式とは異なる方式
+- name: Ansible copy file to remote server (target node)
+  copy:
+    content: | # 下記記述を反映させたファイルを指定のパスへ作成(コピー)
+      <!DOCTYPE html>
+      <html>
+      <head>
+      <meta charset="UTF-8">
+      </head>
+      <body>
+      <h1>このindex.html は copyモジュール の contentパラメータ を使用してコピーしたページ</h1>
+      </body>
+      </html>
+    dest: "{{ html_path }}index.html" # 左記は vars.yml に記載している変数の値(=Nginxのドキュメントルート)を参照する記述

@@ -1,0 +1,11 @@
+[dev_servers]
+ansible-target01 ansible_host=54.199.39.67
+ansible-target02 ansible_host=13.115.162.56
+
+[test_servers]
+ansible-target03 ansible_host=18.181.196.36
+ansible-target04 ansible_host=54.248.0.122
+
+[all:vars]
+ansible_ssh_user=ec2-user
+ansible_ssh_private_key_file=~/.ssh/ansible.key.pem
