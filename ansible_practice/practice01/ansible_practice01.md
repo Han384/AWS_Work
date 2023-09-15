@@ -1,4 +1,10 @@
-# 【 Ansible： 】
+# 【 Ansible ( basic )： 動作環境構築・設定 / roles / 複数ホスト処理 】
+- [Ansible の動作環境構築・設定](#-ansible-の動作環境構築設定)
+- [各種設定ファイルの作成・処理実行](#-各種設定ファイルの作成処理実行)
+- [作成した playbook.yml をロール分割して処理を実行](#-作成した-playbookyml-をロール分割して処理を実行)
+- [複数ホストへ playbook.yml  の処理を実行](#-複数ホストへ-playbookyml--の処理を実行)
+- [所感・取組観点](#-所感取組観点)
+- [参考リンク](#-参考リンク)
 
 ## ■ Ansible の動作環境構築・設定
 ■ 構成　( コントロールノード：ターゲットノード = 1：1 )
@@ -16,9 +22,7 @@
 
   #インストール確認
   $ ansible --version
-
-  #Pythonインストール確認 (※必要に応じてアップグレード実施)
-  $ python -V
+    ansible 2.9.23
   ```
 - ターゲットノード用のEC2を起動　( AMI：Amazon Linux 2 )
 - SessionManager を使用してログイン後、下記を実行
@@ -36,7 +40,8 @@
   - 接続確認　`$ ssh -i 秘密鍵のパス ec2-user@ターゲットノードのIPアドレス`<br>
   (※この時にログインできない場合、SecurityGroupでコントロールノードからのSSH接続が許可されているか確認する)
   - 【補足】 ※別途 `~/.ssh/config` ファイルを使用する方法もある
-### ■ 各種設定ファイル作成
+
+## ■ 各種設定ファイル作成・処理実行
 - 今回のファイル構成　( 参照：[01_ansible](../practice01/01_ansible/) )
   ```
   01_ansible
@@ -88,7 +93,7 @@
 - 接続(疎通)：成功
 ![ansible_practice01_01.png](../practice01/images/ansible_practice01_01.png)
 -  `playbook.yml` に実行させたい処理を記述　( 今回はターゲットノードに Nginx をインストール・起動等 )<br>
-( ※記述内容は [ansible01/playbook.yml](../practice01/ansible01/playbook.yml) を参照 )
+( ※記述内容は [01_ansible/playbook.yml](../practice01/01_ansible/playbook.yml) を参照 )
 - `ansible-playbook` コマンドでplaybook記載の処理を実行<br>
 ( ※ansibleディレクトリ内でコマンドを実行 )
   ```
@@ -126,6 +131,7 @@
 ![ansible_practice01_05.png](../practice01/images/ansible_practice01_05.png)
 
 ## ■ 作成した playbook.yml をロール分割して処理を実行
+■ 構成　( コントロールノード：ターゲットノード = 1：1 )<br>
 - ファイル構成　( 参照：[02_ansible_role](../practice01/02_ansible_role/) )
   ```
   02_ansible_role
@@ -153,7 +159,7 @@
 
 - ブラウザでの表示確認　( ※前回と同じであるため割愛 )
 
-## ■複数ホストへ playbook.yml  の処理を実行
+## ■ 複数ホストへ playbook.yml  の処理を実行
 ■ 構成　( コントロールノード：ターゲットノード = 1：4 )<br>
 　：開発環境・テスト環境に分けられた各2台のEC2に処理を実行することを想定
 - ファイル構成　( 参照：[03_ansible_ multiple_hosts](../practice01/03_ansible_%20multiple_hosts/) )
@@ -217,6 +223,14 @@
 ![ansible_practice01_14.png](../practice01/images/ansible_practice01_14.png)
 ![ansible_practice01_15.png](../practice01/images/ansible_practice01_15.png)
 
-## ■
+## ■ 所感・取組観点
+- 以前 [lecture13.md](../../Tasks/lecture13/lecture13.md) で実施していた部分もあるが、再確認も兼ね、改めてAnsibleの基本をおさえるという観点で実施
+- 前回はとりあえず動かしてみるという内容であったため、今回はAnsibleの使い方・作法の学習に重点を置いた
+- 今後はこれを発展させ、以前実施した [サンプルアプリケーションのデプロイ(手動構築)](../../Tasks/lecture05/lecture05.md) の自動化を部分的にでも行っていきたいと思う
 
 ## ■ 参考リンク
+- [【Ansible公式ドキュメント】インベントリーの構築方法](https://docs.ansible.com/ansible/2.9_ja/user_guide/intro_inventory.html)
+- [Ansibleのinventory入門](https://dev.classmethod.jp/articles/inventory/)
+- [Ansible:インベントリ変数について](https://noknowing.hatenablog.com/entry/2021/01/30/165136)
+- [Ansible初心者の学習まとめ～Playbookの書き方解説付き～](https://www.users-digital.com/2023/09/11/4941/)
+- [【Ansible】メンテナンスしやすいPlaybookの書き方](https://densan-hoshigumi.com/server/playbook-maintainability#IP)
