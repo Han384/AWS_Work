@@ -2,7 +2,7 @@
 
 ## ■ 概要
 - インフラ構築・自動化/パイプライン構築など、下記の実践内容を記載
-  - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ　( シングルAZ構成/手動構築 )](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイテスト)
+  - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ　( シングルAZ構成/手動構築 )](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイ)
   - [【 IaC 】 CloudFormation を使用したインフラリソースの構築　( 冗長化構成/シングルAZ構成 )](#--iac--cloudformation-を使用したインフラリソースの構築)
   - [【 IaC 】 Terraform を使用したインフラリソースの構築　( 冗長化構成 )](#--iac--terraform-を使用したインフラリソースの構築)
   - [【 CI/CD 】 CircleCI による 自動化・パイプライン構築　( 簡易処理を実行 )](#--cicd-circleci-による-自動化パイプライン構築)
@@ -12,7 +12,7 @@
 <br>
 
 ---
-## ■ AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ・テスト<br>
+## ■ AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ<br>
 【 実践内容 】
 - EC2上にサンプルアプリケーションをデプロイ
   - 組み込みサーバ ( Puma ) でデプロイ
@@ -179,7 +179,7 @@
 - [自動化・パイプライン構築の取組](./Tasks/lecture13/lecture13.md)　
 ( ※下記 自動化処理フロー ＆ AWS構成図 の自動実行設定を実施 )
 - 自動化処理・パイプラインを実行する CircleCI の設定ファイル [.circleci/config.yml](./.circleci/config.yml) を作成
-- cfn-lint・CloudFormation については [上記取組](#--iac--cloudformation-を使用したインフラリソースの構築) のものを一部修正して活用
+- cfn-lint・CloudFormation については [上記取組 【実践内容①：シングルAZ構成】](#--iac--cloudformation-を使用したインフラリソースの構築) のものを一部修正して活用
 - Ansible・ServereSpec については簡易的な実行処理を記述<br>
 ( ※ CloudFormation で構築した EC2 に Git をインストール＆テスト )
 - 『 0→1 の実践 』 の考え、簡易パーツを組み合わせて動かすイメージで自動化の取組を実施<br>
