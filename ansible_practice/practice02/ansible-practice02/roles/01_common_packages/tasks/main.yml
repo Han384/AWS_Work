@@ -1,9 +1,20 @@
 ---
+# 確認用：execute-user
+- name: check execute-user information
+  shell: bash -lc "id"
+  register: id
+
+- name: print id (execute-user)
+  debug:
+    var: id
+
+# yum update
 - name: Run Yum Update
   yum:
     name: '*'
     state: latest
 
+# Install：packages
 - name: Install common packages
   yum:
     name: "{{ item }}"
