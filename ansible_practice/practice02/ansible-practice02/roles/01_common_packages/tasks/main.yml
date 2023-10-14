@@ -1,0 +1,25 @@
+---
+- name: Run Yum Update
+  yum:
+    name: '*'
+    state: latest
+
+- name: Install common packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gcc-c++
+    - make
+    - patch
+    - git
+    - curl
+    - zlib-devel
+    - openssl-devel
+    - ImageMagick-devel
+    - readline-devel
+    - libcurl-devel
+    - libffi-devel
+    - libicu-devel
+    - libxml2-devel
+    - libxslt-devel

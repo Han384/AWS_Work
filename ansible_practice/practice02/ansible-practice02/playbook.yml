@@ -1,0 +1,7 @@
+---
+- name: Setup EC2 instance
+  hosts: target_node
+  become: true # 特権モードで下記 roles 記述内容を実行
+
+  roles:
+    - 01_common_packages
