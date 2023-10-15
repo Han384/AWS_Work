@@ -1,0 +1,41 @@
+---
+# install：bundler
+- name: check bundler install & version
+  become_user: ec2-user
+  shell: bash -lc "bundler version | grep {{ bundler_version }}"
+  register: bundler_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: print bundler version
+  debug:
+    var: bundler_installed
+
+- name: bundler install
+  #become_user: ec2-user
+  gem: #gemモジュールを使用してインストール
+    name: bundler #インストールするgemを指定
+    version: "{{ bundler_version }}" #versionを指定
+    executable: /home/ec2-user/.rbenv/shims/gem #Gemコマンドの実行可能ファイルのパスを指定
+    #user_install: no #Gemをユーザーのホームディレクトリにインストールしないように指定(※システム全体で利用する場合に設定)
+  when: bundler_installed is failed
+
+# install：rails
+- name: check rails install & version
+  become_user: ec2-user
+  shell: bash -lc "gem list -e rails | grep {{ rails_version }}"
+  register: rails_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: print rails version
+  debug:
+    var: rails_installed
+
+- name: rails install
+  gem:
+    name: rails
+    version: "{{ rails_version }}"
+    executable: /home/ec2-user/.rbenv/shims/gem
+    user_install: no
+  when: rails_installed is failed

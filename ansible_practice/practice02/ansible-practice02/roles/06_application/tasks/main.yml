@@ -1,0 +1,52 @@
+---
+# git clone：application
+- name: git clone application
+  become_user: ec2-user
+  git:
+    repo: https://github.com/yuta-ushijima/raisetech-live8-sample-app.git
+    dest: /home/ec2-user/raisetech-live8-sample-app
+    force: yes #ディレクトリが既に存在する場合でも既存ディレクトリを上書き
+  register: git_clone
+
+# - name: edit permission application
+#   file:
+#   path: /var/www/raisetech-live8-sample-app
+# #   path: /home/ec2-user/raisetech-live8-sample-app
+#     state: directory
+#     owner: ec2-user
+#     group: ec2-user
+#     recurse: yes #再帰的に実行
+
+# install：gems with bundler
+- name: install gems with bundler
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle install"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+  when: git_clone.changed
+
+
+# #############################
+# - name: create database.yml
+#   become_user: root
+#   template:
+#     src: database.yml.j2
+#     dest: "{{ sample_app_dir }}/config/database.yml"
+
+# - name: create storage.yml
+#   become_user: root
+#   template:
+#     src: storage.yml.j2
+#     dest: "{{ sample_app_dir }}/config/storage.yml"
+
+# - name: edit unicorn.rb
+#   become_user: root
+#   template:
+#     src: unicorn.rb.j2
+#     dest: "{{ sample_app_dir }}/config/unicorn.rb"
+
+# - name: edit development.rb
+#   become_user: root
+#   template:
+#     src: development.rb.j2
+#     dest: "{{ sample_app_dir }}/config/environments/development.rb"

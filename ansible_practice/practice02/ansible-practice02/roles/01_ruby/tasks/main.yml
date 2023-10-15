@@ -5,7 +5,7 @@
   shell: bash -lc "rbenv --version"
   register: rbenv_installed #コマンドの実行結果を変数rbenv_existsに登録
   changed_when: false #タスク実行時に「変更があった」と判断しない
-  ignore_errors: yes  #エラーを無視
+  ignore_errors: true  #エラーを無視
 
 - name: print rbenv version
   debug:
@@ -52,16 +52,16 @@
   shell: bash -lc "rbenv versions | grep {{ ruby_version }}"
   register: ruby_installed
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: print ruby version
   debug:
     var: ruby_installed
 
-# - name: install ruby
-#   become_user: ec2-user
-#   shell: bash -lc "rbenv install {{ ruby_version }}"
-#   when: ruby_installed is failed
+- name: install ruby
+  become_user: ec2-user
+  shell: bash -lc "rbenv install {{ ruby_version }}"
+  when: ruby_installed is failed
 
 - name: set default ruby version
   become_user: ec2-user

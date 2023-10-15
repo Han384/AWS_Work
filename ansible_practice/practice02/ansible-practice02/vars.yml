@@ -1,5 +1,10 @@
 ruby_version: 3.1.2
 bundler_version: 2.3.14
+rails_version: 7.0.4
+node_version: 17.9.1
+yarn_version: 1.22.19
+
+
 db_pass: password
 db_user: root
 db_name: local

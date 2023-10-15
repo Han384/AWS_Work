@@ -1,0 +1,47 @@
+---
+#install：node(+nvm)
+- name: check node install & version
+  become_user: ec2-user
+  shell: bash -lc "node --version | grep {{ node_version }}"
+  register: node_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: print node version
+  debug:
+    var: node_installed
+
+#NVM(Node.jsのバージョン管理ツール)を使用してnodeをインストール
+- name: Install nvm
+  become_user: ec2-user
+  ansible.builtin.shell: > #shell:と同じだが、Ansible 2.9以降のバージョンで推奨されている記法
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+  args: #タスクの引数を指定(※NVMが正常にインストールされているかのチェック用途)
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh" #creates: 指定したファイルが既に存在する場合にこのタスクをスキップするパラメータ
+  when: node_installed is failed
+
+- name: update .bash_profile
+  shell: bash -lc "source ~/.bash_profile"
+  when: node_installed is failed
+
+- name: node install
+  become_user: ec2-user
+  shell: bash -lc "nvm install {{ node_version }}"
+  when: node_installed is failed
+
+#install：yarn
+- name: check yarn install & version
+  become_user: ec2-user
+  shell: bash -lc "yarn --version | grep {{ yarn_version }}"
+  register: yarn_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: print yarn version
+  debug:
+    var: yarn_installed
+
+- name: yarn install
+  become_user: ec2-user
+  shell: bash -lc "npm install --global yarn@{{ yarn_version }}"
+  when: yarn_installed is failed
