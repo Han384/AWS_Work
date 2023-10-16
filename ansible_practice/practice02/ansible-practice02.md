@@ -7,6 +7,25 @@
   - 動作環境
 
 
+## ■ 事前準備 ( コントロールノードの EC2 上で下記を実行 )
+- AWS CLI を使用できるように設定　`aws configure`
+- jq をインストール & AWS CLI を介して情報取得した値を環境変数に設定<br>
+( ※シェルスクリプトにて実行：[]() )
+- `ansible-practice02` ディレクトリ内で下記コマンドを実行
+  ```
+  # 実行権限付与
+  $ chmod +x env_set.sh
+
+  # 一連の処理をシェルスクリプトにて実行
+  $ ./env_set.sh
+
+  # ~./bash_profile 読込み
+  $ source ~/.bash_profile
+
+  # 環境変数が設定されているか確認
+  $ printenv | grep -E 'AWS|DB_SOCKET_PATH'
+  ```
+
 ## ■ 各種ファイル作成
 - ディレクトリ・ファイル構成
 ```
@@ -25,7 +44,7 @@
 
 5 directories, 6 files
 ```
-- 各種ファイル作成作成後、`ansible-playbook` コマンドでplaybook記載の処理を実行<br>
+- 各種ファイル作成後、`ansible-playbook` コマンドでplaybook記載の処理を実行<br>
 ( ※ansible-practice02 ディレクトリ内でコマンドを実行 )
   ```
   $ ansible-playbook -i inventory playbook.yml
