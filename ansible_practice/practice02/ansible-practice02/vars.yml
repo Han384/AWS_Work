@@ -3,11 +3,11 @@ bundler_version: 2.3.14
 rails_version: 7.0.4
 node_version: 17.9.1
 yarn_version: 1.22.19
+aws_db_user: "{{ lookup('env', 'AWS_DB_USER') }}"
+aws_db_pw: "{{ (lookup('env', 'AWS_DB_PW')) }}"
+aws_db_host: "{{ (lookup('env', 'AWS_DB_HOST')) }}"
+db_socket_path: "{{ lookup('env', 'DB_SOCKET_PATH') }}"
 
 
-db_pass: password
-db_user: root
-db_name: local
-local_db_user: local
 public_ip: 127.0.0.1
 application_name: qiita_clone_2019

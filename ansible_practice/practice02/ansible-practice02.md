@@ -29,20 +29,36 @@
 ## ■ 各種ファイル作成
 - ディレクトリ・ファイル構成
 ```
-.
+ansible-practice02
+│
 ├── ansible.cfg
+├── env_set.sh
 ├── inventory
 ├── playbook.yml
 ├── roles
-│   ├── 01_common_packages
+│   ├── 00_common_packages
 │   │   └── tasks
 │   │       └── main.yml
-│   └── 02_ruby
-│       └── tasks
-│           └── main.yml
+│   ├── 01_ruby
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── 02_bundler_rails
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── 03_node_yarn
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── 04_mysql
+│   │   └── tasks
+│   │       └── main.yml
+│   └── 06_application
+│       ├── tasks
+│       │   └── main.yml
+│       └── templates
+│           └── database.yml.j2
 └── vars.yml
 
-5 directories, 6 files
+14 directories, 12 files
 ```
 - 各種ファイル作成後、`ansible-playbook` コマンドでplaybook記載の処理を実行<br>
 ( ※ansible-practice02 ディレクトリ内でコマンドを実行 )

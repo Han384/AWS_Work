@@ -25,14 +25,33 @@
     chdir: /home/ec2-user/raisetech-live8-sample-app/
   when: git_clone.changed
 
+- name: create database.yml
+  become_user: ec2-user
+  template:
+    src: database.yml.j2
+    dest: /home/ec2-user/raisetech-live8-sample-app/config/database.yml
+
+- name: db create & migrate
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle exec rails db:create && bundle exec rails db:migrate"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+  when: git_clone.changed
+
+- name: assets precompile
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "rails assets:precompile"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+  when: git_clone.changed
+
+- name: rails start with puma
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "rails s -b 0.0.0.0"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
 
 # #############################
-# - name: create database.yml
-#   become_user: root
-#   template:
-#     src: database.yml.j2
-#     dest: "{{ sample_app_dir }}/config/database.yml"
-
 # - name: create storage.yml
 #   become_user: root
 #   template:
