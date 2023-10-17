@@ -1,0 +1,72 @@
+---
+# 確認用：execute-user
+- name: check execute-user information
+  shell: bash -lc "id"
+  register: id
+
+- name: print id (execute-user)
+  debug:
+    var: id
+
+# make swap
+- name: Use the stat module to check if swapfile exists
+  stat:
+    path: /swapfile
+  register: file_info
+
+- name: Print the file_info
+  debug:
+    var: file_info.stat.exists
+
+- name: make swapfile
+  shell: bash -lc "dd if=/dev/zero of=/swapfile bs=1M count=512"
+  when: not file_info.stat.exists
+
+- name: chenge swapfile permission
+  file:
+    path: /swapfile
+    state: file
+    mode: '0600'
+  when: not file_info.stat.exists
+
+- name: mkswap swapfile
+  shell: bash -lc "mkswap /swapfile"
+  when: not file_info.stat.exists
+
+- name: swapon swapfile
+  shell: bash -lc "swapon /swapfile"
+  when: not file_info.stat.exists
+
+- name: append a line to the end of /etc/fstab
+  lineinfile: #ファイルに行を追加
+    path: /etc/fstab
+    line: '/swapfile swap swap defaults 0 0'  # 追記したい文字列を指定
+    insertafter: EOF  # ファイルの末尾に追加する
+  when: not file_info.stat.exists
+
+# yum update
+- name: Run Yum Update
+  yum:
+    name: '*'
+    state: latest
+
+# Install：packages
+- name: Install common packages
+  yum:
+    name: "{{ item }}"
+    state: present #パッケージがシインストールされていない場合に任意のバージョンのものをインストール
+  with_items:
+    - gcc-c++
+    - make
+    - patch
+    - git
+    - curl
+    - zlib-devel
+    - openssl-devel
+    - ImageMagick-devel
+    - readline-devel
+    - libcurl-devel
+    - libffi-devel
+    - libicu-devel
+    - libxml2-devel
+    - libxslt-devel

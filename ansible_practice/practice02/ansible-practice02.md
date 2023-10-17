@@ -1,67 +1,78 @@
 # 【 Ansible ( advance )： サンプルアプリケーションのデプロイ・手動構築の自動化 】
 
-## ■ 本実践内容の概要
+## ■ 本実践内容の概要・手順・補足
 - [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 を Ansible にて自動化
-- 環境
-  - EC2： t2.medium を使用　(※リソース不足でインストールが進まなくなるため)
-  - 動作環境
+- インフラリソースについては、[lecture10 の CloudFormation_templates (シングルAZ構成)](../../Tasks/lecture10/CloudFormation_templates/) を使用<br>
+( 補足：EC2以外のリソースを構築 )
+- 上記環境上に EC2 ×2 (コントロールノード・ターゲットノード) をマネージメントコンソールで作成し、Ansibleを実行<br>
+( 補足：コントロールノードがターゲットノードへSSH接続する設定を必要に応じて実施 )
+- コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
+- 動作環境
+  - EC2： t2.medium を使用<br>
+  ( ※ t2.micro ではリソース不足でインストール処理が進まなくなるため)
+  - 各種バージョンなど
+- 構成図
 
 
-## ■ 事前準備 ( コントロールノードの EC2 上で下記を実行 )
+## ■ 事前準備 ( コントロールノードの初期設定 )
 - AWS CLI を使用できるように設定　`aws configure`
 - jq をインストール & AWS CLI を介して情報取得した値を環境変数に設定<br>
-( ※シェルスクリプトにて実行：[]() )
+( ※一連の処理を行うため、右記シェルスクリプトを作成：[env_set.sh](./ansible-practice02/env_set.sh) )<br>
+( ※補足：IaCで新規にRDSを起動した場合、SecretMangerも新規作成され、シークレットの名前の値が変更となるため適宜マネージメントコンソール上のSSMパラメータストアの情報の書き換えが必要 )
 - `ansible-practice02` ディレクトリ内で下記コマンドを実行
   ```
-  # 実行権限付与
+  # 作成したシェルスクリプトに実行権限付与
   $ chmod +x env_set.sh
 
-  # 一連の処理をシェルスクリプトにて実行
-  $ ./env_set.sh
-
-  # ~./bash_profile 読込み
-  $ source ~/.bash_profile
+  # シェルスクリプト実行(※親シェルで実行)
+  $ source env_set.sh
 
   # 環境変数が設定されているか確認
   $ printenv | grep -E 'AWS|DB_SOCKET_PATH'
   ```
 
-## ■ 各種ファイル作成
-- ディレクトリ・ファイル構成
-```
-ansible-practice02
-│
-├── ansible.cfg
-├── env_set.sh
-├── inventory
-├── playbook.yml
-├── roles
-│   ├── 00_common_packages
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 01_ruby
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 02_bundler_rails
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 03_node_yarn
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 04_mysql
-│   │   └── tasks
-│   │       └── main.yml
-│   └── 06_application
-│       ├── tasks
-│       │   └── main.yml
-│       └── templates
-│           └── database.yml.j2
-└── vars.yml
+## ■ ディレクトリ・ファイル構成
+- コントロールノード上で下記ディレクトリ・ファイル群を作成
+  ```
+  ansible-practice02
+  │
+  ├── ansible.cfg
+  ├── env_set.sh
+  ├── inventory
+  ├── playbook.yml
+  ├── roles
+  │   ├── 00_common_packages
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 01_ruby
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 02_bundler_rails
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 03_node_yarn
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 04_mysql
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   └── 06_application
+  │       ├── tasks
+  │       │   └── main.yml
+  │       └── templates
+  │           └── database.yml.j2
+  └── vars.yml
 
-14 directories, 12 files
-```
+  14 directories, 12 files
+  ```
+## ■ Ansible実行 ( コントロールノード上で実行 )
+- ターゲットノードへの疎通確認：`andible`コマンドで実行　( pingモジュールを使用 )<br>
+( ※ `ansible-practice02` ディレクトリ内でコマンドを実行 )
+  ```
+  $ ansible -i inventory target_node -m ping
+  ```
 - 各種ファイル作成後、`ansible-playbook` コマンドでplaybook記載の処理を実行<br>
-( ※ansible-practice02 ディレクトリ内でコマンドを実行 )
+( ※ `ansible-practice02` ディレクトリ内でコマンドを実行 )
   ```
   $ ansible-playbook -i inventory playbook.yml
   -------------------------------------
@@ -70,8 +81,11 @@ ansible-practice02
   $ ansible-playbook -i inventory playbook.yml -vvv          #デバッグ
   $ ansible-playbook -i inventory playbook.yml --check -vvv  #ドライラン + デバッグ
   ```
+## ■ 動作確認
+- 組み込みサーバ (Puma) で起動
 
-
+## ■所感・取組観点など
+- 次回は、CircleCIを使用して全自動化を行っていきたい
 
 ## ■ 参考リンク
 【 Ansible全般 】

@@ -12,7 +12,6 @@
     var: bundler_installed
 
 - name: bundler install
-  #become_user: ec2-user
   gem: #gemモジュールを使用してインストール
     name: bundler #インストールするgemを指定
     version: "{{ bundler_version }}" #versionを指定

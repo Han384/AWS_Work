@@ -5,9 +5,10 @@
   #become_user: ec2-user
   vars_files: vars.yml
   roles:
-    - 00_common_packages
+    - 00_common
     - 01_ruby
     - 02_bundler_rails
     - 03_node_yarn
     - 04_mysql
-    - 06_application
+    - 05_app_puma
+    - 06_app_nginx_unicorn
