@@ -25,10 +25,6 @@ echo $alb_name
 # 環境変数設定：下記記述内で上記変数を使用
 ###################################
 
-# ~./bash_profileに追記
-echo 'secret_id=$(aws ssm get-parameter --name SecretsManager_SecretName --query 'Parameter.Value' --output text --with-decryption)' >> ~/.bash_profile
-echo 'db_instance_identifier=$(aws rds describe-db-instances --query "DBInstances[*].DBInstanceIdentifier" --output text)' >> ~/.bash_profile
-
 # Secrets Managerからユーザー名・パスワードを抽出して環境変数に設定し、~./bash_profileに追記
 echo 'export AWS_DB_USER=$(aws secretsmanager get-secret-value --secret-id $secret_id | jq -r ".SecretString | fromjson | .username")' >> ~/.bash_profile
 echo 'export AWS_DB_PW=$(aws secretsmanager get-secret-value --secret-id $secret_id | jq -r ".SecretString | fromjson | .password")' >> ~/.bash_profile
