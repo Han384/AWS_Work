@@ -34,42 +34,43 @@
 ## ■ ディレクトリ・ファイル構成
 - コントロールノード上で下記ディレクトリ・ファイル群を作成
 ```
-ansible-practice02
-│
-├── ansible.cfg
-├── env_set.sh
-├── inventory
-├── playbook.yml
-├── roles
-│   ├── 00_common
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 01_ruby
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 02_bundler_rails
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 03_node_yarn
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 04_mysql
-│   │   └── tasks
-│   │       └── main.yml
-│   ├── 05_app_puma
-│   │   ├── tasks
-│   │   │   └── main.yml
-│   │   └── templates
-│   │       └── database.yml.j2
-│   └── 06_app_nginx_unicorn
-│       ├── tasks
-│       │   └── main.yml
-│       └── templates
-│           └── raisetech-live8-sample-app.conf.j2
-└── vars.yml
+/ansible-practice02
+  │
+  ├── ansible.cfg
+  ├── env_set.sh
+  ├── inventory
+  ├── playbook.yml
+  ├── roles
+  │   ├── 00_common
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 01_ruby
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 02_bundler_rails
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 03_node_yarn
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 04_mysql
+  │   │   └── tasks
+  │   │       └── main.yml
+  │   ├── 05_app_puma
+  │   │   ├── tasks
+  │   │   │   └── main.yml
+  │   │   └── templates
+  │   │       └── database.yml.j2
+  │   └── 06_app_nginx_unicorn
+  │       ├── tasks
+  │       │   └── main.yml
+  │       └── templates
+  │           └── raisetech-live8-sample-app.conf.j2
+  └── vars.yml
 
 17 directories, 14 files
 ```
+
 ## ■ Ansible実行 ( コントロールノード上で実行 )
 - ターゲットノードへの疎通確認：`andible`コマンドで実行　( pingモジュールを使用 )<br>
 ( ※ `ansible-practice02` ディレクトリ内でコマンドを実行 )
@@ -102,7 +103,7 @@ ansible-practice02
 - [Playbookを再利用しやすくするRoleの基本と共有サービスAnsible Galaxyの使い方](https://atmarkit.itmedia.co.jp/ait/articles/1610/05/news013_2.html)
 
 【 Ansible：モジュール関連 】
-  - [【公式ドキュメント】 ansible.builtin.yum module – Manages packages with the yum package manager](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html)
+  - [ansible.builtin.yum module – Manages packages with the yum package manager](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html)
   - [[Ansible] yum モジュールの基本的な使い方（パッケージのインストールなど）](https://tekunabe.hatenablog.jp/entry/2019/02/24/ansible_yum_intro)
   - [Ansibleのyum module:各state(present,installed,latest,absent,removed)の違い](https://qiita.com/tkit/items/7ad3e93070e97033f604)
 - [community.general.gem module – Manage Ruby gems](https://docs.ansible.com/ansible/latest/collections/community/general/gem_module.html)

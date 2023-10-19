@@ -8,3 +8,8 @@ aws_db_pw: "{{ lookup('env', 'AWS_DB_PW') }}"
 aws_db_host: "{{ lookup('env', 'AWS_DB_HOST') }}"
 db_socket_path: "{{ lookup('env', 'DB_SOCKET_PATH') }}"
 aws_alb_endpoint: "{{ lookup('env', 'AWS_ALB_ENDPOINT') }}"
+
+aws_s3_access_key : "{{ lookup('env', 'AWS_S3_ACCESS_KEY') }}"
+aws_s3_secret_access_key: "{{ lookup('env', 'AWS_S3_SECRET_ACCESS_KEY') }}"
+aws_s3_region: "{{ lookup('env', 'AWS_S3_REGION') }}"
+aws_s3_bucket: "{{ lookup('env', 'AWS_S3_BUCKET') }}"
