@@ -17,7 +17,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref EC2AMI
-      InstanceType: t2.micro
+      InstanceType: t2.medium
       KeyName: "{{resolve:ssm:KeyName:2}}"
       AvailabilityZone: !Select [0, !GetAZs ]
       SubnetId:
