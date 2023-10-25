@@ -11,4 +11,5 @@
     - 03_node_yarn
     - 04_mysql
     - 05_app_puma
-    - 06_app_nginx_unicorn
+    - 06_s3
+    - 07_app_nginx_unicorn

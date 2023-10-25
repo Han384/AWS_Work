@@ -30,7 +30,6 @@
     insertafter: types_hash_max_size 4096; #ブロックを挿入する位置を指定：左記文字列の後に挿入
     block: "    server_names_hash_bucket_size 128;"
 
-
 - name: change rails config - config.assets.debug
   replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/development.rb

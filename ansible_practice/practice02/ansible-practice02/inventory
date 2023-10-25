@@ -1,5 +1,5 @@
 [target_node]
-3.112.29.199
+54.250.143.94
 
 [all:vars]
 ansible_ssh_user=ec2-user
