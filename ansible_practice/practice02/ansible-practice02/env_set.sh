@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install：jq
-sudo yum install jq -y
+#sudo yum install jq -y
 
 ###################################
 # 変数設定
@@ -15,11 +15,15 @@ vpc_id=$(aws ec2 describe-vpcs --filters "Name=tag:Name,Values=CFnVPC" --query '
 # 特定のVPC内のALB名を取得して変数に格納(※以降の工程で使用)
 alb_name=$(aws elbv2 describe-load-balancers --query "LoadBalancers[?VpcId=='$vpc_id'].LoadBalancerName" --output text)
 
+#S3バケット名を取得して変数に格納(※以降の工程で使用)
+s3_name=$(aws s3api list-buckets --query "Buckets[?starts_with(Name, 'raisetech-cfn-')].Name" --output text)
+
 echo "##### 変数：確認 #####"
 echo $secret_id
 echo $db_instance_identifier
 echo $vpc_id
 echo $alb_name
+echo $s3_name
 
 ###################################
 # 環境変数設定：下記記述内で上記変数を使用
@@ -37,6 +41,12 @@ echo 'export DB_SOCKET_PATH=$(mysql_config --socket)' >> ~/.bash_profile
 
 # ALB名の情報を取得し、ALBエンドポイント(DNS名)を抽出して環境変数に設定し、~./bash_profileに追記
 echo 'export AWS_ALB_ENDPOINT=$(aws elbv2 describe-load-balancers --names $alb_name  | jq -r ".LoadBalancers[0].DNSName")' >> ~/.bash_profile
+
+#アクセスキー・シークレットアクセスキーの情報を取得して環境変数に設定(※実運用では別途セキュリティ対策を要考慮)
+echo 'export AWS_S3_ACCESS_KEY=$(aws configure get aws_access_key_id)' >> ~/.bash_profile
+echo 'export AWS_S3_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)' >> ~/.bash_profile
+echo 'export AWS_S3_REGION=$(aws configure get region)' >> ~/.bash_profile
+echo 'export AWS_S3_BUCKET=$s3_name' >> ~/.bash_profile
 
 ###################################
 # ~/.bash_profile 読込み
