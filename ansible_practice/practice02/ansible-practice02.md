@@ -46,8 +46,7 @@
 ( ※一連の処理を行うため、右記シェルスクリプトを作成：[env_set.sh](./ansible-practice02/env_set.sh) )<br>
 - 適宜マネージメントコンソール上のSSMパラメータストアの情報を書き換える<br>
 ( 補足：RDSを新たに作成した場合、SecretManger も新規作成され、シークレットの名前の値 が変更となるため )
-- 下記コマンドを実行、環境変数に値を設定<br>
-( ※Ansible実行時に `vars.yml` 記載の変数の値として使用 )
+- 下記コマンドを実行、環境変数に値を設定　( ※Ansible実行時に `vars.yml` 記載の変数の値として使用 )
   ```
   # 作成したシェルスクリプトに実行権限付与
   $ chmod +x env_set.sh
@@ -103,6 +102,8 @@
     │           └── raisetech-live8-sample-app.conf.j2
     └── vars.yml
   ```
+- 【 補足 】 上記の [00_common/tasks/main.yml](../practice02/ansible-practice02/roles/00_common/tasks/main.yml) では、t2.micro を使用した場合を想定してswapを作成している<br>
+( ※リソース不足による処理実行時のフリーズを防ぐため )
 
 ## ■ Ansible実行 ( コントロールノード上で実行 )
 - `inventory` にターゲットノードの ipアドレスを記載
@@ -114,7 +115,7 @@
   ```
   $ ansible -i inventory target_node -m ping
   ```
-- 疎通確認：成功
+- 疎通確認：成功<br>
 ![ansible-practice02_01.png](../practice02/images/ansible-practice02_01.png)
 - 各種ファイル作成後、`ansible-playbook` コマンドでplaybook記載の処理を実行<br>
 
@@ -126,7 +127,7 @@
   $ ansible-playbook -i inventory playbook.yml -vvv          #デバッグ
   $ ansible-playbook -i inventory playbook.yml --check -vvv  #ドライラン + デバッグ
   ```
-- 実行結果：成功　( ※途中結果は割愛、最終結果を表示 )
+- 実行結果：成功　( ※途中結果は割愛、最終結果を表示 )<br>
 ![ansible_practice02_02.png](../practice02/images/ansible_practice02_02.png)
 
 ## ■ 動作確認
@@ -143,7 +144,7 @@
 - データ登録確認③<br>
 ( S3連携：S3へのデータ登録も同時に行われているか確認 (※サイズ違いで同じ画像データが3つ登録されている) )
 ![ansible_practice02_07.png](../practice02/images/ansible_practice02_07.png)
-- 各種バージョン確認
+- 各種バージョン確認　( SessionManagerでターゲットノードへログインして確認 )
 ![ansible_practice02_09.png](../practice02/images/ansible_practice02_09.png)
   | 動作環境 | バージョン |
   | -------- | ---------- |
