@@ -129,6 +129,8 @@ $ aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10
 ![ansible_practice02_02.png](../practice02/images/ansible_practice02_02.png)
 
 ## ■ 動作確認
+- ALBのヘルスチェック：正常
+![ansible_practice02_08.png](../practice02/images/ansible_practice02_08.png)
 - ALBのDNS名をブラウザに入力し表示確認
 ![ansible_practice02_03.png](../practice02/images/ansible_practice02_03.png)
 - データ登録確認①　( ブラウザ：テキスト・画像の登録 )
@@ -163,6 +165,3 @@ $ aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10
 - [ansible.builtin.blockinfile module – Insert/update/remove a text block surrounded by marker lines](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html)
 - [ansible.builtin.file module – Manage files and file properties](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html)
 - [ansible.builtin.stat module – Retrieve file or file system status](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html)
-- []()
-- []()
-- []()

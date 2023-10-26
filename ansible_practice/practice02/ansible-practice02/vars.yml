@@ -1,8 +1,11 @@
+# 変数設定：各種バージョンを指定
 ruby_version: 3.1.2
 bundler_version: 2.3.14
 rails_version: 7.0.4
 node_version: 17.9.1
 yarn_version: 1.22.19
+
+# Ansibleのlookup関数を使用して環境変数の値を変数に代入、各Playbook内で参照させて利活用
 aws_db_user: "{{ lookup('env', 'AWS_DB_USER') }}"
 aws_db_pw: "{{ lookup('env', 'AWS_DB_PW') }}"
 aws_db_host: "{{ lookup('env', 'AWS_DB_HOST') }}"
