@@ -21,7 +21,7 @@
   | Yarn     | 1.22.19    |
 
 ## ■ インフラリソースの構築 ( IaC：CloudFormation )
-- ローカルPC上で [/AWS_Work](../../../AWS_Work) に移動
+- ローカルPC上で [/AWS_Work](https://github.com/Han384/AWS_Work) に移動
 - AWS CLI を使用して下記コマンドを実行してインフラリソースを構築
   ```
   $ aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
