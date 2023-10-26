@@ -1,0 +1,50 @@
+---
+# remove：mariadb-libs
+- name: remove mariadb-libs
+  yum:
+    name: mariadb-libs #パッケージ名を指定
+    state: absent #指定したパッケージを削除
+
+# install：mysql
+- name: check mysql install & version
+  become_user: ec2-user
+  shell: bash -lc "mysql --version"
+  register: mysql_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: print mysql version
+  debug:
+    var: mysql_installed
+
+- name: Install mysql8.0 community release rpm
+  shell: bash -lc "yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-7.noarch.rpm"
+  register: mysql80_installed
+  when: mysql_installed is failed
+
+- name: Install mysql-community-server
+  yum:
+    name: mysql-community-server
+    state: present
+  when: mysql80_installed.changed #変更があればタスクを実行
+
+- name: Install mysql-community-devel
+  yum:
+    name: mysql-community-devel
+    state: present
+  when: mysql80_installed.changed #変更があればタスクを実行
+
+#インストール確認用
+- name: check mysql install
+  become_user: ec2-user
+  shell: bash -lc "yum list installed | grep mysql"
+  register: check_mysql_install
+
+- name: print check_mysql_install
+  debug:
+    var: check_mysql_install
+
+# start & enable：mysql
+- name: mysqld enable & restart
+  shell: bash -lc "systemctl enable mysqld && systemctl restart mysqld"
+  when: mysql_installed is failed

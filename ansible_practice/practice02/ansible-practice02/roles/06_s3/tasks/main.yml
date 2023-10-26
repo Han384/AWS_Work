@@ -1,0 +1,24 @@
+---
+- name: change rails config - config.active_storage.service
+  replace:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/development.rb
+    regexp: 'config.active_storage.service = :local'
+    replace: 'config.active_storage.service = :amazon'
+
+- name: create storage.yml
+  template:
+    src: storage.yml.j2
+    dest: "/home/ec2-user/raisetech-live8-sample-app/config/storage.yml"
+
+# - name: restart nginx service
+#   service:
+#     name: nginx
+#     state: restarted
+#   register: nginx_restarted
+
+# - name: start unicorn
+#   become_user: ec2-user
+#   shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
+#   args:
+#     chdir: /home/ec2-user/raisetech-live8-sample-app
+#   when: nginx_restarted.changed

@@ -17,8 +17,8 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref EC2AMI
-      InstanceType: t2.micro
-      KeyName: '{{resolve:ssm:KeyName:1}}'
+      InstanceType: t2.medium
+      KeyName: "{{resolve:ssm:KeyName:2}}"
       AvailabilityZone: !Select [0, !GetAZs ]
       SubnetId:
         Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1a
@@ -60,4 +60,3 @@ Outputs:
     Value: !Ref EC2WebServer01
     Export:
       Name: !Sub ${AWS::StackName}-EC2WebServer01
-      

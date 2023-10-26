@@ -1,0 +1,69 @@
+---
+# install：nginx
+- name: check nginx install
+  shell: bash -lc "nginx -v"
+  register: nginx_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: nginx install
+  shell: bash -lc "amazon-linux-extras install -y nginx1"
+  when: nginx_installed is failed
+
+# create：nginx config file in /etc/nginx/conf.d
+- name: create raisetech-live8-sample-app.conf
+  template:
+    src: raisetech-live8-sample-app.conf.j2
+    dest: /etc/nginx/conf.d/raisetech-live8-sample-app.conf
+
+# replace text (user)：/etc/nginx/nginx.conf
+- name: Replace user in /etc/nginx/nginx.conf
+  replace:
+    path: /etc/nginx/nginx.conf  # 対象のファイルへのパスを指定
+    regexp: 'user nginx;'  # 置換したい古いテキストを指定
+    replace: 'user ec2-user;'  # 新しいテキストを指定
+
+- name: avoid error when nginx start
+  #become_user: ec2-user
+  blockinfile: #指定されたファイル内に特定のブロックを挿入
+    path: /etc/nginx/nginx.conf
+    insertafter: types_hash_max_size 4096; #ブロックを挿入する位置を指定：左記文字列の後に挿入
+    block: "    server_names_hash_bucket_size 128;"
+
+- name: change rails config - config.assets.debug
+  replace:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/development.rb
+    regexp: 'config.assets.debug = true'
+    replace: 'config.assets.debug = false'
+
+- name: avoid blocked host error on rails (ALBendpoint)
+  blockinfile: #指定されたファイル内に特定のブロックを挿入
+    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/development.rb
+    insertbefore: end #ブロックを挿入する位置を指定：endの直前に挿入
+    block: "  config.hosts << \"{{ aws_alb_endpoint }}\""
+
+- name: chenge nginx permission
+  file:
+    path: /var/lib/nginx
+    state: directory
+    mode: '0775'
+    recurse: yes
+  register: nginx_dir_result
+
+- name: print nginx_dir_result
+  debug:
+    var: nginx_dir_result
+
+- name: start & enable nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  register: nginx_started
+
+- name: start unicorn
+  become_user: ec2-user
+  shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
+  args:
+    chdir: /home/ec2-user/raisetech-live8-sample-app
+  when: nginx_started.changed

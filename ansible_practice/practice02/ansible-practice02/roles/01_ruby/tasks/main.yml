@@ -1,0 +1,74 @@
+---
+#  install：rbenv・ruby-build
+- name: check rbenv install & version
+  become_user: ec2-user
+  shell: bash -lc "rbenv --version"
+  register: rbenv_installed #コマンドの実行結果を変数rbenv_existsに登録
+  changed_when: false #タスク実行時に「変更があった」と判断しない
+  ignore_errors: true  #エラーを無視
+
+- name: print rbenv version
+  debug:
+    var: rbenv_installed
+
+- name: install rbenv
+  git:
+    repo: https://github.com/sstephenson/rbenv.git
+    dest: /home/ec2-user/.rbenv
+  when: rbenv_installed is failed #条件制御：rbenv_installed が失敗した場合にこのタスクを実行
+
+- name: edit permission rbenv
+  file:
+    path: /home/ec2-user/.rbenv
+    state: directory
+    owner: ec2-user
+    group: ec2-user
+
+- name: add path for rbenv
+  lineinfile: #指定された行(下記のline:内容)をpath:に追加
+    path: /home/ec2-user/.bash_profile
+    line: 'export PATH="$HOME/.rbenv/bin:$PATH"'
+  when: rbenv_installed is failed
+
+- name: eval rbenv init
+  lineinfile:
+    path: /home/ec2-user/.bash_profile
+    line: 'eval "$(rbenv init -)"'
+  when: rbenv_installed is failed
+
+- name: update .bash_profile
+  shell: bash -lc "source ~/.bash_profile"
+  when: rbenv_installed is failed
+
+- name: install ruby-build
+  git:
+    repo: https://github.com/sstephenson/ruby-build.git
+    dest: /home/ec2-user/.rbenv/plugins/ruby-build
+  when: rbenv_installed is failed
+
+# install：ruby
+- name: check ruby install & version
+  become_user: ec2-user
+  shell: bash -lc "rbenv versions | grep {{ ruby_version }}"
+  register: ruby_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: print ruby version
+  debug:
+    var: ruby_installed
+
+- name: install ruby
+  become_user: ec2-user
+  shell: bash -lc "rbenv install {{ ruby_version }}"
+  when: ruby_installed is failed
+
+- name: set default ruby version
+  become_user: ec2-user
+  shell: bash -lc "rbenv global {{ ruby_version }}"
+  when: ruby_installed is failed
+
+- name: set default ruby version rehash
+  become_user: ec2-user
+  shell: bash -lc "rbenv rehash"
+  when: ruby_installed is failed

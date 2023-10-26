@@ -1,0 +1,15 @@
+---
+- name: setup EC2 instance
+  hosts: target_node
+  become: true # 特権モードで下記 roles 記述内容を実行
+  #become_user: ec2-user
+  vars_files: vars.yml # 変数ファイルを指定
+  roles:
+    - 00_common
+    - 01_ruby
+    - 02_bundler_rails
+    - 03_node_yarn
+    - 04_mysql
+    - 05_app_puma
+    - 06_s3
+    - 07_app_nginx_unicorn
