@@ -1,4 +1,4 @@
-# 【 Ansible ( advance )： サンプルアプリケーションのデプロイ・手動構築の自動化 】
+# 【 Ansible ( advanced )： サンプルアプリケーションのデプロイ・手動構築の自動化 】
 
 ## ■ 本実践内容の概要
 - [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 を Ansible にて自動化
@@ -8,34 +8,34 @@
 - デプロイが成功しているか動作確認
 
 ## ■ 構成図・動作環境
-- 構成図
-
-| 動作環境 | バージョン |
-| -------- | ---------- |
-| Ruby     | 3.1.2      |
-| Bundler  | 2.3.14     |
-| Rails    | 7.0.4      |
-| Node     | v17.9.1    |
-| Yarn     | 1.22.19    |
+![ansible-practice02.png](../practice02/images/ansible-practice02.png)
 - EC2 (ターゲットノード) - t2.medium を使用<br>
-( ※既存のCFnテンプレートの記述を変更、t2.micro よりスケールアップ )
+( ※既存のCFnテンプレートの記述を変更、t2.micro よりスケールアップさせ処理能力を向上 )
+
+  | 動作環境 | バージョン |
+  | -------- | ---------- |
+  | Ruby     | 3.1.2      |
+  | Bundler  | 2.3.14     |
+  | Rails    | 7.0.4      |
+  | Node     | v17.9.1    |
+  | Yarn     | 1.22.19    |
 
 ## ■ インフラリソースの構築 ( IaC：CloudFormation )
-- ローカルPC上で [AWS_Work/](../../../AWS_Work) に移動
+- ローカルPC上で [/AWS_Work](../../../AWS_Work) に移動
 - AWS CLI を使用して下記コマンドを実行してインフラリソースを構築
-```
-$ aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
+  ```
+  $ aws cloudformation deploy --stack-name cfn-vpc --template-file  Tasks/lecture10/CloudFormation_templates/01_cfn-vpc.yml
 
-$ aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml
+  $ aws cloudformation deploy --stack-name cfn-securitygroup --template-file  Tasks/lecture10/CloudFormation_templates/02_cfn-securitygroup.yml
 
-$ aws cloudformation deploy --stack-name cfn-rds --template-file  Tasks/lecture10/CloudFormation_templates/03_cfn-rds.yml
+  $ aws cloudformation deploy --stack-name cfn-rds --template-file  Tasks/lecture10/CloudFormation_templates/03_cfn-rds.yml
 
-$ aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml --capabilities CAPABILITY_NAMED_IAM
+  $ aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture10/CloudFormation_templates/04_cfn-ec2.yml --capabilities CAPABILITY_NAMED_IAM
 
-$ aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
+  $ aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
 
-$ aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
-```
+  $ aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
+  ```
 
 
 ## ■ コントロールノード作成 ( 事前準備：環境変数設定など)
@@ -59,49 +59,50 @@ $ aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10
   $ printenv | grep -E 'AWS|DB_SOCKET_PATH'
   ```
 -  `ansible-practice02` ディレクトリを作成
-- 上記に各種ディレクトリ、Playbook等のファイル群を作成：[/practice02/ansible-practice02](../practice02/ansible-practice02/)
+- 上記に各種ディレクトリ、Playbook等のファイル群を作成
 
 ## ■ ディレクトリ・ファイル構成　( コントロールノード内に作成 )
-```
-/ansible-practice02
-  │
-  ├── ansible.cfg
-  ├── env_set.sh
-  ├── inventory
-  ├── playbook.yml
-  ├── roles
-  │   ├── 00_common
-  │   │   └── tasks
-  │   │       └── main.yml
-  │   ├── 01_ruby
-  │   │   └── tasks
-  │   │       └── main.yml
-  │   ├── 02_bundler_rails
-  │   │   └── tasks
-  │   │       └── main.yml
-  │   ├── 03_node_yarn
-  │   │   └── tasks
-  │   │       └── main.yml
-  │   ├── 04_mysql
-  │   │   └── tasks
-  │   │       └── main.yml
-  │   ├── 05_app_puma
-  │   │   ├── tasks
-  │   │   │   └── main.yml
-  │   │   └── templates
-  │   │       └── database.yml.j2
-  │   ├── 06_s3
-  │   │   ├── tasks
-  │   │   │   └── main.yml
-  │   │   └── templates
-  │   │       └── storage.yml.j2
-  │   └── 07_app_nginx_unicorn
-  │       ├── tasks
-  │       │   └── main.yml
-  │       └── templates
-  │           └── raisetech-live8-sample-app.conf.j2
-  └── vars.yml
-```
+- [/ansible-practice02](../practice02/ansible-practice02/)
+  ```
+  /ansible-practice02
+    │
+    ├── ansible.cfg
+    ├── env_set.sh
+    ├── inventory
+    ├── playbook.yml
+    ├── roles
+    │   ├── 00_common
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 01_ruby
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 02_bundler_rails
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 03_node_yarn
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 04_mysql
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 05_app_puma
+    │   │   ├── tasks
+    │   │   │   └── main.yml
+    │   │   └── templates
+    │   │       └── database.yml.j2
+    │   ├── 06_s3
+    │   │   ├── tasks
+    │   │   │   └── main.yml
+    │   │   └── templates
+    │   │       └── storage.yml.j2
+    │   └── 07_app_nginx_unicorn
+    │       ├── tasks
+    │       │   └── main.yml
+    │       └── templates
+    │           └── raisetech-live8-sample-app.conf.j2
+    └── vars.yml
+  ```
 
 ## ■ Ansible実行 ( コントロールノード上で実行 )
 - `inventory` にターゲットノードの ipアドレスを記載
@@ -142,9 +143,22 @@ $ aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10
 - データ登録確認③<br>
 ( S3連携：S3へのデータ登録も同時に行われているか確認 (※サイズ違いで同じ画像データが3つ登録されている) )
 ![ansible_practice02_07.png](../practice02/images/ansible_practice02_07.png)
+- 各種バージョン確認
+![ansible_practice02_09.png](../practice02/images/ansible_practice02_09.png)
+  | 動作環境 | バージョン |
+  | -------- | ---------- |
+  | Ruby     | 3.1.2      |
+  | Bundler  | 2.3.14     |
+  | Rails    | 7.0.4      |
+  | Node     | v17.9.1    |
+  | Yarn     | 1.22.19    |
 
 ## ■所感・取組観点など
-- 次回は、CircleCIを使用して全自動化を行っていきたい
+- 今回はより Ansible の発展的な内容として、<br>
+これまで手動で行っていた OS/ミドルウェアレイヤー のインストール・設定・起動等の自動化を実施
+- Ansibleでどのようなことができるのか、それを体験ベースで知るために今回のようなハンズオンを実施
+- なかなかのボリュームだったが、一通りやり終えて非常に勉強になったと実感
+- 今後は Severspec や CircleCI も活用し、より発展的な自動化を行っていきたい
 
 ## ■ 参考リンク
 【 Ansible全般 】
