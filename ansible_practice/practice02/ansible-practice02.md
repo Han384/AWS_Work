@@ -157,12 +157,28 @@
 
 ## ■ Serverspec によるテスト実行
 - 下記を参考に、コントロールノード上で Severspec が動作するよう環境構築を実施<br>
-【 参照 】 [lecture13.md - 【 ② Serverspec によるテストを 実行ホストからターゲットノード(リモートホスト)へ行う際の環境構築 】](../../Tasks/lecture13/lecture13.md)<br>
+( [lecture13.md - 【 ② Serverspec によるテストを 実行ホストからターゲットノード(リモートホスト)へ行う際の環境構築 】](../../Tasks/lecture13/lecture13.md) )
 - 適宜ターゲットノード (リモートホスト) へのSSH接続設定を実施　( `~/.ssh/config` の作成＋権限設定 )
+- ディレクトリ・ファイル構成
+  ```
+  /serverspec
+    │
+    ├── Gemfile
+    ├── Gemfile.lock
+    ├── Rakefile
+    ├── .rspec
+    └── spec
+        ├── cfn-ec2-EC2WebServer01
+        │   └── sample_spec.rb
+        └── spec_helper.rb
+  ```
 -  `sample_spec.rb` にテストコードを記述<br>
 ( ※記述内容・詳細は [/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb](./serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) を参照 )
-- テストコマンドを実行 `bundle exec rake`　( ※`serverspec` ディレクトリに移動して実行 )
-- テスト結果  ：成功
+- テストコマンドを実行　( ※`serverspec` ディレクトリに移動して実行 )
+  ```
+  $ bundle exec rake
+  ```
+- テスト結果  ：成功<br>
 ![ansible_practice02_10.png](./images/ansible_practice02_10.png)
 ![ansible_practice02_11.png](./images/ansible_practice02_11.png)
 ![ansible_practice02_12.png](./images/ansible_practice02_12.png)
