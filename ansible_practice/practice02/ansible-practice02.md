@@ -1,4 +1,4 @@
-# 【 Ansible ( advanced )： サンプルアプリケーションのデプロイ・手動構築を自動化 】
+# 【 Ansible ( advanced )  ＋ Serverspec：サンプルアプリケーションのデプロイ・手動構築 ＋ テスト を自動化 】
 
 ## ■ 本実践内容の概要
 - [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 を Ansible にて自動化
@@ -6,6 +6,7 @@
 - 上記環境上に 新規EC2 (コントロールノード) をマネージメントコンソールで作成し、Playbook等のファイル群を作成
 - コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
 - デプロイが成功しているか動作確認
+- Serverspec によるテスト自動実行も実施　( ※コントロールノードからターゲットノードへのテストを実行)
 
 ## ■ 構成図・自動化処理フロー図・動作環境
 ![ansible-practice02.png](../practice02/images/ansible-practice02.png)
@@ -154,12 +155,24 @@
   | Node     | v17.9.1    |
   | Yarn     | 1.22.19    |
 
+## ■ Serverspec によるテスト実行
+- 下記を参考に、コントロールノード上で Severspec が動作するよう環境構築を実施<br>
+【 参照 】 [lecture13.md - 【 ② Serverspec によるテストを 実行ホストからターゲットノード(リモートホスト)へ行う際の環境構築 】](../../Tasks/lecture13/lecture13.md)<br>
+- 適宜ターゲットノード (リモートホスト) へのSSH接続設定を実施　( `~/.ssh/config` の作成＋権限設定 )
+-  `sample_spec.rb` にテストコードを記述<br>
+( ※記述内容・詳細は [/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb](./serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) を参照 )
+- テストコマンドを実行 `bundle exec rake`　( ※`serverspec` ディレクトリに移動して実行 )
+- テスト結果  ：成功
+![ansible_practice02_10.png](./images/ansible_practice02_10.png)
+![ansible_practice02_11.png](./images/ansible_practice02_11.png)
+![ansible_practice02_12.png](./images/ansible_practice02_12.png)
+
 ## ■所感・取組観点など
-- 今回はより Ansible の発展的な内容として、<br>
-これまで手動で行っていた OS/ミドルウェアレイヤー のインストール・設定・起動等の自動化を実施
+- 今回はより Ansible の発展的な内容として、これまで手動で行っていた OS/ミドルウェアレイヤー のインストール・設定・起動等の自動化を実施
 - Ansibleでどのようなことができるのか、それを体験ベースで知るために今回のようなハンズオンを実施
-- なかなかのボリュームだったが、一通りやり終えて非常に勉強になったと実感
-- 今後は Severspec や CircleCI も活用し、より発展的な自動化を行っていきたい
+- また、 Ansible 実行後には Severspec によるテストの自動実行も実施
+- なかなかのボリュームだったが、一連の自動化を試すことができ非常に勉強になった
+- 今後は CircleCI も活用した、より発展的な自動化を行っていきたい
 
 ## ■ 参考リンク
 【 Ansible全般 】
@@ -180,3 +193,6 @@
 - [ansible.builtin.blockinfile module – Insert/update/remove a text block surrounded by marker lines](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html)
 - [ansible.builtin.file module – Manage files and file properties](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html)
 - [ansible.builtin.stat module – Retrieve file or file system status](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html)
+
+【 Severspec関連 】
+- [Serverspecでよく使うテストの書き方まとめ](https://qiita.com/minamijoyo/items/467ddd13c0cab15330bf)
