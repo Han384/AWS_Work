@@ -6,7 +6,8 @@
 - 上記環境上に 新規EC2 (コントロールノード) をマネージメントコンソールで作成し、Playbook等のファイル群を作成
 - コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
 - デプロイが成功しているか動作確認
-- Serverspec によるテスト自動実行も実施　( ※コントロールノードからターゲットノードへのテストを実行)
+- Serverspec によるテスト自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行)
+- 作成ファイル　【 Ansible 関連：[ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】　【 Serverspec 関連：[serverspec](./ansible_practice/practice02/serverspec) 】
 
 ## ■ 構成図・自動化処理フロー図・動作環境
 ![ansible-practice02.png](../practice02/images/ansible-practice02.png)

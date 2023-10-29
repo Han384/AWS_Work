@@ -241,38 +241,40 @@
 - 講義で「答え」が示されることははなく、課題設定があるものについては自主学習により取組む
 - 指示のない部分については自分で考え、不明点がある場合は質問して解決していく
 
-| Files                                                  | Tasks                                                                                |
-| :---------------------------------------------------: | :------------------------------------------------------------------------------------: |
-| [lecture02.md](./Tasks/lecture02.md)           | Git/GitHubを用いたチーム開発におけるバージョン管理                                     |
-| [lecture03.md](./Tasks/lecture03.md)           | Ruby on RailsによるWebアプリケーションのデプロイ                                       |
-| [lecture04.md](./Tasks/lecture04.md)           | VPC･EC2･RDSの構築                                                                    |
-| [lecture05.md](./Tasks/lecture05/lecture05.md) | Ruby on Rails サンプルアプリケーションのデプロイ<br>・ELB(ALB) / S3 の構築・構成図作成 |
-| [lecture06.md](./Tasks/lecture06/lecture06.md) | 証跡・ロギング / 監視・通知 / コスト管理                                               |
-| [lecture07.md](./Tasks/lecture07/lecture07.md) | セキュリティ対策                                                                       |
-| [lecture10.md](./Tasks/lecture10/lecture10.md) | インフラ自動化 / IaC / CloudFormation                                                  |
-| [lecture11.md](./Tasks/lecture11/lecture11.md) | 自動テスト / ServerSpec                                                  |
-| [lecture12.md](./Tasks/lecture12/lecture12.md) | CI/CDツール ( CircleCI )                                                   |
-| [lecture13.md](./Tasks/lecture13/lecture13.md) | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec )                                                  |
-| [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動化処理フロー ＆ AWS構成図 の作成など                                                   |<br>
+| №  | Tasks                                                                                                            | Files                                                   | Note             |
+| :-: | :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------: | :--------------: |
+| 01  | Git/GitHubを用いたチーム開発におけるバージョン管理                                                               | [lecture02.md](./Tasks/lecture02.md)                    | －               |
+| 02  | Ruby on RailsによるWebアプリケーションのデプロイ                                                                 | [lecture03.md](./Tasks/lecture03.md)                    | －               |
+| 03  | VPC･EC2･RDSの構築                                                                                              | [lecture04.md](./Tasks/lecture04.md)                    | 手動構築         |
+| 04  | Ruby on Rails サンプルアプリケーションのデプロイ<br>・ELB(ALB) / S3 の構築・構成図作成                           | [lecture05.md](./Tasks/lecture05/lecture05.md)          | 手動構築         |
+| 05  | 証跡・ロギング / 監視・通知 / コスト管理                                                                         | [lecture06.md](./Tasks/lecture06/lecture06.md)          | －               |
+| 06  | セキュリティ対策                                                                                                 | [lecture07.md](./Tasks/lecture07/lecture07.md)          | －               |
+| 07  | インフラ自動化 / IaC / CloudFormation                                                                            | [lecture10.md](./Tasks/lecture10/lecture10.md)          | 自動構築         |
+| 08  | 自動テスト / ServerSpec                                                                                          | [lecture11.md](./Tasks/lecture11/lecture11.md)          | 自動化           |
+| 09  | CI/CDツール ( CircleCI )                                                                                         | [lecture12.md](./Tasks/lecture12/lecture12.md)          | 自動化           |
+| 10  | 構成管理 (プロビジョニング) ツール ( Ansible )　/<br> CircleCIへの組込 ( CloudFormation / Ansible / ServerSpec ) | [lecture13.md](./Tasks/lecture13/lecture13.md)          | 自動構築・自動化 |
+| 11  | 自動化処理フロー ＆ AWS構成図 の作成など                                                                         | [lecture14-15.md](./Tasks/lecture14-15/lecture14-15.md) | 自動構築・自動化 | <br>
 
 <br>
 
 ## ■ 継続実践/学習記録 一覧
 
-| Files                                                      | Practices                                                                      | Note                                                                                                 |
-| :---------------------------------------------------------: | :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
-| [tf_practice01.md](./terraform/practice01/tf_practice01.md) | Terraform<br> ( シングルAZ構成 ) | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を Terraform で構築 |
-| [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)                                                            | CloudFormation<br> ( 冗長化構成 )                                                                              | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更      |
-| [tf_practice02.md](./terraform/practice02/tf_practice02.md)                                                            | Terraform<br> ( 冗長化構成 )                                                                              | [tf_practice01.md](./terraform/practice01/tf_practice01.md) の構成を<br> マルチAZ・冗長化構成 に変更      |
-| [ansible_practice01.md](./ansible_practice/practice01/ansible_practice01.md)                                                            | Ansible ( basic )                                                                              | 動作環境構築・設定 /<br> ロール分割 / 複数ホスト処理      |
-| [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md)                                                            | Ansible ( advanced )<br> ＋ Serverspec                                                                              | [lecture05.md](./Tasks/lecture05/lecture05.md) で実施した サンプルアプリケーションの<br> デプロイ・手動構築＋テスト を自動化     |<br>
+| №  | Practices                              | Files                                                                        | Note                                                                                                                         |
+| :-: | :------------------------------------: | :--------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: |
+| 01  | Terraform<br> ( シングルAZ構成 )       | [tf_practice01.md](./terraform/practice01/tf_practice01.md)                  | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を Terraform で構築                                                     |
+| 02  | CloudFormation<br> ( 冗長化構成 )      | [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)           | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更                                      |
+| 03  | Terraform<br> ( 冗長化構成 )           | [tf_practice02.md](./terraform/practice02/tf_practice02.md)                  | [tf_practice01.md](./terraform/practice01/tf_practice01.md) の構成を<br> マルチAZ・冗長化構成 に変更                         |
+| 04  | Ansible ( basic )                      | [ansible_practice01.md](./ansible_practice/practice01/ansible_practice01.md) | 動作環境構築・設定 /<br> ロール分割 / 複数ホスト処理                                                                         |
+| 05  | Ansible ( advanced )<br> ＋ Serverspec | [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) | [lecture05.md](./Tasks/lecture05/lecture05.md) で実施した サンプルアプリケーションの<br> デプロイ・手動構築＋テスト を自動化 | <br>
 
-### ■ 【 Ansible ( advanced ) ＋ Serverspec ：構成図・自動化処理フロー図 】
+## ■ 【 № 05 】 Ansible ( advanced ) ＋ Serverspec：構成図・自動化処理フロー図
 ![ansible-practice02.png](./ansible_practice/practice02/images/ansible-practice02.png)
-#### ■ 本実践内容の概要 - [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md)
+
+【 実践内容：[ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) 】
 - [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 を Ansible にて自動化
 - インフラリソースについては、[lecture10 の CloudFormation_templates (シングルAZ構成)](../../Tasks/lecture10/CloudFormation_templates/) を使用して構築
 - 上記環境上に 新規EC2 (コントロールノード) をマネージメントコンソールで作成し、Playbook等のファイル群を作成
 - コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
 - デプロイが成功しているか動作確認
 - Serverspec によるテスト自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行)
+- 作成ファイル　【 Ansible 関連：[ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】　【 Serverspec 関連：[serverspec](./ansible_practice/practice02/serverspec) 】
