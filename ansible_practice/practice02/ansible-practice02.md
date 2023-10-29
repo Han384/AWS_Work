@@ -1,13 +1,15 @@
 # 【 Ansible ( advanced )  ＋ Serverspec：サンプルアプリケーションのデプロイ・手動構築 ＋ テスト を自動化 】
 
 ## ■ 本実践内容の概要
-- [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 を Ansible にて自動化
+- [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 + テスト実行 を、 Ansible・Serverspec にて自動化
 - インフラリソースについては、[lecture10 の CloudFormation_templates (シングルAZ構成)](../../Tasks/lecture10/CloudFormation_templates/) を使用して構築
 - 上記環境上に 新規EC2 (コントロールノード) をマネージメントコンソールで作成し、Playbook等のファイル群を作成
 - コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
-- デプロイが成功しているか動作確認
-- Serverspec によるテスト自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行)
-- 作成ファイル　【 Ansible 関連：[ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】　【 Serverspec 関連：[serverspec](./ansible_practice/practice02/serverspec) 】
+- デプロイが成功しているか動作確認　( ※ブラウザ等で確認 )
+- その後、Serverspec が動作するよう手動にてコントロールノードに環境構築を実施
+- テストの自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行 )
+- テスト結果の確認
+- ( 補足 ) 作成ファイル群：【 Ansible関連：[/ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】 【 Serverspec関連：[/serverspec](./ansible_practice/practice02/serverspec) 】
 
 ## ■ 構成図・自動化処理フロー図・動作環境
 ![ansible-practice02.png](../practice02/images/ansible-practice02.png)

@@ -265,16 +265,74 @@
 | 02  | CloudFormation<br> ( 冗長化構成 )      | [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)           | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更                                      |
 | 03  | Terraform<br> ( 冗長化構成 )           | [tf_practice02.md](./terraform/practice02/tf_practice02.md)                  | [tf_practice01.md](./terraform/practice01/tf_practice01.md) の構成を<br> マルチAZ・冗長化構成 に変更                         |
 | 04  | Ansible ( basic )                      | [ansible_practice01.md](./ansible_practice/practice01/ansible_practice01.md) | 動作環境構築・設定 /<br> ロール分割 / 複数ホスト処理                                                                         |
-| 05  | Ansible ( advanced )<br> ＋ Serverspec | [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) | [lecture05.md](./Tasks/lecture05/lecture05.md) で実施した サンプルアプリケーションの<br> デプロイ・手動構築＋テスト を自動化 | <br>
+| 05  |Ansible ( advanced )<br> ＋ Serverspec | [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) | [lecture05.md](./Tasks/lecture05/lecture05.md)：サンプルアプリケーションの<br> デプロイ・手動構築＋テスト を自動化 | <br>
 
-## ■ 【 № 05 】 Ansible ( advanced ) ＋ Serverspec：構成図・自動化処理フロー図
+### ■ 【 № 05 . Ansible ( advanced ) ＋ Serverspec：構成図・自動化処理フロー図 】
 ![ansible-practice02.png](./ansible_practice/practice02/images/ansible-practice02.png)
 
 【 実践内容：[ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) 】
-- [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 を Ansible にて自動化
+- [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 + テスト実行 を、 Ansible・Serverspec にて自動化
 - インフラリソースについては、[lecture10 の CloudFormation_templates (シングルAZ構成)](../../Tasks/lecture10/CloudFormation_templates/) を使用して構築
 - 上記環境上に 新規EC2 (コントロールノード) をマネージメントコンソールで作成し、Playbook等のファイル群を作成
 - コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
-- デプロイが成功しているか動作確認
-- Serverspec によるテスト自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行)
-- 作成ファイル　【 Ansible 関連：[ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】　【 Serverspec 関連：[serverspec](./ansible_practice/practice02/serverspec) 】
+- デプロイが成功しているか動作確認　( ※ブラウザ等で確認 )
+- その後、Serverspec が動作するよう手動にてコントロールノードに環境構築を実施
+- テストの自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行 )
+- テスト結果の確認
+
+<br>
+
+- ディレクトリ・ファイル構成　【 Ansible関連：[/ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】
+  ```
+  /ansible-practice02
+    │
+    ├── ansible.cfg
+    ├── env_set.sh
+    ├── inventory
+    ├── playbook.yml
+    ├── roles
+    │   ├── 00_common
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 01_ruby
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 02_bundler_rails
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 03_node_yarn
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 04_mysql
+    │   │   └── tasks
+    │   │       └── main.yml
+    │   ├── 05_app_puma
+    │   │   ├── tasks
+    │   │   │   └── main.yml
+    │   │   └── templates
+    │   │       └── database.yml.j2
+    │   ├── 06_s3
+    │   │   ├── tasks
+    │   │   │   └── main.yml
+    │   │   └── templates
+    │   │       └── storage.yml.j2
+    │   └── 07_app_nginx_unicorn
+    │       ├── tasks
+    │       │   └── main.yml
+    │       └── templates
+    │           └── raisetech-live8-sample-app.conf.j2
+    └── vars.yml
+  ```
+- ディレクトリ・ファイル構成　【 Serverspec関連：[/serverspec](./ansible_practice/practice02/serverspec) 】
+  ```
+  /serverspec
+    │
+    ├── Gemfile
+    ├── Gemfile.lock
+    ├── Rakefile
+    ├── .rspec
+    └── spec
+        ├── cfn-ec2-EC2WebServer01
+        │   └── sample_spec.rb
+        └── spec_helper.rb
+  ```
