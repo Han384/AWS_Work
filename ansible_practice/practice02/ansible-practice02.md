@@ -9,7 +9,7 @@
 - その後、Serverspec が動作するよう手動にてコントロールノードに環境構築を実施
 - テストの自動実行を実施　( ※コントロールノードからターゲットノードへのテストを実行 )
 - テスト結果の確認
-- ( 補足 ) 作成ファイル群：【 Ansible関連：[/ansible-practice02](./ansible_practice/practice02/ansible-practice02) 】 【 Serverspec関連：[/serverspec](./ansible_practice/practice02/serverspec) 】
+- ( 補足 ) 作成ファイル群：【 Ansible関連：[/ansible-practice02](./ansible-practice02/) 】 【 Serverspec関連：[/serverspec](./serverspec/) 】
 
 ## ■ 構成図・自動化処理フロー図・動作環境
 ![ansible-practice02.png](../practice02/images/ansible-practice02.png)

@@ -275,8 +275,8 @@
 ![ansible-practice02.png](./ansible_practice/practice02/images/ansible-practice02.png)
 
 【 実践内容：[ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) 】
-- [lecture05.md](../../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 + テスト実行 を、 Ansible・Serverspec にて自動化
-- インフラリソースについては、[lecture10 の CloudFormation_templates (シングルAZ構成)](../../Tasks/lecture10/CloudFormation_templates/) を使用して構築
+- [lecture05.md](./Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 + テスト実行 を、 Ansible・Serverspec にて自動化
+- インフラリソースについては、[lecture10 の CloudFormation_templates (シングルAZ構成)](./Tasks/lecture10/CloudFormation_templates/) を使用して構築
 - 上記環境上に 新規EC2 (コントロールノード) をマネージメントコンソールで作成し、Playbook等のファイル群を作成
 - コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行
 - デプロイが成功しているか動作確認　( ※ブラウザ等で確認 )
