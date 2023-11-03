@@ -33,7 +33,7 @@ Resources:
     Type: AWS::EC2::EIPAssociation
     Properties:
       InstanceId: !Ref EC2WebServer01
-      EIP: 35.74.230.175
+      AllocationId: "{{resolve:ssm:EIP-Allocation-ID:1}}"
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
