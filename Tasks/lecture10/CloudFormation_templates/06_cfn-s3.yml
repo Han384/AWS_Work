@@ -18,10 +18,26 @@ Resources:
             ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
 
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          - Sid: DenyPublicAccess
+            Effect: Deny
+            Principal: "*"
+            Action:
+              - s3:GetObject
+            Resource:
+              Fn::Sub:
+                - "arn:aws:s3:::${BucketName}/*"
+                - BucketName:
+                    Ref: S3Bucket
+
 Outputs:
   S3Bucket:
     Description: S3Bucket
     Value: !Ref S3Bucket
     Export:
       Name: !Sub ${S3PrefixName}-${AWS::StackName}
-      
