@@ -21,7 +21,7 @@ jobs:
   execute-cloudformation:
     executor: aws-cli/default
     steps:
-      - checkout
+      - checkout #
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
@@ -36,25 +36,6 @@ jobs:
             aws cloudformation deploy --stack-name cfn-ec2 --template-file  Tasks/lecture13/CloudFormation_templates/04_cfn-ec2-ansible.yml --capabilities CAPABILITY_NAMED_IAM
             aws cloudformation deploy --stack-name cfn-elb --template-file  Tasks/lecture10/CloudFormation_templates/05_cfn-elb.yml
             aws cloudformation deploy --stack-name cfn-s3 --template-file  Tasks/lecture10/CloudFormation_templates/06_cfn-s3.yml
-      - run:
-          name: set environmental variables
-          command: |
-            #set -x
-            mkdir /tmp/workspace
-            cd ./circleci_practice
-            source file_check.sh
-            source env_set_circleci.sh
-            #以下、確認用
-            ls -la /tmp
-            ls -la /tmp/workspace
-            cat  /tmp/workspace/env.txt
-            printenv | grep -E 'AWS|DB_SOCKET_PATH'
-            printenv | grep BASH_ENV
-            cat /tmp/.bash_env-*
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths:
-            - env.txt
 
   execute-ansible:
     executor: ansible-playbook/default
@@ -91,7 +72,6 @@ workflows:
   AWS_Work_CircleCI:
     jobs:
       - cfn-lint
-      #- execute-cloudformation
       - execute-cloudformation:
           requires:
             - cfn-lint
