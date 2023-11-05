@@ -1,7 +1,16 @@
 #!/bin/bash
 
+# AWS CLIのインストールスクリプトURLを設定
+AWS_CLI_INSTALL_URL="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+
+# AWS CLI インストール：インストールスクリプトをダウンロードして実行
+curl -o "awscliv2.zip" $AWS_CLI_INSTALL_URL
+unzip awscliv2.zip
+sudo ./aws/install
+
 # jq：インストール
-sudo apt install jq -y
+#sudo yum install jq -y
+#sudo apt install jq -y
 
 
 ###################################
@@ -36,30 +45,37 @@ echo $s3_name
 # 環境変数設定：下記記述内で上記変数を使用
 ###################################
 
-# Secrets Managerからユーザー名・パスワードを抽出して /tmp/workspace/env.txt に追記
-AWS_DB_USER=$(aws secretsmanager get-secret-value --secret-id $secret_id | jq -r ".SecretString | fromjson | .username" >> /tmp/workspace/env.txt)
-AWS_DB_PW=$(aws secretsmanager get-secret-value --secret-id $secret_id | jq -r ".SecretString | fromjson | .password" >> /tmp/workspace/env.txt)
+# Secrets Managerからユーザー名・パスワードを抽出して環境変数に設定し、~/.profileに追記
+echo 'export AWS_DB_USER=$(aws secretsmanager get-secret-value --secret-id $secret_id | jq -r ".SecretString | fromjson | .username")' >> ~/.profile
+echo 'export AWS_DB_PW=$(aws secretsmanager get-secret-value --secret-id $secret_id | jq -r ".SecretString | fromjson | .password")' >> ~/.profile
+
+# RDSインスタンスの情報を取得し、RDSエンドポイントを抽出して環境変数に設定、~/.profileに追記
+echo 'export AWS_DB_HOST=$(aws rds describe-db-instances --db-instance-identifier $db_instance_identifier --query 'DBInstances[0].Endpoint.Address' --output text)' >> ~/.profile
+
+# MySQLデータベースサーバーのUNIXソケットファイルへのパスを環境変数に設定し、~/.profileに追記
+echo 'export DB_SOCKET_PATH=$(mysql_config --socket)' >> ~/.profile
+
+# ALB名の情報を取得し、ALBエンドポイント(DNS名)を抽出して環境変数に設定し、~/.profileに追記
+echo 'export AWS_ALB_ENDPOINT=$(aws elbv2 describe-load-balancers --names $alb_name  | jq -r ".LoadBalancers[0].DNSName")' >> ~/.profile
+
+# アクセスキー・シークレットアクセスキーの情報を取得して環境変数に設定、~/.profileに追記
+# (※CircleCIのGUIコンソール上で設定した環境変数の値を使用)
+echo 'export AWS_S3_ACCESS_KEY=$AWS_ACCESS_KEY_ID' >> ~/.profile
+echo 'export AWS_S3_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY' >> ~/.profile
+
+# リージョン情報を取得して環境変数に設定、~/.profileに追記
+# (※CircleCIのGUIコンソール上で設定した環境変数の値を使用)
+echo 'export AWS_S3_REGION=$AWS_DEFAULT_REGION' >> ~/.profile
+
+# S3バケット名を環境変数に設定、~/.profileに追記
+echo 'export AWS_S3_BUCKET=$s3_name' >> ~/.profile
 
 
-# RDSインスタンスの情報を取得し、RDSエンドポイントを抽出して /tmp/workspace/env.txt に追記
-AWS_DB_HOST=$(aws rds describe-db-instances --db-instance-identifier $db_instance_identifier --query 'DBInstances[0].Endpoint.Address' --output text >> /tmp/workspace/env.txt)
+###################################
+# ~/.profile 読込み
+source ~/.profile
 
-
-# MySQLデータベースサーバーのUNIXソケットファイルへのパスを /tmp/workspace/env.txt に追記
-DB_SOCKET_PATH=$(mysql_config --socket >> /tmp/workspace/env.txt)
-
-# ALB名の情報を取得し、ALBエンドポイント(DNS名)を抽出して /tmp/workspace/env.txt に追記
-AWS_ALB_ENDPOINT=$(aws elbv2 describe-load-balancers --names $alb_name  | jq -r ".LoadBalancers[0].DNSName" >> /tmp/workspace/env.txt)
-
-# アクセスキー・シークレットアクセスキーの情報を取得して /tmp/workspace/env.txt に追記
-# (※実運用では別途セキュリティ対策が必要：今回は便宜上 下記にて情報取得)
-# (※CircleCIのGUIコンソール上の環境変数からも設定を行っているが、こちらは別方法の確認のため実施)
-AWS_S3_ACCESS_KEY=$(aws configure get aws_access_key_id >> /tmp/workspace/env.txt)
-AWS_S3_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key >> /tmp/workspace/env.txt)
-
-# リージョン情報を取得して /tmp/workspace/env.txt に追記
-# (※CircleCIのGUIコンソール上の環境変数からも設定を行っているが、こちらは別方法の確認のため実施)
-AWS_S3_REGION=$(aws configure get region >> /tmp/workspace/env.txt)
-
-# S3バケット名を取得して /tmp/workspace/env.txt に追記
-AWS_S3_BUCKET=$(aws s3api list-buckets --query "Buckets[?starts_with(Name, 'raisetech-cfn-')].Name" --output text >> /tmp/workspace/env.txt)
+# 確認用：※必要に応じてコメントアウト
+echo "############# 環境変数：確認 #############"
+printenv | grep -E 'AWS|DB_SOCKET_PATH'
+echo "##########################################"

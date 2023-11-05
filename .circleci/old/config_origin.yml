@@ -22,7 +22,7 @@ jobs:
   execute-cloudformation:
     executor: aws-cli/default
     steps:
-      - checkout
+      - checkout #
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
@@ -47,14 +47,9 @@ jobs:
             - FINGERPRINT
       - ansible-playbook/install:
           version: 2.10.7
-      - run:
-          name: set environmental variables
-          command: |
-            cd ./circleci_practice
-            source env_set_circleci.sh
       - ansible-playbook/playbook:
-          playbook: ansible_practice/practice02/ansible-practice02/playbook.yml
-          playbook-options: " -i ansible_practice/practice02/ansible-practice02/inventory"
+          playbook: ansible/playbook.yml
+          playbook-options: "-u ec2-user -i ansible/inventory --private-key ~/.ssh/id_rsa"
 
   execute-serverspec:
     executor: ruby/default
