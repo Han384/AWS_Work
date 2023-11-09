@@ -32,6 +32,7 @@ listen_port_nginx_unicorn = 80
 
 # 環境変数の値を変数に設定：以降のテストコードで使用
 aws_alb_endpoint = ENV['AWS_ALB_ENDPOINT']
+#aws_alb_endpoint = ENV['ALB_DNS']
 aws_s3_bucket = ENV['AWS_S3_BUCKET']
 
 
@@ -136,6 +137,7 @@ describe command('curl http://127.0.0.1:#{listen_port_nginx_unicorn}/ -o /dev/nu
 end
 
 # リモートホスト上でcurlを使用し、指定されたALBエンドポイントに対してHTTPリクエストを送信し、HTTPステータスコードが200であるか
+# describe command("curl http://#{aws_alb_endpoint}/ -o /dev/null -w '%{http_code}\n' -s") do
 describe command("curl http://#{aws_alb_endpoint}/ -o /dev/null -w '%{http_code}\n' -s") do
   its(:stdout) { should match /^200$/ }
 end

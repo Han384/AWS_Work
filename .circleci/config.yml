@@ -23,7 +23,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
-      - aws-cli/setup:
+      - aws-cli/setup:  # CircleCIのGUIにて環境変数を設定した値を使用
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_DEFAULT_REGION
@@ -43,18 +43,41 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
+          fingerprints:  # CircleCIのGUIにて追加したSSHキー・環境変数設定した値を使用
             - FINGERPRINT
       - ansible-playbook/install:
           version: 2.10.7
       - run:
-          name: set environmental variables
+          name: use workspace & make env_set_serverspec.sh
           command: |
+            #set -x
+            mkdir /tmp/workspace
             cd ./circleci_practice
-            source env_set_circleci.sh
-      - ansible-playbook/playbook:
-          playbook: ansible_practice/practice02/ansible-practice02/playbook.yml
-          playbook-options: " -i ansible_practice/practice02/ansible-practice02/inventory"
+            source file_check.sh
+            ####以下、確認用####
+            ls -la /tmp
+            ls -la /tmp/workspace
+            cat  /tmp/workspace/env_set_serverspec.sh
+            printenv | grep -E 'AWS|DB_SOCKET_PATH'
+            printenv | grep BASH_ENV
+            #cat /tmp/.bash_env-*
+            ##################
+      - run:
+          name: env_set_ansible.sh & execute-ansible
+          command: |
+            #set -x
+            cd ./circleci_practice
+            source env_set_ansible.sh    # 環境変数を設定
+            source add_ec2_ip.sh    # Ansible：inventoryにEC2のIPアドレスを追加
+            cd ../ansible_practice/practice02/ansible-practice02
+            ansible-playbook -i inventory playbook.yml
+      # - ansible-playbook/playbook:
+      #     playbook: ansible_practice/practice02/ansible-practice02/playbook.yml
+      #     playbook-options: " -i ansible_practice/practice02/ansible-practice02/inventory"
+      - persist_to_workspace: # 別のジョブでファイルを共有するため workspaceを設定(ジョブ内のデータが保存される)
+          root: /tmp/workspace
+          paths:
+            - env_set_serverspec.sh
 
   execute-serverspec:
     executor: ruby/default
@@ -64,15 +87,25 @@ jobs:
           version: 3.1.2
       - ruby/install-deps: # Bundler を使用して gem をインストール
           bundler-version: 2.3.14 #(参考) Bundler をバージョン指定してインストール
-          app-dir: serverspec #Gemfile を含むディレクトリへのパス (Gemfile がルートに存在する場合は不要)
+          app-dir: ./ansible_practice/practice02/serverspec #Gemfile を含むディレクトリへのパス (Gemfile がルートに存在する場合は不要)
+      - attach_workspace: # 別のジョブで設定されたワークスペースを使用(異なるジョブ間でデータ共有が可能となる)
+          at: /tmp/workspace
       - run: |
-          cd serverspec
+          cat /tmp/workspace/env_set_serverspec.sh
+          source /tmp/workspace/env_set_serverspec.sh   # 環境変数を設定
+          printenv | grep AWS
+          cd ./circleci_practice
+          source add_ec2_ip.sh    # Serverspec：指定のディレクトリ名をEC2のIPアドレスに変更
+          cd ../ansible_practice/practice02/serverspec
           bundle exec rake
-      #諸々の確認用
+          #env ALB_DNS=$(cat /tmp/workspace/env_set_serverspec.txt) bundle exec rake
+      ####以下、確認用####
       - run: |
-          set -x
+          #set -x
+          source /tmp/workspace/env_set_serverspec.sh
           uname -a && id && pwd && ls -la && git --version
-          ssh -i ~/.ssh/id_rsa ${USER_NAME}@${HOST_NAME} -o StrictHostKeyChecking=no "ec2-metadata | grep ipv4 && uname -a && id && pwd && ls -la && git --version && ec2-metadata"
+          ssh -i ~/.ssh/id_rsa ${USER_NAME}@${AWS_EC2_IP} -o StrictHostKeyChecking=no "ec2-metadata | grep ipv4 && uname -a && id && pwd && ls -la && git --version && ec2-metadata"
+      ##################
 
 workflows:
   AWS_Work_CircleCI:
