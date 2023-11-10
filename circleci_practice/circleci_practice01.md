@@ -21,7 +21,7 @@
 ## ■ 構成図・自動化処理フロー図
 ![](./images/circleci_practice01_00.png)
 
-## ■ CircleCI - .circleci/config.yml の関連ファイル構成
+## ■ CircleCI - .circleci/config.yml の関連ディレクトリ・ファイル構成
 - 【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
   ```
   /AWS_Work　

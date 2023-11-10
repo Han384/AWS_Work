@@ -187,7 +187,7 @@
 【 実践概要 】
 - [自動化・パイプライン構築の取組](./circleci_practice/circleci_practice01.md)　
 ( ※下記 自動化処理フロー ＆ AWS構成図 の自動実行設定を実施 )
-- [lecture05.md](../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築・テスト実行 を、 CircleCIにて全自動化<br>
+- [lecture05.md](./Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築・テスト実行 を、 CircleCIにて全自動化<br>
 ( ※ CircleCI に 、cfn-lint・CloudFormatin・Ansible・Serverspec を組み込み自動実行 )
 
 <br>
@@ -196,8 +196,8 @@
 
 - 自動化処理・パイプラインを実行する CircleCI の設定ファイル [.circleci/config.yml](./.circleci/config.yml) を作成
 - インフラリソース については [上記取組 【実践内容①：シングルAZ構成】](#--iac--cloudformation-を使用したインフラリソースの構築) のものを一部修正して構築
-  - [lecture10 - CloudFormation_templates (シングルAZ構成)](../Tasks/lecture10/CloudFormation_templates/)
-  - [lecture13 - CloudFormation_templates (シングルAZ構成)](../Tasks/lecture13/CloudFormation_templates/)
+  - [lecture10 - CloudFormation_templates (シングルAZ構成)](./Tasks/lecture10/CloudFormation_templates/)
+  - [lecture13 - CloudFormation_templates (シングルAZ構成)](./Tasks/lecture13/CloudFormation_templates/)
 - 上記環境上に[継続学習](./ansible_practice/practice02/ansible-practice02.md)で実施した [Ansible](./ansible_practice/practice02/ansible-practice02/)  を組み込み、Playbook記載内容を実行<br>
 ( ※ コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行 )
 - 上記デプロイ・構築後、[継続学習](./ansible_practice/practice02/ansible-practice02.md)実施した [Serverspec](./ansible_practice/practice02/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) にてテストを実行<br>
@@ -218,7 +218,7 @@
 
 <details><summary>【 CircleCI - .circleci/config.yml の関連ディレクトリ・ファイル構成 】</summary>
 
- - [/AWS_Work](../../AWS_Work/)　【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
+ - 【 CircleCI実行ファイル：[.circleci/config.yml](./.circleci/config.yml) 】
     ```
     /AWS_Work　
       |
@@ -314,7 +314,7 @@
 ![circleci_practice01_05.png](./circleci_practice/images/circleci_practice01_05.png)
 ![circleci_practice01_07.png](./circleci_practice/images/circleci_practice01_07.png)
 
-【  】
+【 動作確認 】
 - ALBのヘルスチェック：正常<br>
 ![circleci_practice01_16.png](./circleci_practice/images/circleci_practice01_16.png)
 - ALBのDNS名をブラウザに入力し表示確認<br>
