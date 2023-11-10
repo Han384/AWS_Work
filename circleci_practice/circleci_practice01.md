@@ -9,23 +9,25 @@
 ( ※ コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行 )
 - 上記デプロイ・構築後、[前回](../ansible_practice/practice02/ansible-practice02.md)実施した [Serverspec](../ansible_practice/practice02/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) にてテストを実行<br>
 ( ※ コントロールノードからターゲットノードへのテストを自動実行 )
-- CircleCI の実行結果を確認　( ※ 実行完了時間：約30分 )
-- 実際にデプロイが成功しているか動作確認　( ※ ブラウザ等で確認 )<br>
+- CircleCI の実行結果を確認　( ※ 実行完了時間：約35分 )
+- 実際にデプロイが成功しているか動作確認　( ※ ブラウザ / SessionManager 等で確認 )<br>
 
 <br>
 
 - ( 補足 ) 作成ファイル群
   - 【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
-  -  【 その他、環境変数設定など ( ※シェルスクリプトを作成・実行 )：[/circleci_practice](../circleci_practice/) 】
+  -  【 動的対応 - IPアドレス追加・環境変数設定など ：[/circleci_practice](../circleci_practice/) ( ※シェルスクリプトを作成・実行 ) 】
 
 ## ■ 構成図・自動化処理フロー図
-
+![](./images/circleci_practice01_00.png)
 
 ## ■ CircleCI - .circleci/config.yml の関連ファイル構成
-- [/AWS_Work](../../AWS_Work/)
+- [/AWS_Work](../../AWS_Work/)　【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
   ```
-  /AWS_Work
+  /AWS_Work　
     |
+    |-- .Circleci
+    |   `-- config.yml
     |-- Tasks
     |   |-- lecture10
     |   |   `-- CloudFormation_templates
@@ -89,43 +91,47 @@
         `-- file_check.sh
   ```
 
-## ■ 実行結果
-- CircleCI 一連の実行 ( パイプライン ) 結果<br>
-![]()
-- cfn-lint の実行結果<br>
-![]()
-- CloudFormation の実行結果<br>
-![]()<br>
-( CloudFormation - スタック / リソース )<br>
-![]()
-![]()
-![]()
-![]()
-![]()
-![]()
-![]()
-- Ansible の実行結果<br>
-![]()
-- ServerSpec の実行結果<br>
-![]()
-![]()
+## ■ 実行結果 確認
+- CircleCI 一連の実行 ( パイプライン ) 結果：成功　( ※実行完了時間：約35分 )<br>
+![circleci_practice01_01.png](./images/circleci_practice01_01.png)
+- cfn-lint の実行結果：成功<br>
+![circleci_practice01_02.png](./images/circleci_practice01_02.png)
+- CloudFormation の実行結果：成功<br>
+![circleci_practice01_03.png](./images/circleci_practice01_03.png)<br>
+( CloudFormation - 作成した スタック / リソース )<br>
+![circleci_practice01_08.png](./images/circleci_practice01_08.png)
+![circleci_practice01_09.png](./images/circleci_practice01_09.png)
+![circleci_practice01_10.png](./images/circleci_practice01_10.png)
+![circleci_practice01_11.png](./images/circleci_practice01_11.png)
+![circleci_practice01_12.png](./images/circleci_practice01_12.png)
+![circleci_practice01_13.png](./images/circleci_practice01_13.png)
+![circleci_practice01_14.png](./images/circleci_practice01_14.png)
+- Ansible の実行結果：成功<br>
+![circleci_practice01_04.png](./images/circleci_practice01_04.png)
+![circleci_practice01_015.png](./images/circleci_practice01_15.png)
+- Serverspec の実行結果：成功<br>
+![circleci_practice01_05.png](./images/circleci_practice01_05.png)
+![circleci_practice01_07.png](./images/circleci_practice01_07.png)
 
 ## ■ 動作確認
 - ALBのヘルスチェック：正常<br>
-![]()
+![circleci_practice01_16.png](./images/circleci_practice01_16.png)
 - ALBのDNS名をブラウザに入力し表示確認<br>
-![]()
+![circleci_practice01_17.png](./images/circleci_practice01_17.png)
+![circleci_practice01_18.png](./images/circleci_practice01_18.png)
 - データ登録確認①　( ブラウザ：テキスト・画像の登録 )<br>
-![]()
-![]()
+![circleci_practice01_19.png](./images/circleci_practice01_19.png)
+![circleci_practice01_20.png](./images/circleci_practice01_20.png)
 - データ登録確認②<br>
-( RDS - MySQL：SessionManagerでターゲットノードへログイン、MySQLコマンドを実行して確認  )<br>
-![]()
+( RDS - MySQL：SessionManagerでターゲットノード(EC2)へログイン、MySQLコマンドを実行して確認  )<br>
+![circleci_practice01_24.png](./images/circleci_practice01_24.png)
+![circleci_practice01_21.png](./images/circleci_practice01_21.png)
 - データ登録確認③<br>
 ( S3連携：S3へのデータ登録も同時に行われているか確認 (※サイズ違いで同じ画像データが3つ登録されている) )<br>
-![]()
-- 各種バージョン確認　( SessionManagerでターゲットノードへログインして確認 )<br>
-![]()
+![circleci_practice01_25.png](./images/circleci_practice01_25.png)
+![circleci_practice01_22.png](./images/circleci_practice01_22.png)
+- 各種バージョン確認　( SessionManagerでターゲットノード(EC2)へログインして確認 )<br>
+![circleci_practice01_23.png](./images/circleci_practice01_23.png)
   | 動作環境 | バージョン |
   | -------- | ---------- |
   | Ruby     | 3.1.2      |
@@ -135,14 +141,19 @@
   | Yarn     | 1.22.19    |
 
 ## ■ 所感・取組観点など
-- 今回はより発展的な内容として、CircleCI にて<br>
-これまでのサンプルアプリケーションのデプロイ・構築・テスト実行の全自動化を実施
+- 今回はより発展的な内容として、CircleCI にて これまでのサンプルアプリケーションのデプロイ・構築・テスト実行の全自動化を実施
 - ようやく以前から行いたかった IaC を活用した一連の手順の自動化を行うことができた
-- 実践にあたっては、構築の度に動的に変わる部分をシェルスクリプトを作成して対応<br>
-( ※IPアドレス・環境変数設定など：[/circleci_practice](../circleci_practice/) )
-- 上記を CircleCI の各ジョブに組み込み全自動化を実施
-- シェルスクリプト作成についても以前から作成したかったため、実装したかったことが実現できて大変勉強になった
-- 今後の学習は現在検討中だが、適宜題材を探し、実践していきたい
+- CircleCI については、以前に実施した [lecture13.md](../Tasks/lecture13/lecture13.md) の発展的な取り組みとして、<br>デプロイ・構築・テスト全手順の組込 (※前回は git のインストール＆テストのみ ) 及び Workspace 機能を活用
+- 今回は上記機能を Serverspec 実行時に必要な環境変数設定の目的で使用<br>
+ ( 参考：Workspace - 各ジョブ間で共有するスペースを作成し、ファイルやデータを共有する機能  )
+- また実践にあたっては、構築の度に動的に変わる部分をシェルスクリプトを作成して対応　( ※内容は下記参照 )<br>
+  - [【 /circleci_practice 】](../circleci_practice/) - 今回のシェルスクリプト格納場所
+  - [【 add_ec2_ip.sh 】](./add_ec2_ip.sh) - IPアドレス対応　( Ansible-inventoryに追記 / Severspec-ディレクトリ名変更 )
+  - [【 env_set_ansible.sh 】](./env_set_ansible.sh) - AWS CLI を使用した環境変数設定など　( Ansible / Serverspec )
+  - [【 file_check.sh 】](./file_check.sh) - CircleCI の Workspace に、 Serverspec の環境変数設定を行うシェルスクリプトがあるか確認、なければ作成
+
+- 上記シェルスクリプトも CircleCI の各ジョブに組み込み全自動化を実施、実装したかったことが実現でき大変勉強になった
+- 今後の学習は現在検討中だが、適宜題材を探し実践していきたい
 
 ## ■ 参考リンク
 - [CircleCI 公式ドキュメント：環境変数の概要](https://circleci.com/docs/ja/env-vars/)
