@@ -198,9 +198,9 @@
 - インフラリソース については [上記取組 【実践内容①：シングルAZ構成】](#--iac--cloudformation-を使用したインフラリソースの構築) のものを一部修正して構築
   - [lecture10 - CloudFormation_templates (シングルAZ構成)](./Tasks/lecture10/CloudFormation_templates/)
   - [lecture13 - CloudFormation_templates (シングルAZ構成)](./Tasks/lecture13/CloudFormation_templates/)
-- 上記環境上に[継続学習](./ansible_practice/practice02/ansible-practice02.md)で実施した [Ansible](./ansible_practice/practice02/ansible-practice02/)  を組み込み、Playbook記載内容を実行<br>
+- 上記環境上に[ 継続学習 ( ansible-practice02.md ) ](./ansible_practice/practice02/ansible-practice02.md)で実施した [Ansible](./ansible_practice/practice02/ansible-practice02/)  を組み込み、Playbook記載内容を実行<br>
 ( ※ コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行 )
-- 上記デプロイ・構築後、[継続学習](./ansible_practice/practice02/ansible-practice02.md)で実施した [Serverspec](./ansible_practice/practice02/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) にてテストを実行<br>
+- 上記デプロイ・構築後、[ 継続学習 ( ansible-practice02.md ) ](./ansible_practice/practice02/ansible-practice02.md)で実施した [Serverspec](./ansible_practice/practice02/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) にてテストを実行<br>
 ( ※ コントロールノードからターゲットノードへのテストを自動実行 )
 - 構築の都度、動的に変わる部分についてはシェルスクリプトを作成して対応<br>
   - [【 /circleci_practice 】](./circleci_practice/) - シェルスクリプト格納場所
