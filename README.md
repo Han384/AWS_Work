@@ -5,13 +5,14 @@
   - [AWS上に Ruby on Rails のサンプルアプリケーションをデプロイ　( シングルAZ構成/手動構築 )](#-aws上に-ruby-on-rails-のサンプルアプリケーションをデプロイ)
   - [【 IaC 】 CloudFormation を使用したインフラリソースの構築　( 冗長化構成/シングルAZ構成 )](#--iac--cloudformation-を使用したインフラリソースの構築)
   - [【 IaC 】 Terraform を使用したインフラリソースの構築　( 冗長化構成 )](#--iac--terraform-を使用したインフラリソースの構築)
-  - [【 CI/CD 】 CircleCI による 自動化・パイプライン構築　( 簡易処理を実行 )](#--cicd-circleci-による-自動化パイプライン構築)
+  - [【 CI/CD 】 CircleCI による 自動化・パイプライン構築　( シングルAZ構成 )<br>
+  ( 全自動化：CloudFormation / Ansible / Severspec )](#--cicd-circleci-による-自動化パイプライン構築)
 
 <br>
 
 - 学習記録 一覧　( 自己のアウトプットとして実践内容を記録したもの )
   - [Webエンジニアリングスクールでの実践/学習記録 一覧](#-webエンジニアリングスクールでの実践学習記録-一覧)
-  - [継続実践/学習記録 一覧　( Terraform / CloudFormation / Ansible / Serverspec )](#-継続実践学習記録-一覧)
+  - [継続実践/学習記録 一覧　( Terraform / CloudFormation / Ansible / Serverspec / CircleCI )](#-継続実践学習記録-一覧)
 
 <br>
 
@@ -119,7 +120,10 @@
   |-- data.tf
   |-- main.tf
   ```
-- 作成リソース一覧　( ※リソース構築後、下記コマンドを実行して作成されたリソース一覧を表示 )
+
+<details><summary>【 作成リソース一覧 】</summary>
+
+- リソース構築後、下記コマンドを実行して作成されたリソース一覧を表示
   ```
   $ terraform state list
 
@@ -166,6 +170,7 @@
   aws_vpc.TerraformVPC
   random_string.s3_unique_key
   ```
+</details>
 
 <br>
 
@@ -179,56 +184,165 @@
 
 <br>
 
-【 実践内容 】
-- [自動化・パイプライン構築の取組](./Tasks/lecture13/lecture13.md)　
+【 実践概要 】
+- [自動化・パイプライン構築の取組](./circleci_practice/circleci_practice01.md)　
 ( ※下記 自動化処理フロー ＆ AWS構成図 の自動実行設定を実施 )
+- [lecture05.md](../Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築・テスト実行 を、 CircleCIにて全自動化<br>
+( ※ CircleCI に 、cfn-lint・CloudFormatin・Ansible・Serverspec を組み込み自動実行 )
+
+<br>
+
+<details><summary>【 実践内容 】</summary>
+
 - 自動化処理・パイプラインを実行する CircleCI の設定ファイル [.circleci/config.yml](./.circleci/config.yml) を作成
-- cfn-lint・CloudFormation については [上記取組 【実践内容①：シングルAZ構成】](#--iac--cloudformation-を使用したインフラリソースの構築) のものを一部修正して活用
-- Ansible・ServereSpec については簡易的な実行処理を記述<br>
-( ※ CloudFormation で構築した EC2 に Git をインストール＆テスト )
-- 『 0→1 の実践 』 の考え、簡易パーツを組み合わせて動かすイメージで自動化の取組を実施<br>
-( ※各ツールの深堀りについては継続学習中 )
-- 自動化処理フロー ＆ AWS構成図
-![diagram](./Tasks/lecture14-15/images/diagram.png)
-- [.circleci/config.yml](./.circleci/config.yml) の関連ファイル構成
-  ```
-  .
-  |-- Tasks
-  |   |-- lecture10
-  |   |   |-- CloudFormation_templates
-  |   |      |-- 01_cfn-vpc.yml
-  |   |      |-- 03_cfn-rds.yml
-  |   |      |-- 05_cfn-elb.yml
-  |   |      `-- 06_cfn-s3.yml
-  |   `-- lecture13
-  |       |-- CloudFormation_templates
-  |          |-- 02_cfn-securitygroup-ansible.yml
-  |          `-- 04_cfn-ec2-ansible.yml
-  |-- ansible
-  |   |-- inventory
-  |   `-- playbook.yml
-  |-- ansible.cfg
-  `-- serverspec
-      |-- Gemfile
-      |-- Gemfile.lock
-      |-- Rakefile
-      `-- spec
-          |-- localhost
-          |   `-- sample_spec.rb
-          `-- spec_helper.rb
-  ```
-- CircleCI -  パイプライン構築　の実行結果
-![CircleCI_00_Pipeline](./Tasks/lecture13/images/CircleCI_00_Pipeline.png)
-- cfn-lint -  CloudFormation テンプレート の構文チェック　の実行結果
-![CircleCI_01_cfn-lint](./Tasks/lecture13/images/CircleCI_01_cfn-lint.png)
-- CloudFormation - インフラリソース構築　の実行結果
-![CircleCI_02_execute-cloudformation](./Tasks/lecture13/images/CircleCI_02_execute-cloudformation.png)<br>
-( CloudFormation - 作成スタック )
-![CircleCI_CloudFormation01](./Tasks/lecture13/images/CircleCI_CloudFormation01.png)
-- Ansible - 構成管理 / プロビジョニング　の実行結果
-![CircleCI_03_execute-ansible](./Tasks/lecture13/images/CircleCI_03_execute-ansible.png)
-- ServerSpec - テスト　の実行結果
-![CircleCI_01_execute-serverspec.png](./Tasks/lecture14-15/images/CircleCI_01_execute-serverspec.png)
+- インフラリソース については [上記取組 【実践内容①：シングルAZ構成】](#--iac--cloudformation-を使用したインフラリソースの構築) のものを一部修正して構築
+  - [lecture10 - CloudFormation_templates (シングルAZ構成)](../Tasks/lecture10/CloudFormation_templates/)
+  - [lecture13 - CloudFormation_templates (シングルAZ構成)](../Tasks/lecture13/CloudFormation_templates/)
+- 上記環境上に[継続学習](./ansible_practice/practice02/ansible-practice02.md)で実施した [Ansible](./ansible_practice/practice02/ansible-practice02/)  を組み込み、Playbook記載内容を実行<br>
+( ※ コントロールノードからターゲットノードへ  OS/ミドルウェアレイヤーのインストール・設定・起動等を自動実行 )
+- 上記デプロイ・構築後、[継続学習](./ansible_practice/practice02/ansible-practice02.md)実施した [Serverspec](./ansible_practice/practice02/serverspec/spec/cfn-ec2-EC2WebServer01/sample_spec.rb) にてテストを実行<br>
+( ※ コントロールノードからターゲットノードへのテストを自動実行 )
+- 構築の都度、動的に変わる部分についてはシェルスクリプトを作成して対応<br>
+  - [【 /circleci_practice 】](./circleci_practice/) - シェルスクリプト格納場所
+  - [【 add_ec2_ip.sh 】](./circleci_practice/add_ec2_ip.sh) - IPアドレス対応　( Ansible-inventoryに追記 / Severspec-ディレクトリ名変更 )
+  - [【 env_set_ansible.sh 】](./circleci_practice/env_set_ansible.sh) - AWS CLI を使用した環境変数設定など　( Ansible / Serverspec )
+  - [【 file_check.sh 】](./circleci_practice/file_check.sh) - CircleCI の Workspace に、 Serverspec の環境変数設定を行うシェルスクリプトがあるか確認、なければ作成
+- CircleCI の実行結果を確認　( ※ 実行完了時間：約35分 )
+- 実際にデプロイが成功しているか動作確認　( ※ ブラウザ / SessionManager 等で確認 )<br>
+</details>
+
+<br>
+
+【 自動化処理フロー ＆ AWS構成図 】
+![diagram](./circleci_practice/images/circleci_practice01_00.png)
+
+<details><summary>【 CircleCI - .circleci/config.yml の関連ディレクトリ・ファイル構成 】</summary>
+
+ - [/AWS_Work](../../AWS_Work/)　【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
+    ```
+    /AWS_Work　
+      |
+      |-- .Circleci
+      |   `-- config.yml
+      |-- Tasks
+      |   |-- lecture10
+      |   |   `-- CloudFormation_templates
+      |   |       |-- 01_cfn-vpc.yml
+      |   |       |-- 03_cfn-rds.yml
+      |   |       |-- 05_cfn-elb.yml
+      |   |       `-- 06_cfn-s3.yml
+      |   `-- lecture13
+      |       |-- CloudFormation_templates
+      |           |-- 02_cfn-securitygroup-ansible.yml
+      |           `-- 04_cfn-ec2-ansible.yml
+      |-- ansible.cfg
+      |-- ansible_practice
+      |   `-- practice02
+      |       |-- ansible-practice02
+      |       |   |-- inventory
+      |       |   |-- playbook.yml
+      |       |   |-- roles
+      |       |   |   |-- 00_common
+      |       |   |   |   `-- tasks
+      |       |   |   |       `-- main.yml
+      |       |   |   |-- 01_ruby
+      |       |   |   |   `-- tasks
+      |       |   |   |       `-- main.yml
+      |       |   |   |-- 02_bundler_rails
+      |       |   |   |   `-- tasks
+      |       |   |   |       `-- main.yml
+      |       |   |   |-- 03_node_yarn
+      |       |   |   |   `-- tasks
+      |       |   |   |       `-- main.yml
+      |       |   |   |-- 04_mysql
+      |       |   |   |   `-- tasks
+      |       |   |   |       `-- main.yml
+      |       |   |   |-- 05_app_puma
+      |       |   |   |   |-- tasks
+      |       |   |   |   |   `-- main.yml
+      |       |   |   |   `-- templates
+      |       |   |   |       `-- database.yml.j2
+      |       |   |   |-- 06_s3
+      |       |   |   |   |-- tasks
+      |       |   |   |   |   `-- main.yml
+      |       |   |   |   `-- templates
+      |       |   |   |       `-- storage.yml.j2
+      |       |   |   `-- 07_app_nginx_unicorn
+      |       |   |       |-- tasks
+      |       |   |       |   `-- main.yml
+      |       |   |       `-- templates
+      |       |   |           `-- raisetech-live8-sample-app.conf.j2
+      |       |   `-- vars.yml
+      |       `-- serverspec
+      |           |-- Gemfile
+      |           |-- Gemfile.lock
+      |           |-- Rakefile
+      |           `-- spec
+      |               |-- cfn-ec2-EC2WebServer01
+      |               |   `-- sample_spec.rb
+      |               `-- spec_helper.rb
+      `-- circleci_practice
+          |-- add_ec2_ip.sh
+          |-- env_set_ansible.sh
+          `-- file_check.sh
+    ```
+</details>
+
+<details><summary>【 実行結果・動作確認 】</summary>
+
+<br>
+
+【 実行結果 確認 】
+- CircleCI 一連の実行 ( パイプライン ) 結果：成功　( ※実行完了時間：約35分 )<br>
+![circleci_practice01_01.png](./circleci_practice/images/circleci_practice01_01.png)
+- cfn-lint の実行結果：成功<br>
+![circleci_practice01_02.png](./circleci_practice/images/circleci_practice01_02.png)
+- CloudFormation の実行結果：成功<br>
+![circleci_practice01_03.png](./circleci_practice/images/circleci_practice01_03.png)<br>
+( CloudFormation - 作成した スタック / リソース )<br>
+![circleci_practice01_08.png](./circleci_practice/images/circleci_practice01_08.png)
+![circleci_practice01_09.png](./circleci_practice/images/circleci_practice01_09.png)
+![circleci_practice01_10.png](./circleci_practice/images/circleci_practice01_10.png)
+![circleci_practice01_11.png](./circleci_practice/images/circleci_practice01_11.png)
+![circleci_practice01_12.png](./circleci_practice/images/circleci_practice01_12.png)
+![circleci_practice01_13.png](./circleci_practice/images/circleci_practice01_13.png)
+![circleci_practice01_14.png](./circleci_practice/images/circleci_practice01_14.png)
+- Ansible の実行結果：成功<br>
+![circleci_practice01_04.png](./circleci_practice/images/circleci_practice01_04.png)
+![circleci_practice01_015.png](./circleci_practice/images/circleci_practice01_15.png)
+- Serverspec の実行結果：成功<br>
+![circleci_practice01_05.png](./circleci_practice/images/circleci_practice01_05.png)
+![circleci_practice01_07.png](./circleci_practice/images/circleci_practice01_07.png)
+
+【  】
+- ALBのヘルスチェック：正常<br>
+![circleci_practice01_16.png](./circleci_practice/images/circleci_practice01_16.png)
+- ALBのDNS名をブラウザに入力し表示確認<br>
+![circleci_practice01_17.png](./circleci_practice/images/circleci_practice01_17.png)
+![circleci_practice01_18.png](./circleci_practice/images/circleci_practice01_18.png)
+- データ登録確認①　( ブラウザ：テキスト・画像の登録 )<br>
+![circleci_practice01_19.png](./circleci_practice/images/circleci_practice01_19.png)
+![circleci_practice01_20.png](./circleci_practice/images/circleci_practice01_20.png)
+- データ登録確認②<br>
+( RDS - MySQL：SessionManagerでターゲットノード(EC2)へログイン、MySQLコマンドを実行して確認  )<br>
+![circleci_practice01_24.png](./circleci_practice/images/circleci_practice01_24.png)
+![circleci_practice01_21.png](./circleci_practice/images/circleci_practice01_21.png)
+- データ登録確認③<br>
+( S3連携：S3へのデータ登録も同時に行われているか確認 (※サイズ違いで同じ画像データが3つ登録されている) )<br>
+![circleci_practice01_25.png](./circleci_practice/images/circleci_practice01_25.png)
+![circleci_practice01_22.png](./circleci_practice/images/circleci_practice01_22.png)
+- 各種バージョン確認　( SessionManagerでターゲットノード(EC2)へログインして確認 )<br>
+![circleci_practice01_23.png](./circleci_practice/images/circleci_practice01_23.png)
+  | 動作環境 | バージョン |
+  | -------- | ---------- |
+  | Ruby     | 3.1.2      |
+  | Bundler  | 2.3.14     |
+  | Rails    | 7.0.4      |
+  | Node     | v17.9.1    |
+  | Yarn     | 1.22.19    |
+</details>
+
+
 
 <br>
 
@@ -273,10 +387,15 @@
 | 02  | CloudFormation<br> ( 冗長化構成 )      | [cfn_practice01.md](./cloudformation/practice01/cfn_practice01.md)           | [lecture10.md](./Tasks/lecture10/lecture10.md) の構成を<br> マルチAZ・冗長化構成 に変更                                      |
 | 03  | Terraform<br> ( 冗長化構成 )           | [tf_practice02.md](./terraform/practice02/tf_practice02.md)                  | [tf_practice01.md](./terraform/practice01/tf_practice01.md) の構成を<br> マルチAZ・冗長化構成 に変更                         |
 | 04  | Ansible ( basic )                      | [ansible_practice01.md](./ansible_practice/practice01/ansible_practice01.md) | 動作環境構築・設定 /<br> ロール分割 / 複数ホスト処理                                                                         |
-| 05  |Ansible ( advanced )<br> ＋ Serverspec | [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) | [lecture05.md](./Tasks/lecture05/lecture05.md)：サンプルアプリケーションの<br> デプロイ・手動構築＋テスト を自動化 | <br>
+| 05  |Ansible ( advanced )<br> ＋ Serverspec | [ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) | [lecture05.md](./Tasks/lecture05/lecture05.md)：サンプルアプリケーションの<br> デプロイ・手動構築＋テスト を自動化 |
+| 06  | CircleCI<br>( 全自動化 ) | [circleci_practice01.md](./circleci_practice/circleci_practice01.md) |  [lecture05.md](./Tasks/lecture05/lecture05.md)：サンプルアプリケーションの<br> デプロイ・構築・テストを全自動化 | <br>
 
 ### ■ 【 № 05 . Ansible ( advanced ) ＋ Serverspec：構成図・自動化処理フロー図 】
 ![ansible-practice02.png](./ansible_practice/practice02/images/ansible-practice02.png)
+
+<details><summary>【 実践内容 】</summary>
+
+<br>
 
 【 実践内容：[ansible_practice02.md](./ansible_practice/practice02/ansible-practice02.md) 】
 - [lecture05.md](./Tasks/lecture05/lecture05.md) の サンプルアプリケーションのデプロイ・手動構築 + テスト実行 を、 Ansible・Serverspec にて自動化
@@ -344,3 +463,9 @@
         │   └── sample_spec.rb
         └── spec_helper.rb
   ```
+</details>
+
+### ■ 【 № 06 . CircleCI ( 全自動化 )：構成図・自動化処理フロー図 】
+![circleci_practice01_00.png](./circleci_practice/images/circleci_practice01_00.png)
+
+【 実践内容 】　( ※ 上記 [【 CI/CD 】 CircleCI による 自動化・パイプライン構築](#--cicd-circleci-による-自動化パイプライン構築) に記載)

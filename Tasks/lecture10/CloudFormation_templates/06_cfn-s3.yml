@@ -11,7 +11,6 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub ${S3PrefixName}-${AWS::StackName}
-      AccessControl: Private
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - BucketKeyEnabled: true
@@ -24,4 +23,3 @@ Outputs:
     Value: !Ref S3Bucket
     Export:
       Name: !Sub ${S3PrefixName}-${AWS::StackName}
-      

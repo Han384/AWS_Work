@@ -18,7 +18,7 @@ Resources:
     Properties:
       ImageId: !Ref EC2AMI
       InstanceType: t2.micro
-      KeyName: '{{resolve:ssm:KeyName:1}}'
+      KeyName: "{{resolve:ssm:KeyName:2}}"
       AvailabilityZone: !Select [0, !GetAZs ]
       SubnetId:
         Fn::ImportValue: !Sub ${VPCStack}-PublicSubnet1a
@@ -29,11 +29,11 @@ Resources:
         - Key: Name
           Value: !Sub ${AWS::StackName}-EC2WebServer01
 
-  EIPAssociation:
-    Type: AWS::EC2::EIPAssociation
-    Properties:
-      InstanceId: !Ref EC2WebServer01
-      EIP: 54.150.101.186
+  # EIPAssociation:
+  #   Type: AWS::EC2::EIPAssociation
+  #   Properties:
+  #     InstanceId: !Ref EC2WebServer01
+  #     AllocationId: "{{resolve:ssm:EIP-Allocation-ID:5}}"
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
