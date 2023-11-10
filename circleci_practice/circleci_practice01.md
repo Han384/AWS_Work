@@ -22,11 +22,11 @@
 ![](./images/circleci_practice01_00.png)
 
 ## ■ CircleCI - .circleci/config.yml の関連ファイル構成
-- [/AWS_Work](../../AWS_Work/)　【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
+- 【 CircleCI実行ファイル：[.circleci/config.yml](../.circleci/config.yml) 】
   ```
   /AWS_Work　
     |
-    |-- .Circleci
+    |-- .circleci
     |   `-- config.yml
     |-- Tasks
     |   |-- lecture10
@@ -151,7 +151,6 @@
   - [【 add_ec2_ip.sh 】](./add_ec2_ip.sh) - IPアドレス対応　( Ansible-inventoryに追記 / Severspec-ディレクトリ名変更 )
   - [【 env_set_ansible.sh 】](./env_set_ansible.sh) - AWS CLI を使用した環境変数設定など　( Ansible / Serverspec )
   - [【 file_check.sh 】](./file_check.sh) - CircleCI の Workspace に、 Serverspec の環境変数設定を行うシェルスクリプトがあるか確認、なければ作成
-
 - 上記シェルスクリプトも CircleCI の各ジョブに組み込み全自動化を実施、実装したかったことが実現でき大変勉強になった
 - 今後の学習は現在検討中だが、適宜題材を探し実践していきたい
 
