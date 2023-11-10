@@ -154,6 +154,15 @@
 - 上記シェルスクリプトも CircleCI の各ジョブに組み込み全自動化を実施、実装したかったことが実現でき大変勉強になった
 - 今後の学習は現在検討中だが、適宜題材を探し実践していきたい
 
+## ■ 取組メモ・備忘録
+【 環境変数設定 関連：export コマンド ( 実行結果の違い ) 】<br>
+- `echo 'export 環境変数名=$(実行コマンド)' >> ~/.profile`<br>
+：echo以降の記述が全て文字列として ~/.profile に追記される
+- `echo export 環境変数名=$(実行コマンド) >> ~/.profile`<br>
+：echo以降の記述の内、$(実行コマンド)の実行結果が表示された状態で ~/.profile に追記される<br>
+- ※CircleCIの実行環境では、aws cli を使用して環境変数設定を行うにはジョブごとに aws cli をインストールしなければならなかったため上記の記述を使い分けて環境変数の設定を行った<br>
+( 参考：[env_set_ansible.sh](./env_set_ansible.sh) - 環境変数設定：CircleCiのworkspace機能を活用 )
+
 ## ■ 参考リンク
 - [CircleCI 公式ドキュメント：環境変数の概要](https://circleci.com/docs/ja/env-vars/)
 - [CircleCI 上の BASH_ENV 環境変数について](https://blog.yukii.work/posts/2021-09-18-circleci-and-bash-env/#gsc.tab=0)
